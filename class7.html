@@ -443,6 +443,10 @@
     </div>
     <button class="btn-primary" id="retryBtn" data-t="btnRetry">Take Exam Again</button>
     <button class="btn-secondary" id="reviewToggle" data-t="btnReview">Show Answer Review</button>
+    <a href="index.html" class="btn-secondary" id="btnHomeLink" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+      <span>🏠</span> <span data-t="btnHome">Back to Home Page</span>
+    </a>
+
     <div class="review" id="reviewBlock" hidden></div>
   </section>
 
@@ -484,6 +488,7 @@ var UI = {
     btnRetry:"Take Exam Again",
     btnReview:"Show Answer Review",
     btnReviewHide:"Hide Answer Review",
+    btnHome:"Back to Home Page",
     credit:"Practice exam for Sunday School Class VII · Prepared from the Class VII (English) lesson book",
     question:"Question",
     score:"Score",
@@ -517,6 +522,7 @@ var UI = {
     btnRetry:"വീണ്ടും പരീക്ഷ എഴുതുക",
     btnReview:"ഉത്തരങ്ങൾ കാണിക്കുക",
     btnReviewHide:"ഉത്തരങ്ങൾ മറയ്ക്കുക",
+    btnHome:"ഹോം പേജിലേക്ക് മടങ്ങുക",
     credit:"സൺഡേസ്കൂൾ ക്ലാസ്സ് 7-നുള്ള പരിശീലന പരീക്ഷ · ക്ലാസ്സ് 7 (ഇംഗ്ലീഷ്) പാഠപുസ്തകത്തിൽ നിന്നും തയ്യാറാക്കിയത്",
     question:"ചോദ്യം",
     score:"സ്കോർ",
@@ -1025,9 +1031,16 @@ function buildReview(){
     } else {
       aDiv.innerHTML = t('yourAnswer') + ': <span class="wrong-pick">' + pickedText + '</span> &nbsp;&middot;&nbsp; ' + t('correctAnswer') + ': <b>' + correctText + '</b>';
     }
+
     div.appendChild(aDiv);
     block.appendChild(div);
   });
+
+  var bottomHome = document.createElement('div');
+  bottomHome.style.textAlign = 'center';
+  bottomHome.style.marginTop = '20px';
+  bottomHome.innerHTML = '<a href="index.html" class="btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:auto; padding:10px 24px; box-sizing:border-box;"><span>🏠</span> <span>' + t('btnHome') + '</span></a>';
+  block.appendChild(bottomHome);
 }
 
 document.getElementById('reviewToggle').addEventListener('click', function(){
