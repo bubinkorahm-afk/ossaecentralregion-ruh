@@ -561,12 +561,17 @@
     <div class="metric-card">
       <div class="metric-label">Total Attempts</div>
       <div class="metric-value" id="statTotal">0</div>
-      <div class="metric-sub" id="statTotalSub">0 Class 10 &middot; 0 Class 12</div>
+      <div class="metric-sub" id="statTotalSub">0 Class 10 &middot; 0 Class 11 &middot; 0 Class 12</div>
     </div>
     <div class="metric-card">
       <div class="metric-label">Class 10 Attempts</div>
       <div class="metric-value" id="statClass10">0</div>
       <div class="metric-sub">Secondary Certificate</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Class 11 Attempts</div>
+      <div class="metric-value" id="statClass11">0</div>
+      <div class="metric-sub">Vedapraveen (Part I)</div>
     </div>
     <div class="metric-card">
       <div class="metric-label">Class 12 Attempts</div>
@@ -600,7 +605,9 @@
       <label>Filter by Class</label>
       <select id="classFilter">
         <option value="">All Classes</option>
+        <option value="Class 8">Class 8</option>
         <option value="Class 10">Class 10</option>
+        <option value="Class 11">Class 11</option>
         <option value="Class 12">Class 12</option>
       </select>
     </div>
@@ -680,7 +687,7 @@
     <div id="emptyState" class="empty-state">
       <span class="empty-icon">📋</span>
       <h3 style="margin:0 0 6px; font-family:'Cormorant Garamond', serif; font-size:1.4rem;">No Student Attempts Recorded Yet</h3>
-      <p style="margin:0 0 16px; font-size:.88rem;">Once students complete a Class 10 or Class 12 exam, their marks and credentials will appear here automatically.</p>
+      <p style="margin:0 0 16px; font-size:.88rem;">Once students complete a Class 10, Class 11, or Class 12 exam, their marks and credentials will appear here automatically.</p>
       <button type="button" class="btn btn-outline" onclick="addSampleData()">Add Sample Attempts</button>
     </div>
   </div>
@@ -868,11 +875,13 @@
   // Statistics calculation
   function renderStats(){
     var total = attemptsData.length;
-    var c10 = 0, c12 = 0, scoreSum = 0, passCount = 0;
+    var c8 = 0, c10 = 0, c11 = 0, c12 = 0, scoreSum = 0, passCount = 0;
     var diocesesSet = new Set();
 
     attemptsData.forEach(function(a){
+      if (a.className === 'Class 8') c8++;
       if (a.className === 'Class 10') c10++;
+      if (a.className === 'Class 11') c11++;
       if (a.className === 'Class 12') c12++;
       scoreSum += (a.percentage || 0);
       if (a.status === 'PASS' || a.percentage >= 50) passCount++;
@@ -883,8 +892,14 @@
     var passRate = total ? Math.round((passCount / total) * 100) : 0;
 
     document.getElementById('statTotal').textContent = total;
-    document.getElementById('statTotalSub').textContent = c10 + ' Class 10 · ' + c12 + ' Class 12';
+    var subParts = [];
+    if (c8) subParts.push(c8 + ' Class 8');
+    subParts.push(c10 + ' Class 10');
+    if (c11) subParts.push(c11 + ' Class 11');
+    subParts.push(c12 + ' Class 12');
+    document.getElementById('statTotalSub').textContent = subParts.join(' · ');
     document.getElementById('statClass10').textContent = c10;
+    if (document.getElementById('statClass11')) document.getElementById('statClass11').textContent = c11;
     document.getElementById('statClass12').textContent = c12;
     document.getElementById('statAvgScore').textContent = avgPct + '%';
     document.getElementById('statAvgMarks').textContent = (total ? (scoreSum / total * 0.3).toFixed(1) : 0) + ' / 30 avg';
@@ -1096,6 +1111,24 @@
         status: "PASS",
         timeTakenSeconds: 1410,
         durationStr: "23m 30s"
+      },
+      {
+        id: "att_sample_3",
+        timestamp: new Date(Date.now() - 5400000).toISOString(),
+        dateStr: new Date(Date.now() - 5400000).toLocaleDateString('en-GB'),
+        timeStr: "08:50 AM",
+        className: "Class 11",
+        studentName: "Joel Jacob Thomas",
+        rollNumber: "XI-115",
+        studentPhone: "+91 94470 98765",
+        schoolCode: "260310",
+        diocese: "Thrissur Diocese",
+        score: 27,
+        totalQuestions: 30,
+        percentage: 90,
+        status: "PASS",
+        timeTakenSeconds: 1250,
+        durationStr: "20m 50s"
       }
     ];
 

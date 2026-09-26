@@ -946,6 +946,12 @@ startBtn.addEventListener('click', function(){
     return;
   }
 
+  BANK.forEach(function(item){
+    delete item._answered;
+    delete item._picked;
+    delete item._shuffled;
+    delete item._shuffledOrder;
+  });
   state.name = name;
   state.roll = roll;
   state.phone = phone;
@@ -1002,7 +1008,18 @@ function renderQuestion(){
     qOptionsEl.appendChild(btn);
   });
 
-  nextBtn.disabled = true;
+  if (item._answered) {
+    var buttons = qOptionsEl.querySelectorAll('.option');
+    buttons.forEach(function(b){
+      b.disabled = true;
+      var oi = parseInt(b.dataset.origIdx, 10);
+      if (oi === item.a) b.dataset.state = 'correct';
+      else if (oi === item._picked) b.dataset.state = 'wrong';
+    });
+    nextBtn.disabled = false;
+  } else {
+    nextBtn.disabled = true;
+  }
   nextBtn.textContent = (state.idx === total - 1) ? t('btnFinish') : t('btnNext');
 }
 

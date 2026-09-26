@@ -16,9 +16,11 @@
       --muted: #7a6c58;
       --border: #e4d8bf;
       --accent7: #7b1e2b;
+      --accent8: #831843;
       --accent6: #1f5c4d;
       --accent5: #235482;
       --accent10: #b45309;
+      --accent11: #4338ca;
       --accent12: #5b21b6;
       --gold: #a97a26;
       --gold-light: #f5eedb;
@@ -37,9 +39,11 @@
       --muted: #b8a68b;
       --border: #3d352b;
       --accent7: #e0929c;
+      --accent8: #f472b6;
       --accent6: #7fc9a9;
       --accent5: #6ea8dc;
       --accent10: #f59e0b;
+      --accent11: #818cf8;
       --accent12: #c084fc;
       --gold: #dcb567;
       --gold-light: #2c2518;
@@ -235,6 +239,10 @@
       background: linear-gradient(90deg, var(--accent10), var(--gold));
     }
 
+    .card.c11::before {
+      background: linear-gradient(90deg, var(--accent11), var(--gold));
+    }
+
     .card.c12::before {
       background: linear-gradient(90deg, var(--accent12), var(--gold));
     }
@@ -245,6 +253,10 @@
 
     .card.c7::before {
       background: linear-gradient(90deg, var(--accent7), var(--gold));
+    }
+
+    .card.c8::before {
+      background: linear-gradient(90deg, var(--accent8), var(--gold));
     }
 
     .card.wip::before {
@@ -296,6 +308,11 @@
       color: var(--accent10);
     }
 
+    .badge-c11 {
+      background: color-mix(in srgb, var(--accent11) 14%, transparent);
+      color: var(--accent11);
+    }
+
     .badge-c12 {
       background: color-mix(in srgb, var(--accent12) 14%, transparent);
       color: var(--accent12);
@@ -309,6 +326,11 @@
     .badge-c7 {
       background: color-mix(in srgb, var(--accent7) 14%, transparent);
       color: var(--accent7);
+    }
+
+    .badge-c8 {
+      background: color-mix(in srgb, var(--accent8) 14%, transparent);
+      color: var(--accent8);
     }
 
     .card p {
@@ -554,6 +576,19 @@
         </div>
       </a>
 
+      <a class="card c8" href="class8.html">
+        <div>
+          <div class="card-top">
+            <h2 data-en="Class VIII" data-ml="ക്ലാസ്സ് VIII">Class VIII</h2>
+            <span class="card-badge badge-c8" data-en="450 Questions" data-ml="450 ചോദ്യങ്ങൾ">450 Questions</span>
+          </div>
+          <p data-en="9 Units · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="9 യൂണിറ്റുകൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">9 Units · English &amp; Malayalam · 25 questions randomly selected per exam</p>
+        </div>
+        <div class="card-action">
+          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
+        </div>
+      </a>
+
       <a class="card c10" href="class10.html">
         <div>
           <div class="card-top">
@@ -561,6 +596,19 @@
             <span class="card-badge badge-c10" data-en="323 Questions" data-ml="323 ചോദ്യങ്ങൾ">323 Questions</span>
           </div>
           <p data-en="Secondary Certificate · English &amp; Malayalam · 30 questions randomly selected per exam" data-ml="സെക്കൻഡറി സർട്ടിഫിക്കറ്റ് · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 30 ചോദ്യങ്ങൾ">Secondary Certificate · English &amp; Malayalam · 30 questions randomly selected per exam</p>
+        </div>
+        <div class="card-action">
+          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
+        </div>
+      </a>
+
+      <a class="card c11" href="class11.html">
+        <div>
+          <div class="card-top">
+            <h2 data-en="Class XI — Vedapraveen" data-ml="ക്ലാസ്സ് XI — വേദപ്രവീൺ">Class XI — Vedapraveen</h2>
+            <span class="card-badge badge-c11" data-en="378 Questions" data-ml="378 ചോദ്യങ്ങൾ">378 Questions</span>
+          </div>
+          <p data-en="Vedapraveen Part I · English &amp; Malayalam · 30 questions randomly selected per exam" data-ml="വേദപ്രവീൺ പാർട്ട് 1 · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 30 ചോദ്യങ്ങൾ">Vedapraveen Part I · English &amp; Malayalam · 30 questions randomly selected per exam</p>
         </div>
         <div class="card-action">
           <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
@@ -588,20 +636,8 @@
     </div>
 
     <div class="grid-wip">
-      <button class="card wip" onclick="showWIP('Class VIII')">
-        <h2 data-en="Class VIII" data-ml="ക്ലാസ്സ് VIII">Class VIII</h2>
-        <p data-en="Questions coming soon" data-ml="ചോദ്യങ്ങൾ ഉടൻ വരും">Questions coming soon</p>
-        <span class="wip-badge" data-en="🚧 Coming Soon" data-ml="🚧 ഉടൻ വരും">🚧 Coming Soon</span>
-      </button>
-
       <button class="card wip" onclick="showWIP('Class IX')">
         <h2 data-en="Class IX" data-ml="ക്ലാസ്സ് IX">Class IX</h2>
-        <p data-en="Questions coming soon" data-ml="ചോദ്യങ്ങൾ ഉടൻ വരും">Questions coming soon</p>
-        <span class="wip-badge" data-en="🚧 Coming Soon" data-ml="🚧 ഉടൻ വരും">🚧 Coming Soon</span>
-      </button>
-
-      <button class="card wip" onclick="showWIP('Class XI')">
-        <h2 data-en="Class XI" data-ml="ക്ലാസ്സ് XI">Class XI</h2>
         <p data-en="Questions coming soon" data-ml="ചോദ്യങ്ങൾ ഉടൻ വരും">Questions coming soon</p>
         <span class="wip-badge" data-en="🚧 Coming Soon" data-ml="🚧 ഉടൻ വരും">🚧 Coming Soon</span>
       </button>
