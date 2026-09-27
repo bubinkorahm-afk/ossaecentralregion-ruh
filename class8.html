@@ -451,8 +451,8 @@
     </div>
 
     <div class="field">
-      <label data-t="lblPhone">Phone Number (with Country Code)</label>
-      <input type="tel" id="studentPhone" placeholder="+91 98765 43210" autocomplete="tel">
+      <label data-t="lblPhone">Phone Number (+966xxxxxxxx, +91xxxxxxxxxx)</label>
+      <input type="tel" id="studentPhone" placeholder="" autocomplete="tel">
     </div>
 
     <div class="field">
@@ -619,7 +619,7 @@ var UI = {
     lblLang:"Choose Exam Language",
     lblName:"Student Name",
     lblRoll:"Roll Number",
-    lblPhone:"Phone Number (with Country Code)",
+    lblPhone:"Phone Number (+966xxxxxxxx, +91xxxxxxxxxx)",
     lblSchoolCode:"Sunday School Code",
     lblDiocese:"Diocese",
     selectDiocese:"Select your Diocese",
@@ -673,7 +673,7 @@ var UI = {
     lblLang:"പരീക്ഷ ഭാഷ തിരഞ്ഞെടുക്കുക",
     lblName:"വിദ്യാർത്ഥിയുടെ പേര്",
     lblRoll:"റോൾ നമ്പർ",
-    lblPhone:"ഫോൺ നമ്പർ (കൺട്രി കോഡ് സഹിതം)",
+    lblPhone:"ഫോൺ നമ്പർ (+966xxxxxxxx, +91xxxxxxxxxx)",
     lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ്",
     lblDiocese:"ഭദ്രാസനം",
     selectDiocese:"ഭദ്രാസനം തിരഞ്ഞെടുക്കുക",
@@ -774,7 +774,7 @@ function applyStaticText(){
   var rNum = document.getElementById('rollNumber');
   if (rNum) rNum.placeholder = (lang==='en') ? "Enter your roll number" : "റോൾ നമ്പർ നൽകുക";
   var sPhone = document.getElementById('studentPhone');
-  if (sPhone) sPhone.placeholder = (lang==='en') ? "+91 98765 43210" : "+91 98765 43210";
+  if (sPhone) sPhone.placeholder = "";
   var scCode = document.getElementById('schoolCode');
   if (scCode) scCode.placeholder = (lang==='en') ? "Enter Sunday School Code" : "സൺഡേ സ്കൂൾ കോഡ് നൽകുക";
   var dioSel = document.getElementById('dioceseSelect');
@@ -1061,8 +1061,6 @@ function renderQuestion(){
   if (qTopic){
     if (item.topic && item.topic[lang]) {
       qTopic.textContent = t('unitWord') + ' ' + item.unit + ': ' + item.topic[lang];
-    } else if (item.unit && item.ch) {
-      qTopic.textContent = t('unitWord') + ' ' + item.unit + ' · ' + t('chapterWord') + ' ' + item.ch;
     } else if (item.unit) {
       qTopic.textContent = t('unitWord') + ' ' + item.unit;
     }
