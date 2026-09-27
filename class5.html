@@ -129,11 +129,11 @@
     display:block; font-weight:600; font-size:.85rem; margin-bottom:6px;
     color:var(--muted); text-transform:uppercase; letter-spacing:.04em;
   }
-  input[type="text"]{
+  input[type="text"], input[type="tel"], select{
     width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--border);
     background:var(--surface-2); color:var(--ink); font-size:1rem; font-family:inherit;
   }
-  input[type="text"]:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  input[type="text"]:focus-visible, input[type="tel"]:focus-visible, select:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
 
   .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
   .chip{
@@ -366,6 +366,47 @@
     transform:translateY(-1px);
   }
 
+
+  /* Student Info Bar on Quiz Screen */
+  .student-bar{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    gap:8px; padding:8px 14px; border-radius:10px; background:var(--surface-2);
+    font-size:.82rem; font-weight:600; color:var(--muted); margin-bottom:16px;
+    border:1px solid var(--border);
+  }
+  .student-bar strong{ color:var(--ink); }
+
+  .btn-share{
+    width:100%; margin-top:12px; padding:12px 18px; border-radius:12px;
+    background:var(--surface-2); border:1px solid var(--border); color:var(--ink);
+    font-size:.92rem; font-weight:700; cursor:pointer; font-family:inherit;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    transition:all .15s ease;
+  }
+  .btn-share:hover{ border-color:var(--gold); transform:translateY(-1px); }
+
+  /* Result screen */
+  .score-hero{ text-align:center; padding-block:6px 12px; }
+  .result-details{
+    display:inline-block; text-align:left; background:var(--surface-2); border:1px solid var(--border);
+    border-radius:14px; padding:12px 20px; font-size:.88rem; margin:10px 0 16px; line-height:1.6;
+    width:100%; max-width:380px;
+  }
+  .result-details div{ display:flex; gap:12px; justify-content:space-between; }
+  .result-details span.label{ color:var(--muted); font-weight:600; }
+  .result-details span.val{ color:var(--ink); font-weight:700; }
+  .score-num{
+    font-family:'Cormorant Garamond', serif; font-weight:700; font-size:3.5rem; line-height:1;
+    font-variant-numeric: tabular-nums; margin:8px 0 4px; color:var(--accent);
+  }
+  .score-pct{ font-size:1.1rem; font-weight:700; color:var(--muted); }
+  .verdict{
+    display:inline-block; margin-top:12px; padding:6px 18px; border-radius:999px;
+    font-weight:700; font-size:.88rem; letter-spacing:.04em;
+  }
+  .verdict.pass{ background:var(--good-bg); color:var(--good); }
+  .verdict.fail{ background:var(--bad-bg); color:var(--bad); }
+
 </style>
 </head>
 <body>
@@ -387,31 +428,90 @@
     </header>
 
     <section class="card" id="screenSetup">
-    <div class="field">
-      <label data-t="lblLang">Choose Exam Language</label>
-      <div class="lang-chips" id="langChips">
-        <button type="button" class="lang-chip selected" data-lang="en">
-          <span>🇬🇧</span> English
-        </button>
-        <button type="button" class="lang-chip" data-lang="ml">
-          <span>🇮🇳</span> മലയാളം
-        </button>
-      </div>
-    </div>
+<div class="field">
+  <label data-t="lblLang">Choose Exam Language</label>
+  <div class="lang-chips" id="langChips">
+    <button type="button" class="lang-chip selected" data-lang="en">
+      <span>🇬🇧</span> English
+    </button>
+    <button type="button" class="lang-chip" data-lang="ml">
+      <span>🇮🇳</span> മലയാളം
+    </button>
+  </div>
+</div>
 
-    <div class="field">
-      <label data-t="lblName">Student name</label>
-      <input type="text" id="studentName" placeholder="Enter your name" autocomplete="name">
-    </div>
+<div class="field">
+  <label data-t="lblName">Student Name</label>
+  <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="name">
+</div>
 
-    <p class="hint" data-t="hintPool">Every attempt draws 25 random questions from the full chapter bank &mdash; a fresh set each time.</p>
+<div class="field">
+  <label data-t="lblRoll">Roll Number</label>
+  <input type="text" id="rollNumber" placeholder="Enter your roll number" autocomplete="off">
+</div>
 
-    <button class="btn-primary" id="startBtn" data-t="btnStart">Start Exam</button>
-  </section>
+<div class="field">
+  <label data-t="lblPhone">Phone Number (with Country Code)</label>
+  <input type="tel" id="studentPhone" placeholder="+91 98765 43210" autocomplete="tel">
+</div>
+
+<div class="field">
+  <label data-t="lblSchoolCode">Sunday School Code</label>
+  <input type="text" id="schoolCode" placeholder="Enter Sunday School Code" autocomplete="off">
+  <div id="schoolCodeError" style="display:none; color:var(--bad); font-size:.82rem; margin-top:5px; font-weight:600;" data-t="codeErrorInline">Wrong code. Please contact your Sunday school HM.</div>
+</div>
+
+<div class="field">
+  <label data-t="lblDiocese">Diocese</label>
+  <select id="dioceseSelect">
+        <option value="" disabled selected data-t="selectDiocese">Select your Diocese</option>
+        <option value="Thiruvananthapuram Diocese">Thiruvananthapuram Diocese (തിരുവനന്തപുരം)</option>
+        <option value="Kollam Diocese">Kollam Diocese (കൊല്ലം)</option>
+        <option value="Kottarakara – Punalur Diocese">Kottarakara – Punalur Diocese (കൊട്ടാരക്കര – പുനലൂർ)</option>
+        <option value="Adoor – Kadampanadu Diocese">Adoor – Kadampanadu Diocese (അടൂർ – കടമ്പനാട്)</option>
+        <option value="Thumpamon Diocese">Thumpamon Diocese (തുമ്പമൺ)</option>
+        <option value="Mavelikara Diocese">Mavelikara Diocese (മാവേലിക്കര)</option>
+        <option value="Niranam Diocese">Niranam Diocese (നിരണം)</option>
+        <option value="Chengannur Diocese">Chengannur Diocese (ചെങ്ങന്നൂർ)</option>
+        <option value="Kottayam Diocese">Kottayam Diocese (കോട്ടയം)</option>
+        <option value="Kottayam Central Diocese">Kottayam Central Diocese (കോട്ടയം സെൻട്രൽ)</option>
+        <option value="Idukki Diocese">Idukki Diocese (ഇടുക്കി)</option>
+        <option value="Kandanad East Diocese">Kandanad East Diocese (കണ്ടനാട് ഈസ്റ്റ്)</option>
+        <option value="Kandanad West Diocese">Kandanad West Diocese (കണ്ടനാട് വെസ്റ്റ്)</option>
+        <option value="Kochi Diocese">Kochi Diocese (കൊച്ചി)</option>
+        <option value="Angamaly Diocese">Angamaly Diocese (അങ്കമാലി)</option>
+        <option value="Angamaly East Diocese">Angamaly East Diocese (അങ്കമാലി ഈസ്റ്റ്)</option>
+        <option value="Angamaly West Diocese">Angamaly West Diocese (അങ്കമാലി വെസ്റ്റ്)</option>
+        <option value="Thrissur Diocese">Thrissur Diocese (തൃശ്ശൂർ)</option>
+        <option value="Kunnamkulam Diocese">Kunnamkulam Diocese (കുന്നംകുളം)</option>
+        <option value="Malabar Diocese">Malabar Diocese (മലബാർ)</option>
+        <option value="Sulthan Bathery Diocese">Sulthan Bathery Diocese (സുൽത്താൻ ബത്തേരി)</option>
+        <option value="Nilackal Diocese">Nilackal Diocese (നിലയ്ക്കൽ)</option>
+        <option value="Bangalore Diocese">Bangalore Diocese (ബാംഗ്ലൂർ)</option>
+        <option value="Bombay Diocese">Bombay Diocese (ബോംബെ)</option>
+        <option value="Calcutta Diocese">Calcutta Diocese (കൽക്കട്ട)</option>
+        <option value="Delhi Diocese">Delhi Diocese (ഡൽഹി)</option>
+        <option value="Ahmedabad Diocese">Ahmedabad Diocese (അഹമ്മദാബാദ്)</option>
+        <option value="Brahmavar Diocese">Brahmavar Diocese (ബ്രഹ്മവാർ)</option>
+        <option value="Madras Diocese">Madras Diocese (മദ്രാസ്)</option>
+        <option value="Diocese of North America (Northeast American Diocese)">Diocese of North America (Northeast American Diocese)</option>
+        <option value="Diocese of Southwest America">Diocese of Southwest America</option>
+        <option value="Diocese of UK, Europe, and Africa">Diocese of UK, Europe, and Africa</option>
+  </select>
+</div>
+
+<p class="hint" data-t="hintPool">25 questions are randomly selected from the complete Class V Question Bank (181 questions) — Duration: 25 minutes.</p>
+
+<button class="btn-primary" id="startBtn" disabled data-t="btnStart">Start Exam (25 Questions &middot; 25 Mins)</button>
+</section>
 
   <section class="card" id="screenQuiz" hidden>
+<div class="student-bar" id="studentBar">
+  <div><span data-t="studentPrefix">Candidate:</span> <strong id="barName">Name</strong> &middot; <strong id="barPhone">+00</strong></div>
+  <div><span data-t="rollPrefix">Roll:</span> <strong id="barRoll">00</strong> &middot; <span data-t="codePrefix">Code:</span> <strong id="barCode">260310</strong> &middot; <strong id="barDiocese">Diocese</strong></div>
+</div>
     <div class="progress-wrap">
-      <span id="progressLabel">Question 1 / 20</span>
+      <span id="progressLabel">Question 1 / 25</span>
       <span class="timer-badge" id="timerBadge">⏱️ <span id="timerText">25:00</span></span>
       <span id="scoreLive">Score: 0</span>
     </div>
@@ -434,21 +534,32 @@
   </section>
 
   <section class="card" id="screenResult" hidden>
-    <div class="score-hero">
-      <div style="font-size:.85rem;color:var(--muted);font-weight:600;" id="resultName">Well done, Student!</div>
-      <div class="score-num" id="scoreNum">0 / 20</div>
-      <div class="score-pct" id="scorePct">0%</div>
-      <div style="font-size:.85rem;color:var(--muted);font-weight:600;margin-top:4px;" id="resTime"></div>
-      <span class="verdict" id="verdict">Pass</span>
-    </div>
-    <button class="btn-primary" id="retryBtn" data-t="btnRetry">Take Exam Again</button>
-    <button class="btn-secondary" id="reviewToggle" data-t="btnReview">Show Answer Review</button>
-    <a href="index.html" class="btn-secondary" id="btnHomeLink" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
-      <span>🏠</span> <span data-t="btnHome">Back to Home Page</span>
-    </a>
+<div class="score-hero">
+  <div class="result-details">
+    <div><span class="label" data-t="resNameLbl">Student:</span> <span class="val" id="resName">-</span></div>
+    <div><span class="label" data-t="resRollLbl">Roll Number:</span> <span class="val" id="resRoll">-</span></div>
+    <div><span class="label" data-t="resPhoneLbl">Phone Number:</span> <span class="val" id="resPhone">-</span></div>
+    <div><span class="label" data-t="resCodeLbl">Sunday School Code:</span> <span class="val" id="resCode">-</span></div>
+    <div><span class="label" data-t="resDioceseLbl">Diocese:</span> <span class="val" id="resDiocese">-</span></div>
+    <div><span class="label" data-t="resTimeLbl">Time Taken:</span> <span class="val" id="resTime">-</span></div>
+  </div>
 
-    <div class="review" id="reviewBlock" hidden></div>
-  </section>
+  <div class="score-num" id="scoreNum">0 / 25</div>
+  <div class="score-pct" id="scorePct">0%</div>
+  <div><span class="verdict" id="verdict">PASS</span></div>
+</div>
+
+<button class="btn-share" id="shareBtn" onclick="shareResult()">
+  <span>📷</span> <span data-t="btnShare">Share Result</span>
+</button>
+<button class="btn-primary" id="retryBtn" data-t="btnRetry">Take Exam Again</button>
+<button class="btn-secondary" id="reviewToggle" data-t="btnReview">Show Answer Review</button>
+<a href="index.html" class="btn-secondary" id="btnHomeLink" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+  <span>🏠</span> <span data-t="btnHome">Back to Home Page</span>
+</a>
+
+<div class="review" id="reviewBlock" hidden></div>
+</section>
 
   <footer class="credit" data-t="credit">Practice exam for Sunday School Class V &middot; Prepared from the Class V (English) lesson book</footer>
   <p class="dev-credit">developed by <a href="https://www.sparkwings.co.in" target="_blank" rel="noopener noreferrer">bubinkm (Sparkwings Innovations)</a></p>
@@ -469,74 +580,136 @@
   </div>
 </div>
 
+<!-- Wrong Sunday School Code Modal -->
+<div class="modal-overlay" id="codeErrorModal" role="dialog" aria-modal="true" aria-labelledby="codeErrorTitle">
+  <div class="modal-box" style="text-align:center;">
+    <span class="modal-icon" style="font-size:2.8rem; display:block; margin-bottom:12px;">🚫</span>
+    <h3 id="codeErrorTitle" style="color:var(--bad);" data-t="codeErrorTitle">Wrong Sunday School Code</h3>
+    <p id="codeErrorMsg" style="color:var(--muted); font-size:.95rem; margin:8px 0 20px;" data-t="codeErrorMsg">Please contact your Sunday school HM.</p>
+    <div style="display:flex; justify-content:center;">
+      <button type="button" class="btn-modal-cancel" id="codeErrorCloseBtn" style="min-width:120px;" data-t="okBtn">OK</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
 
+var TOTAL_TIME_SECONDS = 25 * 60; // 25 minutes
+
 var UI = {
   en:{
-    brandTitle:"Class V Annual Exam",
+    brandTitle:"Class V — Annual Exam",
     brandSub:"O.S.S.A.E. · All Divisions",
     homeLink:"← Choose another class",
     lblLang:"Choose Exam Language",
-    lblName:"Student name",
-    lblCount:"Number of questions",
-    hintPool:"Questions are drawn at random from all 25 chapters — every attempt is different.",
-    btnStart:"Start Exam",
-    btnNext:"Next",
-    btnFinish:"Finish",
+    lblName:"Student Name",
+    lblRoll:"Roll Number",
+    lblPhone:"Phone Number (with Country Code)",
+    lblSchoolCode:"Sunday School Code",
+    lblDiocese:"Diocese",
+    selectDiocese:"Select your Diocese",
+    hintPool:"25 questions are randomly selected from the complete Class V Question Bank (181 questions) — Duration: 25 minutes.",
+    btnStart:"Start Exam (25 Questions · 25 Mins)",
+    btnNext:"Next Question",
+    btnFinish:"Finish Exam",
     btnRetry:"Take Exam Again",
     btnReview:"Show Answer Review",
     btnReviewHide:"Hide Answer Review",
     btnHome:"Back to Home Page",
-    credit:"Practice exam for Sunday School Class V · Prepared from the Class V (English) lesson book",
+    btnShare:"Share Result",
+    credit:"Practice exam for Sunday School Class V · Prepared from OSSAE Question Bank",
     question:"Question",
     score:"Score",
     unitWord:"Unit",
     chapterWord:"Chapter",
     pass:"PASS",
     fail:"TRY AGAIN",
-    wellDone:"Well done, {name}!",
+    studentPrefix:"Candidate:",
+    rollPrefix:"Roll:",
+    codePrefix:"Code:",
+    resNameLbl:"Student:",
+    resRollLbl:"Roll Number:",
+    resPhoneLbl:"Phone Number:",
+    resCodeLbl:"Sunday School Code:",
+    resDioceseLbl:"Diocese:",
+    resTimeLbl:"Time Taken:",
     yourAnswer:"Your answer",
     correctAnswer:"Correct answer",
-    timeTaken:"Time Taken: ",
+    copiedMsg:"✅ Result copied to clipboard!",
     btnAbort:"✕ Abort Exam",
     abortTitle:"Abort Exam?",
     abortMsg:"Are you sure you want to abort the exam? All your current answers and score will be lost.",
     abortCancel:"Continue Exam",
     abortConfirm:"Yes, Abort",
     timeUpAlert:"⏰ Time is up! Submitting exam.",
-    enterName:"Please enter your name to begin."
+    codeErrorTitle:"Wrong Sunday School Code",
+    codeErrorMsg:"Please contact your Sunday school HM.",
+    codeErrorInline:"Wrong code. Please contact your Sunday school HM.",
+    okBtn:"OK"
   },
   ml:{
-    brandTitle:"ക്ലാസ്സ് 5 വാർഷിക പരീക്ഷ",
+    brandTitle:"ക്ലാസ്സ് V — വാർഷിക പരീക്ഷ",
     brandSub:"ഒ.എസ്.എസ്.എ.ഇ · എല്ലാ ഡിവിഷനുകളും",
     homeLink:"← മറ്റൊരു ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക",
     lblLang:"പരീക്ഷ ഭാഷ തിരഞ്ഞെടുക്കുക",
     lblName:"വിദ്യാർത്ഥിയുടെ പേര്",
-    lblCount:"ചോദ്യങ്ങളുടെ എണ്ണം",
-    hintPool:"25 പാഠങ്ങളിൽ നിന്നും ക്രമരഹിതമായി ചോദ്യങ്ങൾ തിരഞ്ഞെടുക്കുന്നു — ഓരോ തവണയും വ്യത്യസ്തം.",
-    btnStart:"പരീക്ഷ ആരംഭിക്കുക",
-    btnNext:"അടുത്തത്",
-    btnFinish:"പൂർത്തിയാക്കുക",
-    btnRetry:"വീണ്ടും പരീക്ഷ എഴുതുക",
-    btnReview:"ഉത്തരങ്ങൾ കാണിക്കുക",
-    btnReviewHide:"ഉത്തരങ്ങൾ മറയ്ക്കുക",
+    lblRoll:"റോൾ നമ്പർ",
+    lblPhone:"ഫോൺ നമ്പർ (കൺട്രി കോഡ് സഹിതം)",
+    lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ്",
+    lblDiocese:"ഭദ്രാസനം",
+    selectDiocese:"ഭദ്രാസനം തിരഞ്ഞെടുക്കുക",
+    hintPool:"ക്ലാസ്സ് V ചോദ്യബാങ്കിൽ (181 ചോദ്യങ്ങൾ) നിന്നും 25 ചോദ്യങ്ങൾ ക്രമരഹിതമായി തിരഞ്ഞെടുക്കുന്നു — സമയം: 25 മിനിറ്റ്.",
+    btnStart:"പരീക്ഷ ആരംഭിക്കുക (25 ചോദ്യങ്ങൾ · 25 മിനിറ്റ്)",
+    btnNext:"അടുത്ത ചോദ്യം",
+    btnFinish:"പരീക്ഷ പൂർത്തിയാക്കുക",
+    btnRetry:"വീണ്ടും പരീക്ഷയെഴുതുക",
+    btnReview:"ഉത്തരങ്ങൾ പരിശോധിക്കുക",
+    btnReviewHide:"പരിശോധന മറയ്ക്കുക",
     btnHome:"ഹോം പേജിലേക്ക് മടങ്ങുക",
-    credit:"സൺഡേസ്കൂൾ ക്ലാസ്സ് 5-നുള്ള പരിശീലന പരീക്ഷ · ക്ലാസ്സ് 5 (ഇംഗ്ലീഷ്) പാഠപുസ്തകത്തിൽ നിന്നും തയ്യാറാക്കിയത്",
+    btnShare:"ഫലം പങ്കിടുക",
+    credit:"സൺഡേസ്കൂൾ ക്ലാസ്സ് V വാർഷിക പരീക്ഷ പരിശീലനം · OSSAE ചോദ്യബാങ്ക് അടിസ്ഥാനമാക്കി തയ്യാറാക്കിയത്",
     question:"ചോദ്യം",
     score:"സ്കോർ",
     unitWord:"യൂണിറ്റ്",
     chapterWord:"അധ്യായം",
     pass:"വിജയിച്ചു",
     fail:"വീണ്ടും ശ്രമിക്കുക",
-    wellDone:"നന്നായി, {name}!",
-    yourAnswer:"നിങ്ങളുടെ ഉത്തരം",
+    studentPrefix:"വിദ്യാർത്ഥി:",
+    rollPrefix:"റോൾ:",
+    codePrefix:"കോഡ്:",
+    resNameLbl:"വിദ്യാർത്ഥി:",
+    resRollLbl:"റോൾ നമ്പർ:",
+    resPhoneLbl:"ഫോൺ നമ്പർ:",
+    resCodeLbl:"സൺഡേ സ്കൂൾ കോഡ്:",
+    resDioceseLbl:"ഭദ്രാസനം:",
+    resTimeLbl:"എടുത്ത സമയം:",
+    yourAnswer:"നിങ്ങൾ നൽകിയ ഉത്തരം",
     correctAnswer:"ശരിയായ ഉത്തരം",
-    enterName:"ദയവായി നിങ്ങളുടെ പേര് നൽകുക."
+    copiedMsg:"✅ ഫലം ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി!",
+    btnAbort:"✕ പരീക്ഷ ഉപേക്ഷിക്കുക",
+    abortTitle:"പരീക്ഷ ഉപേക്ഷിക്കണമോ?",
+    abortMsg:"പരീക്ഷ ഉപേക്ഷിക്കാൻ തീർച്ചയാണോ? നിങ്ങളുടെ ഇതുവരെയുള്ള ഉത്തരങ്ങളും സ്കോറും നഷ്ടപ്പെടും.",
+    abortCancel:"പരീക്ഷ തുടരുക",
+    abortConfirm:"അതെ, ഉപേക്ഷിക്കുക",
+    timeUpAlert:"⏰ സമയം കഴിഞ്ഞു! പരീക്ഷ സമർപ്പിക്കുന്നു.",
+    codeErrorTitle:"തെറ്റായ സൺഡേ സ്കൂൾ കോഡ്",
+    codeErrorMsg:"ദയവായി നിങ്ങളുടെ സൺഡേ സ്കൂൾ HM മായി ബന്ധപ്പെടുക.",
+    codeErrorInline:"തെറ്റായ കോഡ്. ദയവായി സൺഡേ സ്കൂൾ HM മായി ബന്ധപ്പെടുക.",
+    okBtn:"ശരി"
   }
 };
-var lang = "en";
+
+var savedLang = localStorage.getItem('ss_lang');
+var lang = (savedLang === 'ml' || savedLang === 'en') ? savedLang : 'en';
+
+var savedTheme = localStorage.getItem('ss_theme');
+if (savedTheme === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+} else if (savedTheme === 'light') {
+  document.documentElement.setAttribute('data-theme', 'light');
+}
 
 var BANK = [
 {"unit": 1, "ch": 1, "q": {"en": "Moses was born into which tribe of Israel?", "ml": "മോശ ഏതു ഗോത്രത്തിൽ ജനിച്ചു?"}, "o": {"en": ["Levi", "Judah", "Benjamin", "Reuben"], "ml": ["ലേവി", "യെഹൂദാ", "ബെന്യാമീൻ", "രൂബേൻ"]}, "a": 0},
@@ -733,26 +906,6 @@ function shuffle(arr){
 
 function t(key){ return (UI[lang] && UI[lang][key]) || UI.en[key] || key; }
 
-
-function updateLangChips(){
-  document.querySelectorAll('.lang-chip').forEach(function(chip){
-    if (chip.getAttribute('data-lang') === lang){
-      chip.classList.add('selected');
-    } else {
-      chip.classList.remove('selected');
-    }
-  });
-}
-
-function setLanguage(newLang){
-  lang = newLang;
-  localStorage.setItem('ss_lang', lang);
-  updateLangChips();
-  applyStaticText();
-  if (!document.getElementById('screenQuiz').hidden) renderQuestion();
-  if (!document.getElementById('screenResult').hidden) renderResult();
-}
-
 function updateLangChips(){
   document.querySelectorAll('.lang-chip').forEach(function(chip){
     if (chip.getAttribute('data-lang') === lang){
@@ -773,14 +926,22 @@ function setLanguage(newLang){
 }
 
 function applyStaticText(){
-  document.documentElement.lang = lang;
-  var nodes = document.querySelectorAll('[data-t]');
-  nodes.forEach(function(el){ el.textContent = t(el.getAttribute('data-t')); });
+  document.querySelectorAll('[data-t]').forEach(function(el){
+    var key = el.getAttribute('data-t');
+    if (UI[lang] && UI[lang][key]) el.textContent = UI[lang][key];
+  });
   var sName = document.getElementById('studentName');
-  if (sName) sName.placeholder = (lang === 'en') ? 'Enter your name' : 'പേര് നൽകുക';
-  var lt = document.getElementById('langToggle');
-  if (lt) lt.textContent = lang === 'en' ? 'മലയാളം' : 'English';
-  if (lang === 'ml') {
+  if (sName) sName.placeholder = (lang==='en') ? "Enter your full name" : "മുഴുവൻ പേര് നൽകുക";
+  var rNum = document.getElementById('rollNumber');
+  if (rNum) rNum.placeholder = (lang==='en') ? "Enter your roll number" : "റോൾ നമ്പർ നൽകുക";
+  var sPhone = document.getElementById('studentPhone');
+  if (sPhone) sPhone.placeholder = (lang==='en') ? "+91 98765 43210" : "+91 98765 43210";
+  var scCode = document.getElementById('schoolCode');
+  if (scCode) scCode.placeholder = (lang==='en') ? "Enter Sunday School Code" : "സൺഡേ സ്കൂൾ കോഡ് നൽകുക";
+  var dioSel = document.getElementById('dioceseSelect');
+  if (dioSel && dioSel.options[0]) dioSel.options[0].textContent = (lang==='en') ? "Select your Diocese" : "ഭദ്രാസനം തിരഞ്ഞെടുക്കുക";
+  var lt = document.getElementById('langToggle'); if (lt) lt.textContent = (lang==='en') ? "മലയാളം" : "English";
+  if (lang === 'ml'){
     document.body.classList.add('malayalam');
   } else {
     document.body.classList.remove('malayalam');
@@ -788,14 +949,112 @@ function applyStaticText(){
   updateLangChips();
 }
 
-var lt = document.getElementById('langToggle');
-if (lt) {
-  lt.addEventListener('click', function(){
-    setLanguage(lang === 'en' ? 'ml' : 'en');
+document.querySelectorAll('.lang-chip').forEach(function(chip){
+  chip.addEventListener('click', function(){
+    setLanguage(chip.getAttribute('data-lang'));
+  });
+});
+
+var lt = document.getElementById('langToggle'); if (lt) lt.addEventListener('click', function(){
+  setLanguage(lang === 'en' ? 'ml' : 'en');
+});
+
+// Setup Form State
+var VALID_CODES = ["260101", "260103", "260105", "260106", "260113", "260310"];
+var VALID_DIOCESE = "Thrissur Diocese";
+
+var nameInput = document.getElementById('studentName');
+var rollInput = document.getElementById('rollNumber');
+var phoneInput = document.getElementById('studentPhone');
+var codeInput = document.getElementById('schoolCode');
+var dioceseSelect = document.getElementById('dioceseSelect');
+var startBtn = document.getElementById('startBtn');
+var homeLink = document.getElementById('homeLink');
+
+var codeErrorModal = document.getElementById('codeErrorModal');
+var codeErrorCloseBtn = document.getElementById('codeErrorCloseBtn');
+if (codeErrorCloseBtn && codeErrorModal){
+  codeErrorCloseBtn.addEventListener('click', function(){
+    codeErrorModal.classList.remove('active');
+    if (codeInput) codeInput.focus();
+  });
+  codeErrorModal.addEventListener('click', function(e){
+    if (e.target === codeErrorModal) codeErrorModal.classList.remove('active');
   });
 }
 
+function showCodeErrorModal(){
+  if (codeErrorModal) codeErrorModal.classList.add('active');
+  var errEl = document.getElementById('schoolCodeError');
+  if (errEl) errEl.style.display = 'block';
+}
 
+function isCodeValid(code){
+  return VALID_CODES.indexOf(code) !== -1;
+}
+
+function isDioceseValid(diocese){
+  return diocese === VALID_DIOCESE;
+}
+
+// Navigation prevention during exam
+function handleBeforeUnload(e){
+  if (!document.getElementById('screenQuiz').hidden){
+    e.preventDefault();
+    e.returnValue = '';
+    return '';
+  }
+}
+window.addEventListener('beforeunload', handleBeforeUnload);
+
+function validateSetup(){
+  var n = nameInput.value.trim();
+  var r = rollInput.value.trim();
+  var p = phoneInput.value.trim();
+  var c = codeInput.value.trim();
+  var d = dioceseSelect.value.trim();
+  var errEl = document.getElementById('schoolCodeError');
+
+  var codeHasError = (c !== '' && !isCodeValid(c));
+  var dioceseHasError = (d !== '' && !isDioceseValid(d));
+
+  if (codeHasError || dioceseHasError){
+    if (errEl) errEl.style.display = 'block';
+  } else {
+    if (errEl) errEl.style.display = 'none';
+  }
+
+  if (n && r && p && c && d && isCodeValid(c) && isDioceseValid(d)){
+    startBtn.disabled = false;
+  } else {
+    startBtn.disabled = true;
+  }
+}
+
+nameInput.addEventListener('input', validateSetup);
+rollInput.addEventListener('input', validateSetup);
+phoneInput.addEventListener('input', validateSetup);
+codeInput.addEventListener('input', validateSetup);
+
+codeInput.addEventListener('change', function(){
+  var c = codeInput.value.trim();
+  if (c && !isCodeValid(c)){
+    showCodeErrorModal();
+  }
+  validateSetup();
+});
+
+dioceseSelect.addEventListener('change', function(){
+  var d = dioceseSelect.value.trim();
+  if (d && !isDioceseValid(d)){
+    showCodeErrorModal();
+  }
+  validateSetup();
+});
+
+var state = { count: 25, pool: [], idx: 0, score: 0, answers: [], name: '', roll: '', phone: '', schoolCode: '', diocese: '' };
+
+// Timer state
 var TOTAL_TIME_SECONDS = 25 * 60; // 25 minutes
 var timerInterval = null;
 var secondsLeft = TOTAL_TIME_SECONDS;
@@ -844,42 +1103,24 @@ function stopTimer(){
   clearInterval(timerInterval);
 }
 
-function formatDuration(sec){
-  var m = Math.floor(sec / 60);
-  var s = sec % 60;
-  if (m === 0) return s + (lang === 'ml' ? ' സെക്കൻഡ്' : ' sec');
-  return m + (lang === 'ml' ? ' മിനിറ്റ് ' : 'm ') + s + (lang === 'ml' ? ' സെക്കൻഡ്' : 's');
-}
+startBtn.addEventListener('click', function(){
+  var name = nameInput.value.trim();
+  var roll = rollInput.value.trim();
+  var phone = phoneInput.value.trim();
+  var code = codeInput.value.trim();
+  var diocese = dioceseSelect.value.trim();
+  if (!name || !roll || !phone || !code || !diocese) return;
 
-function handleBeforeUnload(e){
-  if (!document.getElementById('screenQuiz').hidden){
-    e.preventDefault();
-    e.returnValue = '';
-    return '';
-  }
-}
-window.addEventListener('beforeunload', handleBeforeUnload);
-
-var state = { count: 25, pool: [], idx: 0, score: 0, answers: [] };
-
-document.querySelectorAll('.lang-chip').forEach(function(chip){
-  chip.addEventListener('click', function(){
-    setLanguage(chip.getAttribute('data-lang'));
-  });
-});
-
-var savedLang = localStorage.getItem('ss_lang');
-if (savedLang === 'ml' || savedLang === 'en') {
-  lang = savedLang;
-}
-
-document.getElementById('startBtn').addEventListener('click', function(){
-  var name = document.getElementById('studentName').value.trim();
-  if (!name){
-    alert(t('enterName'));
-    document.getElementById('studentName').focus();
+  if (!isDioceseValid(diocese) || !isCodeValid(code)){
+    showCodeErrorModal();
+    if (!isDioceseValid(diocese)){
+      dioceseSelect.focus();
+    } else {
+      codeInput.focus();
+    }
     return;
   }
+
   BANK.forEach(function(item){
     delete item._answered;
     delete item._picked;
@@ -887,15 +1128,28 @@ document.getElementById('startBtn').addEventListener('click', function(){
     delete item._shuffledOrder;
   });
   state.name = name;
+  state.roll = roll;
+  state.phone = phone;
+  state.schoolCode = code;
+  state.diocese = diocese;
   state.pool = shuffle(BANK).slice(0, Math.min(state.count, BANK.length));
   state.idx = 0;
   state.score = 0;
   state.answers = [];
-  var hl = document.getElementById('homeLink');
-  if (hl) hl.style.display = 'none';
+
+  document.getElementById('barName').textContent = name;
+  document.getElementById('barPhone').textContent = phone;
+  document.getElementById('barRoll').textContent = roll;
+  document.getElementById('barCode').textContent = code;
+  document.getElementById('barDiocese').textContent = diocese;
+
+  // Disallow choosing another class while exam is in progress
+  if (homeLink) homeLink.style.display = 'none';
+
   document.getElementById('screenSetup').hidden = true;
   document.getElementById('screenResult').hidden = true;
   document.getElementById('screenQuiz').hidden = false;
+
   startTimer();
   renderQuestion();
 });
@@ -932,7 +1186,7 @@ function renderQuestion(){
   }
 
   qOptionsEl.innerHTML = '';
-  var letters = ['A','B','C','D','E','F'];
+  var letters = ['A','B','C','D'];
   item._shuffledOrder.forEach(function(origIdx, pos){
     var btn = document.createElement('button');
     btn.type = 'button';
@@ -978,7 +1232,7 @@ function selectOption(item, pickedIdx, btnEl){
 
   state.answers.push({
     q: item.q, options: item.o, correctIdx: item.a, pickedIdx: pickedIdx,
-    unit: item.unit, ch: item.ch
+    unit: item.unit, topic: item.topic || {}, ch: item.ch
   });
 
   nextBtn.disabled = false;
@@ -993,45 +1247,84 @@ nextBtn.addEventListener('click', function(){
   }
 });
 
+function saveExamAttempt(attempt){
+  try {
+    var raw = localStorage.getItem('ss_exam_attempts');
+    var list = raw ? JSON.parse(raw) : [];
+    list.unshift(attempt);
+    if (list.length > 1000) list = list.slice(0, 1000);
+    localStorage.setItem('ss_exam_attempts', JSON.stringify(list));
+  } catch(e) {
+    console.error('Failed to save attempt locally', e);
+  }
+
+  try {
+    var cloudUrl = localStorage.getItem('ss_cloud_endpoint');
+    if (cloudUrl && cloudUrl.trim().startsWith('http')) {
+      fetch(cloudUrl.trim(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(attempt),
+        mode: 'no-cors'
+      }).catch(function(err){
+        console.warn('Cloud sync error:', err);
+      });
+    }
+  } catch(e) {
+    console.warn('Cloud sync error:', e);
+  }
+}
+
+function formatDuration(sec){
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  if (m === 0) return s + (lang === 'ml' ? ' സെക്കൻഡ്' : ' sec');
+  return m + (lang === 'ml' ? ' മിനിറ്റ് ' : 'm ') + s + (lang === 'ml' ? ' സെക്കൻഡ്' : 's');
+}
+
 function finishQuiz(){
   stopTimer();
   document.getElementById('progressFill').style.width = '100%';
   document.getElementById('screenQuiz').hidden = true;
   document.getElementById('screenResult').hidden = false;
-  var hl = document.getElementById('homeLink');
-  if (hl) hl.style.display = 'inline-block';
+  if (homeLink) homeLink.style.display = 'inline-block';
   renderResult();
+
+  var total = state.pool.length;
+  var pct = Math.round((state.score / total) * 100);
+  saveExamAttempt({
+    id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+    timestamp: new Date().toISOString(),
+    dateStr: new Date().toLocaleDateString('en-GB'),
+    timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    className: 'Class 5',
+    studentName: state.name,
+    rollNumber: state.roll,
+    studentPhone: state.phone,
+    schoolCode: state.schoolCode,
+    diocese: state.diocese,
+    score: state.score,
+    totalQuestions: total,
+    percentage: pct,
+    status: pct >= 50 ? 'PASS' : 'FAIL',
+    timeTakenSeconds: timeTakenSeconds,
+    durationStr: formatDuration(timeTakenSeconds)
+  });
 }
 
 function renderResult(){
   var total = state.pool.length;
   var pct = Math.round((state.score / total) * 100);
 
-  try {
-    var raw = localStorage.getItem('ss_exam_attempts');
-    var list = raw ? JSON.parse(raw) : [];
-    list.unshift({
-      id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-      timestamp: new Date().toISOString(),
-      dateStr: new Date().toLocaleDateString('en-GB'),
-      timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      className: 'Class 5',
-      studentName: state.name || 'Candidate',
-      score: state.score,
-      totalQuestions: total,
-      percentage: pct,
-      status: pct >= 50 ? 'PASS' : 'FAIL',
-      timeTakenSeconds: timeTakenSeconds,
-      durationStr: formatDuration(timeTakenSeconds)
-    });
-    if (list.length > 1000) list = list.slice(0, 1000);
-    localStorage.setItem('ss_exam_attempts', JSON.stringify(list));
-  } catch(e) {}
+  document.getElementById('resName').textContent = state.name;
+  document.getElementById('resRoll').textContent = state.roll;
+  document.getElementById('resPhone').textContent = state.phone;
+  document.getElementById('resCode').textContent = state.schoolCode;
+  document.getElementById('resDiocese').textContent = state.diocese;
+  document.getElementById('resTime').textContent = formatDuration(timeTakenSeconds);
 
-  document.getElementById('resultName').textContent = t('wellDone').replace('{name}', state.name || '');
   document.getElementById('scoreNum').textContent = state.score + ' / ' + total;
   document.getElementById('scorePct').textContent = pct + '%';
-  var rt = document.getElementById('resTime'); if (rt) rt.textContent = t('timeTaken') + formatDuration(timeTakenSeconds);
   var verdictEl = document.getElementById('verdict');
   if (pct >= 50){
     verdictEl.textContent = t('pass');
@@ -1043,6 +1336,40 @@ function renderResult(){
   buildReview();
 }
 
+window.shareResult = function(){
+  var total = state.pool.length;
+  var pct = Math.round((state.score / total) * 100);
+  var verdict = pct >= 50 ? 'PASS' : 'TRY AGAIN';
+  var shareText = 'M.G.O.S.C OSSAE Class V Annual Exam\n' +
+    'Candidate: ' + state.name + '\n' +
+    'Roll No: ' + state.roll + '\n' +
+    'Phone: ' + state.phone + '\n' +
+    'Sunday School Code: ' + state.schoolCode + '\n' +
+    'Diocese: ' + state.diocese + '\n' +
+    'Time Taken: ' + formatDuration(timeTakenSeconds) + '\n' +
+    'Score: ' + state.score + ' / ' + total + ' (' + pct + '%)\n' +
+    'Result: ' + verdict + '\n' +
+    'https://sunday-school-exam.vercel.app';
+
+  if (navigator.share){
+    navigator.share({
+      title: 'Class V Annual Exam Result',
+      text: shareText
+    }).catch(function(){ copyShareText(shareText); });
+  } else {
+    copyShareText(shareText);
+  }
+};
+
+function copyShareText(text){
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.getElementById('shareBtn');
+    var original = btn.innerHTML;
+    btn.innerHTML = '<span>✅</span> <span>' + t('copiedMsg') + '</span>';
+    setTimeout(function(){ btn.innerHTML = original; }, 2200);
+  });
+}
+
 function buildReview(){
   var block = document.getElementById('reviewBlock');
   block.innerHTML = '<h3>' + (lang==='en' ? 'Answer Review' : 'ഉത്തര പരിശോധന') + '</h3>';
@@ -1051,7 +1378,11 @@ function buildReview(){
     div.className = 'review-item';
     var qDiv = document.createElement('div');
     qDiv.className = 'review-q';
-    qDiv.textContent = (i+1) + '. ' + a.q[lang];
+    var topicPrefix = '';
+    if (a.topic && a.topic[lang]) {
+      topicPrefix = '[' + a.topic[lang] + '] ';
+    }
+    qDiv.textContent = (i+1) + '. ' + topicPrefix + a.q[lang];
     div.appendChild(qDiv);
 
     var aDiv = document.createElement('div');
@@ -1082,7 +1413,7 @@ document.getElementById('reviewToggle').addEventListener('click', function(){
   btn.textContent = block.hidden ? t('btnReview') : t('btnReviewHide');
 });
 
-
+// Abort Exam Modal & Actions
 var abortModal = document.getElementById('abortModal');
 var abortBtn = document.getElementById('abortBtn');
 var abortCancelBtn = document.getElementById('abortCancelBtn');
@@ -1131,25 +1462,23 @@ if (abortConfirmBtn) {
     document.getElementById('screenQuiz').hidden = true;
     document.getElementById('screenResult').hidden = true;
     document.getElementById('screenSetup').hidden = false;
-    var hl = document.getElementById('homeLink');
-    if (hl) hl.style.display = 'inline-block';
+    if (homeLink) homeLink.style.display = 'inline-block';
+    validateSetup();
   });
 }
 
-document.getElementById('retryBtn').addEventListener('click', function(){
-  BANK.forEach(function(item){
-    delete item._answered;
-    delete item._picked;
-    delete item._shuffled;
-    delete item._shuffledOrder;
+var retryBtn = document.getElementById('retryBtn');
+if (retryBtn) {
+  retryBtn.addEventListener('click', function(){
+    resetExamState();
+    document.getElementById('reviewBlock').hidden = true;
+    document.getElementById('reviewToggle').textContent = t('btnReview');
+    document.getElementById('screenResult').hidden = true;
+    document.getElementById('screenSetup').hidden = false;
+    if (homeLink) homeLink.style.display = 'inline-block';
+    validateSetup();
   });
-  document.getElementById('reviewBlock').hidden = true;
-  document.getElementById('reviewToggle').textContent = t('btnReview');
-  document.getElementById('screenResult').hidden = true;
-  document.getElementById('screenSetup').hidden = false;
-  var hl = document.getElementById('homeLink');
-  if (hl) hl.style.display = 'inline-block';
-});
+}
 
 var btnTranslate = document.getElementById('btnTranslate');
 if (btnTranslate) {
@@ -1160,6 +1489,7 @@ if (btnTranslate) {
 
 applyStaticText();
 })();
+
 </script>
 </body>
 </html>
