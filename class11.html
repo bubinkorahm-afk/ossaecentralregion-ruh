@@ -610,6 +610,19 @@
   </div>
 </div>
 
+<!-- Ready for Quiz Confirmation Modal -->
+<div class="modal-overlay" id="startModal" role="dialog" aria-modal="true" aria-labelledby="startModalTitle">
+  <div class="modal-box" style="text-align:center; max-width:440px;">
+    <span class="modal-icon" style="font-size:2.8rem; display:block; margin-bottom:10px;">✨</span>
+    <h3 id="startModalTitle" style="color:var(--gold); font-size:1.45rem; margin:0 0 12px; line-height:1.3;" data-t="startModalTitle">Ready for the Quiz? ✨</h3>
+    <p id="startModalMsg" style="color:var(--muted); font-size:.92rem; margin:0 0 22px; line-height:1.6;" data-t="startModalMsg">Want to score full marks? Review the lessons thoroughly before taking the test!</p>
+    <div class="modal-actions" style="display:flex; gap:10px; justify-content:center;">
+      <button type="button" class="btn-modal-cancel" id="startModalCancelBtn" data-t="startModalCancel">Review More</button>
+      <button type="button" class="btn-primary" id="startModalAcceptBtn" style="flex:1.2; margin-top:0; padding:11px 16px; font-size:.92rem;" data-t="startModalAccept">I am Ready &middot; Start Exam</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -669,6 +682,10 @@ var UI = {
     codeErrorTitle:"Wrong Sunday School Code",
     codeErrorMsg:"Please contact your Sunday school HM.",
     codeErrorInline:"Wrong code. Please contact your Sunday school HM.",
+        startModalTitle:"Ready for the Quiz? ✨",
+    startModalMsg:"Want to score full marks? Review the lessons thoroughly before taking the test!",
+    startModalCancel:"Review More",
+    startModalAccept:"I am Ready · Start Exam",
     okBtn:"OK"
   },
   ml:{
@@ -718,6 +735,10 @@ var UI = {
     codeErrorTitle:"തെറ്റായ സൺഡേ സ്കൂൾ കോഡ്",
     codeErrorMsg:"ദയവായി നിങ്ങളുടെ സൺഡേ സ്കൂൾ HM മായി ബന്ധപ്പെടുക.",
     codeErrorInline:"തെറ്റായ കോഡ്. ദയവായി സൺഡേ സ്കൂൾ HM മായി ബന്ധപ്പെടുക.",
+        startModalTitle:"പരീക്ഷയ്ക്ക് തയ്യാറാണോ? ✨",
+    startModalMsg:"മികച്ച മാർക്ക് നേടാൻ പാഠങ്ങൾ ഒന്നുകൂടി വായിച്ചു നോക്കൂ. നന്നായി പഠിച്ച ശേഷം മാത്രം പരീക്ഷ എഴുതുക!",
+    startModalCancel:"കൂടുതൽ പഠിക്കുക",
+    startModalAccept:"ഞാൻ തയ്യാറാണ് · പരീക്ഷ ആരംഭിക്കുക",
     okBtn:"ശരി"
   }
 };
@@ -941,23 +962,32 @@ window.addEventListener('beforeunload', handleBeforeUnload);
 
 var state = { count: 30, pool: [], idx: 0, score: 0, answers: [], name: '', roll: '', phone: '', schoolCode: '', diocese: '' };
 
-startBtn.addEventListener('click', function(){
+var startModal = document.getElementById('startModal');
+var startModalCancelBtn = document.getElementById('startModalCancelBtn');
+var startModalAcceptBtn = document.getElementById('startModalAcceptBtn');
+
+if (startModalCancelBtn && startModal){
+  startModalCancelBtn.addEventListener('click', function(){
+    startModal.classList.remove('active');
+  });
+  startModal.addEventListener('click', function(e){
+    if (e.target === startModal) startModal.classList.remove('active');
+  });
+}
+
+if (startModalAcceptBtn && startModal){
+  startModalAcceptBtn.addEventListener('click', function(){
+    startModal.classList.remove('active');
+    beginExam();
+  });
+}
+
+function beginExam(){
   var name = nameInput.value.trim();
   var roll = rollInput.value.trim();
   var phone = phoneInput.value.trim();
   var code = codeInput.value.trim();
   var diocese = dioceseSelect.value.trim();
-  if (!name || !roll || !phone || !code || !diocese) return;
-
-  if (!isDioceseValid(diocese) || !isCodeValid(code)){
-    showCodeErrorModal();
-    if (!isDioceseValid(diocese)){
-      dioceseSelect.focus();
-    } else {
-      codeInput.focus();
-    }
-    return;
-  }
 
   BANK.forEach(function(item){
     delete item._answered;
@@ -981,12 +1011,40 @@ startBtn.addEventListener('click', function(){
   document.getElementById('barCode').textContent = code;
   document.getElementById('barDiocese').textContent = diocese;
 
-  document.getElementById('homeLink').style.display = 'none';
+  var hl = document.getElementById('homeLink');
+  if (hl) hl.style.display = 'none';
+
   document.getElementById('screenSetup').hidden = true;
   document.getElementById('screenResult').hidden = true;
   document.getElementById('screenQuiz').hidden = false;
+
   startTimer();
   renderQuestion();
+}
+
+startBtn.addEventListener('click', function(){
+  var name = nameInput.value.trim();
+  var roll = rollInput.value.trim();
+  var phone = phoneInput.value.trim();
+  var code = codeInput.value.trim();
+  var diocese = dioceseSelect.value.trim();
+  if (!name || !roll || !phone || !code || !diocese) return;
+
+  if (!isDioceseValid(diocese) || !isCodeValid(code)){
+    showCodeErrorModal();
+    if (!isDioceseValid(diocese)){
+      dioceseSelect.focus();
+    } else {
+      codeInput.focus();
+    }
+    return;
+  }
+
+  if (startModal){
+    startModal.classList.add('active');
+  } else {
+    beginExam();
+  }
 });
 
 var qOptionsEl = document.getElementById('qOptions');
