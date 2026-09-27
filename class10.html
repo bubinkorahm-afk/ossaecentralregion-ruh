@@ -989,6 +989,27 @@ function beginExam(){
   state.idx = 0;
   state.score = 0;
   state.answers = [];
+  state.attemptId = 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+  var now = new Date();
+  saveExamAttempt({
+    id: state.attemptId,
+    timestamp: now.toISOString(),
+    dateStr: now.toLocaleDateString('en-GB'),
+    timeStr: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    className: 'Class 10',
+    studentName: state.name,
+    rollNumber: state.roll,
+    studentPhone: state.phone,
+    schoolCode: state.schoolCode,
+    diocese: state.diocese,
+    score: 0,
+    totalQuestions: state.pool.length,
+    percentage: 0,
+    status: 'IN PROGRESS',
+    timeTakenSeconds: 0,
+    durationStr: 'In Progress',
+    startedAt: now.toISOString()
+  });
 
   document.getElementById('barName').textContent = name;
   document.getElementById('barPhone').textContent = phone;
@@ -1101,6 +1122,24 @@ function selectOption(item, pickedIdx, btnEl){
     unit: item.unit, topic: item.topic
   });
 
+    if (state.attemptId){
+    try {
+      var rawAttempts = localStorage.getItem('ss_exam_attempts');
+      if (rawAttempts){
+        var attemptsList = JSON.parse(rawAttempts);
+        for (var ai = 0; ai < attemptsList.length; ai++){
+          if (attemptsList[ai].id === state.attemptId){
+            attemptsList[ai].score = state.score;
+            attemptsList[ai].percentage = Math.round((state.score / state.pool.length) * 100);
+            attemptsList[ai].questionsAnswered = state.answers.length;
+            localStorage.setItem('ss_exam_attempts', JSON.stringify(attemptsList));
+            break;
+          }
+        }
+      }
+    } catch(ae){}
+  }
+
   nextBtn.disabled = false;
 }
 
@@ -1117,7 +1156,17 @@ function saveExamAttempt(attempt){
   try {
     var raw = localStorage.getItem('ss_exam_attempts');
     var list = raw ? JSON.parse(raw) : [];
-    list.unshift(attempt);
+    var found = false;
+    for (var i = 0; i < list.length; i++){
+      if (list[i].id === attempt.id){
+        list[i] = Object.assign({}, list[i], attempt);
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      list.unshift(attempt);
+    }
     if (list.length > 1000) list = list.slice(0, 1000);
     localStorage.setItem('ss_exam_attempts', JSON.stringify(list));
   } catch(e) {
@@ -1153,7 +1202,7 @@ function finishQuiz(){
   var total = state.pool.length;
   var pct = Math.round((state.score / total) * 100);
   saveExamAttempt({
-    id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+    id: state.attemptId || ('att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6)),
     timestamp: new Date().toISOString(),
     dateStr: new Date().toLocaleDateString('en-GB'),
     timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -1297,6 +1346,7 @@ abortModal.addEventListener('click', function(e){
 });
 
 function resetExamState(){
+  state.attemptId = null;
   stopTimer();
   BANK.forEach(function(item){
     delete item._answered;
@@ -1314,6 +1364,30 @@ function resetExamState(){
 
 abortConfirmBtn.addEventListener('click', function(){
   abortModal.classList.remove('active');
+  if (state.attemptId){
+    var total = (state.pool && state.pool.length) ? state.pool.length : 25;
+    var pct = Math.round(((state.score || 0) / total) * 100);
+    var now = new Date();
+    saveExamAttempt({
+      id: state.attemptId,
+      timestamp: now.toISOString(),
+      dateStr: now.toLocaleDateString('en-GB'),
+      timeStr: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      className: 'Class 10',
+      studentName: state.name,
+      rollNumber: state.roll,
+      studentPhone: state.phone,
+      schoolCode: state.schoolCode,
+      diocese: state.diocese,
+      score: state.score || 0,
+      totalQuestions: total,
+      percentage: pct,
+      status: 'ABORTED',
+      timeTakenSeconds: timeTakenSeconds,
+      durationStr: formatDuration(timeTakenSeconds) + ' (Aborted)',
+      abortedAt: now.toISOString()
+    });
+  }
   resetExamState();
   document.getElementById('screenQuiz').hidden = true;
   document.getElementById('screenResult').hidden = true;

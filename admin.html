@@ -427,6 +427,8 @@
   }
   .badge-pass{ background:var(--good-bg); color:var(--good); }
   .badge-fail{ background:var(--bad-bg); color:var(--bad); }
+  .badge-inprogress{ background:var(--warn-bg); color:var(--warn); border:1px solid rgba(180,83,9,.3); }
+  .badge-aborted{ background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
 
   .badge-class-c5 { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
   .badge-class-c6 { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
@@ -445,6 +447,8 @@
   [data-theme="dark"] .badge-class-c10 { background: #451a03; color: #fcd34d; border-color: #78350f; }
   [data-theme="dark"] .badge-class-c11 { background: #1e1b4b; color: #a5b4fc; border-color: #3730a3; }
   [data-theme="dark"] .badge-class-c12 { background: #3b0764; color: #d8b4fe; border-color: #581c87; }
+  [data-theme="dark"] .badge-inprogress{ background:#3d2c14; color:#fcd34d; border-color:#78350f; }
+  [data-theme="dark"] .badge-aborted{ background:#1e293b; color:#94a3b8; border-color:#334155; }
 
   .score-cell{
     font-weight:700;
@@ -638,6 +642,9 @@
         <p>Candidate Attempt Logs &amp; Marksheet &middot; All Classes (Classes 5 to 12)</p>
       </div>
       <div style="display:flex; gap:10px; align-items:center;">
+        <button type="button" class="btn btn-outline" onclick="loadAttempts()" title="Refresh attempt records from storage">
+          <span>🔄</span> <span>Refresh</span>
+        </button>
         <button type="button" class="btn btn-primary" onclick="exportCSV()">
           <span>📥</span> <span>Export CSV / Excel</span>
         </button>
@@ -713,11 +720,13 @@
       </select>
     </div>
     <div class="filter-group">
-      <label>Filter by Result</label>
+      <label>Filter by Status</label>
       <select id="statusFilter">
-        <option value="">All Results</option>
+        <option value="">All Statuses</option>
         <option value="PASS">Passed Only</option>
         <option value="FAIL">Failed Only</option>
+        <option value="IN PROGRESS">In Progress Only</option>
+        <option value="ABORTED">Aborted Only</option>
       </select>
     </div>
     <div class="filter-group">
@@ -979,6 +988,10 @@
   function renderStats(){
     var total = attemptsData.length;
     var passCount = 0;
+    var failCount = 0;
+    var inProgressCount = 0;
+    var abortedCount = 0;
+    var completedCount = 0;
     var scorePctSum = 0;
     var scoreSum = 0;
     var totalQSum = 0;
@@ -986,38 +999,60 @@
 
     var classStats = {};
     ALL_CLASSES.forEach(function(c){
-      classStats[c] = { count: 0, pass: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
+      classStats[c] = { count: 0, pass: 0, fail: 0, inProgress: 0, aborted: 0, completed: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
     });
 
     attemptsData.forEach(function(a){
       var c = a.className || 'Other';
       if (!classStats[c]){
-        classStats[c] = { count: 0, pass: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
+        classStats[c] = { count: 0, pass: 0, fail: 0, inProgress: 0, aborted: 0, completed: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
       }
-      var isPass = (a.status === 'PASS' || (a.percentage || 0) >= 50);
       classStats[c].count++;
-      if (isPass) classStats[c].pass++;
-      classStats[c].scorePctSum += (a.percentage || 0);
-      classStats[c].marksSum += (a.score || 0);
-      classStats[c].totalQuestions = a.totalQuestions || classStats[c].totalQuestions || 25;
 
-      scorePctSum += (a.percentage || 0);
-      scoreSum += (a.score || 0);
-      totalQSum += (a.totalQuestions || 25);
-      if (isPass) passCount++;
+      var s = (a.status || '').toUpperCase();
+      if (s === 'IN PROGRESS' || s === 'STARTED'){
+        inProgressCount++;
+        classStats[c].inProgress++;
+      } else if (s === 'ABORTED'){
+        abortedCount++;
+        classStats[c].aborted++;
+      } else {
+        // Completed: PASS or FAIL
+        completedCount++;
+        classStats[c].completed++;
+        var isPass = (s === 'PASS' || (!s && (a.percentage || 0) >= 50));
+        if (isPass){
+          passCount++;
+          classStats[c].pass++;
+        } else {
+          failCount++;
+          classStats[c].fail++;
+        }
+        scorePctSum += (a.percentage || 0);
+        scoreSum += (a.score || 0);
+        totalQSum += (a.totalQuestions || 25);
+        classStats[c].scorePctSum += (a.percentage || 0);
+        classStats[c].marksSum += (a.score || 0);
+      }
+
+      classStats[c].totalQuestions = a.totalQuestions || classStats[c].totalQuestions || 25;
       if (a.diocese) diocesesSet.add(a.diocese);
     });
 
-    var avgPct = total ? Math.round(scorePctSum / total) : 0;
-    var passRate = total ? Math.round((passCount / total) * 100) : 0;
-    var avgMarks = total ? (scoreSum / total).toFixed(1) : 0;
-    var avgTotalQ = total ? Math.round(totalQSum / total) : 25;
+    var avgPct = completedCount ? Math.round(scorePctSum / completedCount) : 0;
+    var passRate = completedCount ? Math.round((passCount / completedCount) * 100) : 0;
+    var avgMarks = completedCount ? (scoreSum / completedCount).toFixed(1) : 0;
+    var avgTotalQ = completedCount ? Math.round(totalQSum / completedCount) : 25;
 
     document.getElementById('statTotal').textContent = total;
     document.getElementById('statPassRate').textContent = passRate + '%';
-    document.getElementById('statPassCount').textContent = passCount + ' passed · ' + (total - passCount) + ' failed';
+    var passSub = passCount + ' passed · ' + failCount + ' failed';
+    if (inProgressCount) passSub += ' · ' + inProgressCount + ' active';
+    if (abortedCount) passSub += ' · ' + abortedCount + ' aborted';
+    document.getElementById('statPassCount').textContent = passSub;
+
     document.getElementById('statAvgScore').textContent = avgPct + '%';
-    document.getElementById('statAvgMarks').textContent = avgMarks + ' / ' + avgTotalQ + ' marks avg';
+    document.getElementById('statAvgMarks').textContent = completedCount ? (avgMarks + ' / ' + avgTotalQ + ' marks avg') : 'No completed tests yet';
     document.getElementById('statDioceses').textContent = diocesesSet.size;
 
     // Subtitle breakdown for total
@@ -1039,16 +1074,20 @@
         var stat = classStats[c];
         var card = document.createElement('div');
         card.className = 'class-pill-card' + (activeFilter === c ? ' active' : '');
-        var cAvg = stat.count ? Math.round(stat.scorePctSum / stat.count) : 0;
-        var cPassPct = stat.count ? Math.round((stat.pass / stat.count) * 100) : 0;
+        var cComp = stat.completed || 0;
+        var cAvg = cComp ? Math.round(stat.scorePctSum / cComp) : 0;
+        var cPassPct = cComp ? Math.round((stat.pass / cComp) * 100) : 0;
+
+        var subDesc = stat.count ? (stat.pass + '/' + stat.count + ' passed (' + cPassPct + '%)') : 'No records';
+        if (stat.inProgress) subDesc += ' · ' + stat.inProgress + ' active';
 
         card.innerHTML =
           '<div class="class-pill-name">' +
             '<span>' + c + '</span>' +
             '<span class="badge ' + getClassBadgeClass(c) + '" style="font-size:.68rem; padding:1px 6px;">' + stat.count + '</span>' +
           '</div>' +
-          '<div class="class-pill-count">' + (stat.count ? cAvg + '%' : '-') + '</div>' +
-          '<div class="class-pill-sub">' + (stat.count ? stat.pass + '/' + stat.count + ' passed (' + cPassPct + '%)' : 'No records') + '</div>';
+          '<div class="class-pill-count">' + (cComp ? cAvg + '%' : (stat.inProgress ? 'Active' : '-')) + '</div>' +
+          '<div class="class-pill-sub">' + subDesc + '</div>';
 
         card.addEventListener('click', function(){
           var cf = document.getElementById('classFilter');
@@ -1077,7 +1116,13 @@
     var filtered = attemptsData.filter(function(a){
       if (cFilter && a.className !== cFilter) return false;
       if (dFilterVal && a.diocese !== dFilterVal) return false;
-      if (sFilter && a.status !== sFilter) return false;
+      if (sFilter){
+        var itemStatus = (a.status || '').toUpperCase();
+        if (sFilter === 'PASS' && itemStatus !== 'PASS' && (itemStatus || (a.percentage || 0) < 50)) return false;
+        if (sFilter === 'FAIL' && itemStatus !== 'FAIL' && (itemStatus || (a.percentage || 0) >= 50)) return false;
+        if (sFilter === 'IN PROGRESS' && itemStatus !== 'IN PROGRESS' && itemStatus !== 'STARTED') return false;
+        if (sFilter === 'ABORTED' && itemStatus !== 'ABORTED') return false;
+      }
 
       if (q){
         var haystack = [
@@ -1086,7 +1131,8 @@
           a.studentPhone || '',
           a.schoolCode || '',
           a.diocese || '',
-          a.className || ''
+          a.className || '',
+          a.status || ''
         ].join(' ').toLowerCase();
         if (haystack.indexOf(q) === -1) return false;
       }
@@ -1125,7 +1171,36 @@
 
     list.forEach(function(item, idx){
       var tr = document.createElement('tr');
-      var isPass = (item.status === 'PASS' || (item.percentage || 0) >= 50);
+      var s = (item.status || '').toUpperCase();
+      var isPass = (s === 'PASS' || (!s && (item.percentage || 0) >= 50));
+      var statusBadgeHtml = '';
+      if (s === 'IN PROGRESS' || s === 'STARTED'){
+        statusBadgeHtml = '<span class="badge badge-inprogress">⏳ In Progress</span>';
+      } else if (s === 'ABORTED'){
+        statusBadgeHtml = '<span class="badge badge-aborted">⚠️ Aborted</span>';
+      } else if (isPass){
+        statusBadgeHtml = '<span class="badge badge-pass">PASS</span>';
+      } else {
+        statusBadgeHtml = '<span class="badge badge-fail">FAIL</span>';
+      }
+
+      var scoreCellHtml = '';
+      if (s === 'IN PROGRESS' || s === 'STARTED'){
+        scoreCellHtml =
+          '<div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 25) +
+          ' <span style="color:var(--warn); font-size:.78rem;">(' + (item.percentage || 0) + '% · Active)</span></div>' +
+          '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%; background:var(--warn);"></div></div>';
+      } else if (s === 'ABORTED'){
+        scoreCellHtml =
+          '<div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 25) +
+          ' <span style="color:var(--muted); font-size:.78rem;">(' + (item.percentage || 0) + '% · Aborted)</span></div>' +
+          '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%; background:var(--muted);"></div></div>';
+      } else {
+        scoreCellHtml =
+          '<div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 25) +
+          ' <span style="color:var(--muted); font-size:.78rem;">(' + (item.percentage || 0) + '%)</span></div>' +
+          '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%"></div></div>';
+      }
 
       var dt = (item.dateStr || '') + ' ' + (item.timeStr || '');
       if (!item.dateStr && item.timestamp) {
@@ -1142,10 +1217,9 @@
         '<td><a href="tel:' + escapeHtml(item.studentPhone || '') + '" style="color:inherit; text-decoration:none; font-variant-numeric:tabular-nums;">' + escapeHtml(item.studentPhone || '-') + '</a></td>' +
         '<td><code>' + escapeHtml(item.schoolCode || '-') + '</code></td>' +
         '<td style="max-width:180px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="' + escapeHtml(item.diocese || '-') + '">' + escapeHtml(item.diocese || '-') + '</td>' +
-        '<td><div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 25) + ' <span style="color:var(--muted); font-size:.78rem;">(' + (item.percentage || 0) + '%)</span></div>' +
-            '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%"></div></div></td>' +
-        '<td><span class="badge ' + (isPass ? 'badge-pass' : 'badge-fail') + '">' + (isPass ? 'PASS' : 'FAIL') + '</span></td>' +
-        '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + (item.durationStr || (item.timeTakenSeconds ? item.timeTakenSeconds + 's' : '-')) + '</td>' +
+        '<td>' + scoreCellHtml + '</td>' +
+        '<td>' + statusBadgeHtml + '</td>' +
+        '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + escapeHtml(item.durationStr || (item.timeTakenSeconds ? item.timeTakenSeconds + 's' : '-')) + '</td>' +
         '<td style="white-space:nowrap;">' +
           '<button type="button" class="btn-row-action" onclick="viewAttempt(\'' + item.id + '\')">👁️ View</button> ' +
           '<button type="button" class="btn-row-action delete" onclick="deleteAttempt(\'' + item.id + '\')">🗑️</button>' +
@@ -1180,7 +1254,14 @@
     if (!item) return;
     activeModalItem = item;
 
-    var isPass = (item.status === 'PASS' || (item.percentage || 0) >= 50);
+    var s = (item.status || '').toUpperCase();
+    var isPass = (s === 'PASS' || (!s && (item.percentage || 0) >= 50));
+    var statusBadge = '';
+    if (s === 'IN PROGRESS' || s === 'STARTED') statusBadge = '<span class="badge badge-inprogress">⏳ In Progress</span>';
+    else if (s === 'ABORTED') statusBadge = '<span class="badge badge-aborted">⚠️ Aborted</span>';
+    else if (isPass) statusBadge = '<span class="badge badge-pass">PASS</span>';
+    else statusBadge = '<span class="badge badge-fail">FAIL</span>';
+
     var html =
       '<div style="background:var(--surface-2); padding:14px; border-radius:12px; margin-bottom:16px; border:1px solid var(--border);">' +
         '<div><strong>Candidate:</strong> ' + escapeHtml(item.studentName || '-') + '</div>' +
@@ -1191,10 +1272,10 @@
       '</div>' +
       '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">' +
         '<div><strong>Class:</strong> ' + escapeHtml(item.className || '-') + '</div>' +
-        '<div><strong>Result:</strong> <span class="badge ' + (isPass ? 'badge-pass' : 'badge-fail') + '">' + (isPass ? 'PASS' : 'FAIL') + '</span></div>' +
+        '<div><strong>Status:</strong> ' + statusBadge + '</div>' +
         '<div><strong>Score:</strong> ' + (item.score || 0) + ' / ' + (item.totalQuestions || 30) + ' (' + (item.percentage || 0) + '%)</div>' +
-        '<div><strong>Time Taken:</strong> ' + (item.durationStr || '-') + '</div>' +
-        '<div style="grid-column:span 2;"><strong>Timestamp:</strong> ' + (item.timestamp || item.dateStr || '-') + '</div>' +
+        '<div><strong>Duration:</strong> ' + escapeHtml(item.durationStr || '-') + '</div>' +
+        '<div style="grid-column:span 2;"><strong>Timestamp:</strong> ' + escapeHtml(item.timestamp || item.dateStr || '-') + '</div>' +
       '</div>';
 
     document.getElementById('modalDetailContent').innerHTML = html;
@@ -1552,6 +1633,16 @@
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI(savedTheme);
   }
+
+  // Real-time live update listeners
+  window.addEventListener('storage', function(e){
+    if (e.key === 'ss_exam_attempts'){
+      loadAttempts();
+    }
+  });
+  window.addEventListener('focus', function(){
+    loadAttempts();
+  });
 
   // Init
   checkSessionAuth();
