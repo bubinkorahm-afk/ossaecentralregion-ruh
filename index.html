@@ -17,6 +17,7 @@
       --border: #e4d8bf;
       --accent7: #7b1e2b;
       --accent8: #831843;
+      --accent9: #0d766e;
       --accent6: #1f5c4d;
       --accent5: #235482;
       --accent10: #b45309;
@@ -40,6 +41,7 @@
       --border: #3d352b;
       --accent7: #e0929c;
       --accent8: #f472b6;
+      --accent9: #2dd4bf;
       --accent6: #7fc9a9;
       --accent5: #6ea8dc;
       --accent10: #f59e0b;
@@ -259,6 +261,10 @@
       background: linear-gradient(90deg, var(--accent8), var(--gold));
     }
 
+    .card.c9::before {
+      background: linear-gradient(90deg, var(--accent9), var(--gold));
+    }
+
     .card.wip::before {
       background: linear-gradient(90deg, #888888, #cccccc);
     }
@@ -331,6 +337,11 @@
     .badge-c8 {
       background: color-mix(in srgb, var(--accent8) 14%, transparent);
       color: var(--accent8);
+    }
+
+    .badge-c9 {
+      background: color-mix(in srgb, var(--accent9) 14%, transparent);
+      color: var(--accent9);
     }
 
     .card p {
@@ -530,9 +541,9 @@
     <h1 data-en="Sunday School Annual Exam" data-ml="സൺഡേ സ്കൂൾ വാർഷിക പരീക്ഷ">Sunday School Annual Exam</h1>
     <p class="sub" data-en="O.S.S.A.E. · All Divisions — Classes 5 to 12 · Choose your class to begin the practice exam" data-ml="ഒ.എസ്.എസ്.എ.ഇ. · എല്ലാ ഡിവിഷനുകളും — ക്ലാസ്സ് 5 മുതൽ 12 വരെ · പരിശീലന പരീക്ഷ ആരംഭിക്കാൻ നിങ്ങളുടെ ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">O.S.S.A.E. · All Divisions — Classes 5 to 12 · Choose your class to begin the practice exam</p>
 
-    <!-- Available Section -->
+    <!-- Classes Section -->
     <div class="section-head">
-      <span class="section-label" data-en="Available Now" data-ml="ഇപ്പോൾ ലഭ്യമായവ">Available Now</span>
+      <span class="section-label" data-en="Select Your Class" data-ml="ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Select Your Class</span>
       <div class="section-line"></div>
     </div>
 
@@ -589,6 +600,19 @@
         </div>
       </a>
 
+      <a class="card c9" href="class9.html">
+        <div>
+          <div class="card-top">
+            <h2 data-en="Class IX" data-ml="ക്ലാസ്സ് IX">Class IX</h2>
+            <span class="card-badge badge-c9" data-en="435 Questions" data-ml="435 ചോദ്യങ്ങൾ">435 Questions</span>
+          </div>
+          <p data-en="9 Units · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="9 യൂണിറ്റുകൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">9 Units · English &amp; Malayalam · 25 questions randomly selected per exam</p>
+        </div>
+        <div class="card-action">
+          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
+        </div>
+      </a>
+
       <a class="card c10" href="class10.html">
         <div>
           <div class="card-top">
@@ -627,20 +651,6 @@
           <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
         </div>
       </a>
-    </div>
-
-    <!-- Coming Soon Section -->
-    <div class="section-head">
-      <span class="section-label" data-en="Coming Soon" data-ml="ഉടൻ ലഭ്യമാകും">Coming Soon</span>
-      <div class="section-line"></div>
-    </div>
-
-    <div class="grid-wip">
-      <button class="card wip" onclick="showWIP('Class IX')">
-        <h2 data-en="Class IX" data-ml="ക്ലാസ്സ് IX">Class IX</h2>
-        <p data-en="Questions coming soon" data-ml="ചോദ്യങ്ങൾ ഉടൻ വരും">Questions coming soon</p>
-        <span class="wip-badge" data-en="🚧 Coming Soon" data-ml="🚧 ഉടൻ വരും">🚧 Coming Soon</span>
-      </button>
     </div>
 
     <footer>

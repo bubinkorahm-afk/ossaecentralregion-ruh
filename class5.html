@@ -1006,6 +1006,28 @@ function finishQuiz(){
 function renderResult(){
   var total = state.pool.length;
   var pct = Math.round((state.score / total) * 100);
+
+  try {
+    var raw = localStorage.getItem('ss_exam_attempts');
+    var list = raw ? JSON.parse(raw) : [];
+    list.unshift({
+      id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      timestamp: new Date().toISOString(),
+      dateStr: new Date().toLocaleDateString('en-GB'),
+      timeStr: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      className: 'Class 5',
+      studentName: state.name || 'Candidate',
+      score: state.score,
+      totalQuestions: total,
+      percentage: pct,
+      status: pct >= 50 ? 'PASS' : 'FAIL',
+      timeTakenSeconds: timeTakenSeconds,
+      durationStr: formatDuration(timeTakenSeconds)
+    });
+    if (list.length > 1000) list = list.slice(0, 1000);
+    localStorage.setItem('ss_exam_attempts', JSON.stringify(list));
+  } catch(e) {}
+
   document.getElementById('resultName').textContent = t('wellDone').replace('{name}', state.name || '');
   document.getElementById('scoreNum').textContent = state.score + ' / ' + total;
   document.getElementById('scorePct').textContent = pct + '%';

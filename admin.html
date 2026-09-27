@@ -203,6 +203,80 @@
     font-weight:600;
   }
 
+  /* Class Breakdown Section */
+  .class-breakdown-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 22px;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+  }
+  .class-breakdown-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .class-breakdown-title{
+    font-size:.88rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .class-pills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+    gap:10px;
+  }
+  .class-pill-card{
+    background:var(--surface-2);
+    border:1.5px solid var(--border);
+    border-radius:14px;
+    padding:10px 12px;
+    cursor:pointer;
+    transition:all .2s ease;
+    text-align:left;
+    user-select:none;
+    display:block;
+  }
+  .class-pill-card:hover{
+    border-color:var(--gold);
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(0,0,0,.08);
+  }
+  .class-pill-card.active{
+    border-color:var(--accent);
+    background:color-mix(in srgb, var(--accent) 12%, var(--surface));
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .class-pill-name{
+    font-weight:700;
+    font-size:.84rem;
+    margin-bottom:3px;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .class-pill-count{
+    font-size:1.15rem;
+    font-weight:700;
+    color:var(--ink);
+    line-height:1.1;
+  }
+  .class-pill-sub{
+    font-size:.72rem;
+    color:var(--muted);
+    margin-top:3px;
+  }
+
   /* Actions Bar */
   .toolbar{
     display:flex;
@@ -353,6 +427,24 @@
   }
   .badge-pass{ background:var(--good-bg); color:var(--good); }
   .badge-fail{ background:var(--bad-bg); color:var(--bad); }
+
+  .badge-class-c5 { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+  .badge-class-c6 { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+  .badge-class-c7 { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
+  .badge-class-c8 { background: #fff1f2; color: #9f1239; border-color: #fecdd3; }
+  .badge-class-c9 { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+  .badge-class-c10 { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+  .badge-class-c11 { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+  .badge-class-c12 { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
+
+  [data-theme="dark"] .badge-class-c5 { background: #082f49; color: #7dd3fc; border-color: #0369a1; }
+  [data-theme="dark"] .badge-class-c6 { background: #064e3b; color: #6ee7b7; border-color: #047857; }
+  [data-theme="dark"] .badge-class-c7 { background: #4a044e; color: #f472b6; border-color: #701a75; }
+  [data-theme="dark"] .badge-class-c8 { background: #4c0519; color: #fda4af; border-color: #881337; }
+  [data-theme="dark"] .badge-class-c9 { background: #042f2e; color: #5eead4; border-color: #115e59; }
+  [data-theme="dark"] .badge-class-c10 { background: #451a03; color: #fcd34d; border-color: #78350f; }
+  [data-theme="dark"] .badge-class-c11 { background: #1e1b4b; color: #a5b4fc; border-color: #3730a3; }
+  [data-theme="dark"] .badge-class-c12 { background: #3b0764; color: #d8b4fe; border-color: #581c87; }
 
   .score-cell{
     font-weight:700;
@@ -543,7 +635,7 @@
     <div class="header-title-row">
       <div class="header-brand">
         <h1>Sunday School Exam Admin Portal</h1>
-        <p>Candidate Attempt Logs & Marksheet &middot; Classes 10 & 12</p>
+        <p>Candidate Attempt Logs &amp; Marksheet &middot; All Classes (Classes 5 to 12)</p>
       </div>
       <div style="display:flex; gap:10px; align-items:center;">
         <button type="button" class="btn btn-primary" onclick="exportCSV()">
@@ -556,37 +648,22 @@
     </div>
   </div>
 
-  <!-- Metrics Grid -->
+  <!-- Primary Metrics Grid -->
   <div class="metrics-grid">
     <div class="metric-card">
       <div class="metric-label">Total Attempts</div>
       <div class="metric-value" id="statTotal">0</div>
-      <div class="metric-sub" id="statTotalSub">0 Class 10 &middot; 0 Class 11 &middot; 0 Class 12</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Class 10 Attempts</div>
-      <div class="metric-value" id="statClass10">0</div>
-      <div class="metric-sub">Secondary Certificate</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Class 11 Attempts</div>
-      <div class="metric-value" id="statClass11">0</div>
-      <div class="metric-sub">Vedapraveen (Part I)</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Class 12 Attempts</div>
-      <div class="metric-value" id="statClass12">0</div>
-      <div class="metric-sub">Vedapraveen Diploma</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Average Score</div>
-      <div class="metric-value" id="statAvgScore">0%</div>
-      <div class="metric-sub" id="statAvgMarks">0 / 30 avg</div>
+      <div class="metric-sub" id="statTotalSub">Classes 5 to 12</div>
     </div>
     <div class="metric-card">
       <div class="metric-label">Pass Rate</div>
       <div class="metric-value" id="statPassRate">0%</div>
       <div class="metric-sub" id="statPassCount">0 passed &middot; 0 failed</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Average Score</div>
+      <div class="metric-value" id="statAvgScore">0%</div>
+      <div class="metric-sub" id="statAvgMarks">0 marks avg</div>
     </div>
     <div class="metric-card">
       <div class="metric-label">Dioceses Represented</div>
@@ -595,17 +672,35 @@
     </div>
   </div>
 
+  <!-- Class-Wise Performance & Marks Breakdown -->
+  <div class="class-breakdown-card">
+    <div class="class-breakdown-head">
+      <div class="class-breakdown-title">
+        <span>📚</span>
+        <span>Class-Wise Performance &amp; Marks Records</span>
+      </div>
+      <span style="font-size:.76rem; color:var(--muted); font-weight:600;">Click any class to filter table</span>
+    </div>
+    <div class="class-pills-grid" id="classPillsGrid">
+      <!-- Generated dynamically for Class 5 to Class 12 -->
+    </div>
+  </div>
+
   <!-- Filter & Search Panel -->
   <div class="filter-panel">
     <div class="filter-group" style="grid-column: span 2;">
       <label>Search Candidates</label>
-      <input type="text" id="searchInput" placeholder="Search by name, roll no, phone, or code...">
+      <input type="text" id="searchInput" placeholder="Search by name, roll no, phone, code, or class...">
     </div>
     <div class="filter-group">
       <label>Filter by Class</label>
       <select id="classFilter">
-        <option value="">All Classes</option>
+        <option value="">All Classes (Classes 5 – 12)</option>
+        <option value="Class 5">Class 5</option>
+        <option value="Class 6">Class 6</option>
+        <option value="Class 7">Class 7</option>
         <option value="Class 8">Class 8</option>
+        <option value="Class 9">Class 9</option>
         <option value="Class 10">Class 10</option>
         <option value="Class 11">Class 11</option>
         <option value="Class 12">Class 12</option>
@@ -687,7 +782,7 @@
     <div id="emptyState" class="empty-state">
       <span class="empty-icon">📋</span>
       <h3 style="margin:0 0 6px; font-family:'Cormorant Garamond', serif; font-size:1.4rem;">No Student Attempts Recorded Yet</h3>
-      <p style="margin:0 0 16px; font-size:.88rem;">Once students complete a Class 10, Class 11, or Class 12 exam, their marks and credentials will appear here automatically.</p>
+      <p style="margin:0 0 16px; font-size:.88rem;">Once students complete an exam for any class (Classes 5 to 12), their marks, score percentage, and credentials will appear here automatically.</p>
       <button type="button" class="btn btn-outline" onclick="addSampleData()">Add Sample Attempts</button>
     </div>
   </div>
@@ -872,40 +967,103 @@
     renderTable();
   }
 
+  var ALL_CLASSES = ['Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'];
+
+  function getClassBadgeClass(className){
+    if (!className) return 'badge-class';
+    var num = className.replace(/[^0-9]/g, '');
+    return num ? 'badge-class badge-class-c' + num : 'badge-class';
+  }
+
   // Statistics calculation
   function renderStats(){
     var total = attemptsData.length;
-    var c8 = 0, c10 = 0, c11 = 0, c12 = 0, scoreSum = 0, passCount = 0;
+    var passCount = 0;
+    var scorePctSum = 0;
+    var scoreSum = 0;
+    var totalQSum = 0;
     var diocesesSet = new Set();
 
+    var classStats = {};
+    ALL_CLASSES.forEach(function(c){
+      classStats[c] = { count: 0, pass: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
+    });
+
     attemptsData.forEach(function(a){
-      if (a.className === 'Class 8') c8++;
-      if (a.className === 'Class 10') c10++;
-      if (a.className === 'Class 11') c11++;
-      if (a.className === 'Class 12') c12++;
-      scoreSum += (a.percentage || 0);
-      if (a.status === 'PASS' || a.percentage >= 50) passCount++;
+      var c = a.className || 'Other';
+      if (!classStats[c]){
+        classStats[c] = { count: 0, pass: 0, scorePctSum: 0, marksSum: 0, totalQuestions: 0 };
+      }
+      var isPass = (a.status === 'PASS' || (a.percentage || 0) >= 50);
+      classStats[c].count++;
+      if (isPass) classStats[c].pass++;
+      classStats[c].scorePctSum += (a.percentage || 0);
+      classStats[c].marksSum += (a.score || 0);
+      classStats[c].totalQuestions = a.totalQuestions || classStats[c].totalQuestions || 25;
+
+      scorePctSum += (a.percentage || 0);
+      scoreSum += (a.score || 0);
+      totalQSum += (a.totalQuestions || 25);
+      if (isPass) passCount++;
       if (a.diocese) diocesesSet.add(a.diocese);
     });
 
-    var avgPct = total ? Math.round(scoreSum / total) : 0;
+    var avgPct = total ? Math.round(scorePctSum / total) : 0;
     var passRate = total ? Math.round((passCount / total) * 100) : 0;
+    var avgMarks = total ? (scoreSum / total).toFixed(1) : 0;
+    var avgTotalQ = total ? Math.round(totalQSum / total) : 25;
 
     document.getElementById('statTotal').textContent = total;
-    var subParts = [];
-    if (c8) subParts.push(c8 + ' Class 8');
-    subParts.push(c10 + ' Class 10');
-    if (c11) subParts.push(c11 + ' Class 11');
-    subParts.push(c12 + ' Class 12');
-    document.getElementById('statTotalSub').textContent = subParts.join(' · ');
-    document.getElementById('statClass10').textContent = c10;
-    if (document.getElementById('statClass11')) document.getElementById('statClass11').textContent = c11;
-    document.getElementById('statClass12').textContent = c12;
-    document.getElementById('statAvgScore').textContent = avgPct + '%';
-    document.getElementById('statAvgMarks').textContent = (total ? (scoreSum / total * 0.3).toFixed(1) : 0) + ' / 30 avg';
     document.getElementById('statPassRate').textContent = passRate + '%';
     document.getElementById('statPassCount').textContent = passCount + ' passed · ' + (total - passCount) + ' failed';
+    document.getElementById('statAvgScore').textContent = avgPct + '%';
+    document.getElementById('statAvgMarks').textContent = avgMarks + ' / ' + avgTotalQ + ' marks avg';
     document.getElementById('statDioceses').textContent = diocesesSet.size;
+
+    // Subtitle breakdown for total
+    var subParts = [];
+    ALL_CLASSES.forEach(function(c){
+      if (classStats[c] && classStats[c].count > 0){
+        subParts.push(classStats[c].count + ' ' + c);
+      }
+    });
+    document.getElementById('statTotalSub').textContent = subParts.length ? subParts.join(' · ') : 'Classes 5 to 12';
+
+    // Render Class Breakdown Pills
+    var pillsContainer = document.getElementById('classPillsGrid');
+    if (pillsContainer){
+      pillsContainer.innerHTML = '';
+      var activeFilter = document.getElementById('classFilter').value;
+
+      ALL_CLASSES.forEach(function(c){
+        var stat = classStats[c];
+        var card = document.createElement('div');
+        card.className = 'class-pill-card' + (activeFilter === c ? ' active' : '');
+        var cAvg = stat.count ? Math.round(stat.scorePctSum / stat.count) : 0;
+        var cPassPct = stat.count ? Math.round((stat.pass / stat.count) * 100) : 0;
+
+        card.innerHTML =
+          '<div class="class-pill-name">' +
+            '<span>' + c + '</span>' +
+            '<span class="badge ' + getClassBadgeClass(c) + '" style="font-size:.68rem; padding:1px 6px;">' + stat.count + '</span>' +
+          '</div>' +
+          '<div class="class-pill-count">' + (stat.count ? cAvg + '%' : '-') + '</div>' +
+          '<div class="class-pill-sub">' + (stat.count ? stat.pass + '/' + stat.count + ' passed (' + cPassPct + '%)' : 'No records') + '</div>';
+
+        card.addEventListener('click', function(){
+          var cf = document.getElementById('classFilter');
+          if (cf.value === c){
+            cf.value = '';
+          } else {
+            cf.value = c;
+          }
+          renderStats();
+          renderTable();
+        });
+
+        pillsContainer.appendChild(card);
+      });
+    }
   }
 
   // Filter & Search
@@ -978,13 +1136,13 @@
       tr.innerHTML =
         '<td>' + (idx + 1) + '</td>' +
         '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + dt + '</td>' +
-        '<td><span class="badge badge-class">' + (item.className || 'Exam') + '</span></td>' +
+        '<td><span class="badge ' + getClassBadgeClass(item.className) + '">' + escapeHtml(item.className || 'Exam') + '</span></td>' +
         '<td><strong>' + escapeHtml(item.studentName || '-') + '</strong></td>' +
         '<td><code>' + escapeHtml(item.rollNumber || '-') + '</code></td>' +
         '<td><a href="tel:' + escapeHtml(item.studentPhone || '') + '" style="color:inherit; text-decoration:none; font-variant-numeric:tabular-nums;">' + escapeHtml(item.studentPhone || '-') + '</a></td>' +
         '<td><code>' + escapeHtml(item.schoolCode || '-') + '</code></td>' +
         '<td style="max-width:180px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="' + escapeHtml(item.diocese || '-') + '">' + escapeHtml(item.diocese || '-') + '</td>' +
-        '<td><div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 30) + ' <span style="color:var(--muted); font-size:.78rem;">(' + (item.percentage || 0) + '%)</span></div>' +
+        '<td><div class="score-cell">' + (item.score || 0) + ' / ' + (item.totalQuestions || 25) + ' <span style="color:var(--muted); font-size:.78rem;">(' + (item.percentage || 0) + '%)</span></div>' +
             '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%"></div></div></td>' +
         '<td><span class="badge ' + (isPass ? 'badge-pass' : 'badge-fail') + '">' + (isPass ? 'PASS' : 'FAIL') + '</span></td>' +
         '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + (item.durationStr || (item.timeTakenSeconds ? item.timeTakenSeconds + 's' : '-')) + '</td>' +
@@ -1005,8 +1163,14 @@
 
   // Filter Listeners
   ['searchInput', 'classFilter', 'dioceseFilter', 'statusFilter', 'sortBy'].forEach(function(id){
-    document.getElementById(id).addEventListener('input', renderTable);
-    document.getElementById(id).addEventListener('change', renderTable);
+    document.getElementById(id).addEventListener('input', function(){
+      if (id === 'classFilter') renderStats();
+      renderTable();
+    });
+    document.getElementById(id).addEventListener('change', function(){
+      if (id === 'classFilter') renderStats();
+      renderTable();
+    });
   });
 
   // Row Actions: View Detail
@@ -1129,6 +1293,60 @@
         status: "PASS",
         timeTakenSeconds: 1250,
         durationStr: "20m 50s"
+      },
+      {
+        id: "att_sample_4",
+        timestamp: new Date(Date.now() - 1800000).toISOString(),
+        dateStr: new Date(Date.now() - 1800000).toLocaleDateString('en-GB'),
+        timeStr: "10:15 AM",
+        className: "Class 9",
+        studentName: "Hannah Mary Thomas",
+        rollNumber: "IX-042",
+        studentPhone: "+91 98950 12345",
+        schoolCode: "260310",
+        diocese: "Thrissur Diocese",
+        score: 23,
+        totalQuestions: 25,
+        percentage: 92,
+        status: "PASS",
+        timeTakenSeconds: 980,
+        durationStr: "16m 20s"
+      },
+      {
+        id: "att_sample_5",
+        timestamp: new Date(Date.now() - 9000000).toISOString(),
+        dateStr: new Date(Date.now() - 9000000).toLocaleDateString('en-GB'),
+        timeStr: "07:45 AM",
+        className: "Class 8",
+        studentName: "Kevin Paul",
+        rollNumber: "VIII-018",
+        studentPhone: "+91 94471 11223",
+        schoolCode: "260101",
+        diocese: "Thrissur Diocese",
+        score: 22,
+        totalQuestions: 25,
+        percentage: 88,
+        status: "PASS",
+        timeTakenSeconds: 1040,
+        durationStr: "17m 20s"
+      },
+      {
+        id: "att_sample_6",
+        timestamp: new Date(Date.now() - 10800000).toISOString(),
+        dateStr: new Date(Date.now() - 10800000).toLocaleDateString('en-GB'),
+        timeStr: "07:15 AM",
+        className: "Class 5",
+        studentName: "Riya Susan",
+        rollNumber: "V-009",
+        studentPhone: "+91 98460 55443",
+        schoolCode: "260103",
+        diocese: "Thrissur Diocese",
+        score: 24,
+        totalQuestions: 25,
+        percentage: 96,
+        status: "PASS",
+        timeTakenSeconds: 890,
+        durationStr: "14m 50s"
       }
     ];
 
