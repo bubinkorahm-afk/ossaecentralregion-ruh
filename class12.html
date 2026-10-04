@@ -476,8 +476,8 @@
     </div>
 
     <div class="field">
-      <label data-t="lblSchoolCode">Sunday School Code</label>
-      <input type="text" id="schoolCode" placeholder="Enter Sunday School Code" autocomplete="off">
+      <label data-t="lblSchoolCode">Sunday School Code (eg: 123456)</label>
+      <input type="text" id="schoolCode" placeholder="Enter Sunday School Code (eg: 123456)" autocomplete="off">
       <div id="schoolCodeError" style="display:none; color:var(--bad); font-size:.82rem; margin-top:5px; font-weight:600;" data-t="codeErrorInline">Wrong code. Please contact your Sunday school HM.</div>
     </div>
 
@@ -638,7 +638,7 @@ var UI = {
     lblName:"Student Name",
     lblRoll:"Roll Number",
     lblPhone:"Phone Number (+966xxxxxxxx, +91xxxxxxxxxx)",
-    lblSchoolCode:"Sunday School Code",
+    lblSchoolCode:"Sunday School Code (eg: 123456)",
     lblDiocese:"Diocese",
     selectDiocese:"Select your Diocese",
     hintPool:"30 questions are randomly selected from the complete Vedapraveen Diploma bank (569 questions) — every attempt is different.",
@@ -691,7 +691,7 @@ var UI = {
     lblName:"വിദ്യാർത്ഥിയുടെ പേര്",
     lblRoll:"റോൾ നമ്പർ",
     lblPhone:"ഫോൺ നമ്പർ (+966xxxxxxxx, +91xxxxxxxxxx)",
-    lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ്",
+    lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ് (eg: 123456)",
     lblDiocese:"ഭദ്രാസനം",
     selectDiocese:"ഭദ്രാസനം തിരഞ്ഞെടുക്കുക",
     hintPool:"വേദപ്രവീൺ ഡിപ്ലോമ ചോദ്യബാങ്കിൽ (569 ചോദ്യങ്ങൾ) നിന്നും 30 ചോദ്യങ്ങൾ ക്രമരഹിതമായി തിരഞ്ഞെടുക്കുന്നു — ഓരോ ശ്രമവും വ്യത്യസ്തം.",
@@ -783,7 +783,7 @@ function applyStaticText(){
   var sPhone = document.getElementById('studentPhone');
   if (sPhone) sPhone.placeholder = "";
   var scCode = document.getElementById('schoolCode');
-  if (scCode) scCode.placeholder = (lang === 'en') ? 'Enter Sunday School Code' : 'സൺഡേ സ്കൂൾ കോഡ് നൽകുക';
+  if (scCode) scCode.placeholder = (lang === 'en') ? 'Enter Sunday School Code (eg: 123456)' : 'സൺഡേ സ്കൂൾ കോഡ് നൽകുക (eg: 123456)';
   var dioSel = document.getElementById('dioceseSelect');
   if (dioSel && dioSel.options[0]) dioSel.options[0].textContent = (lang === 'en') ? 'Select your Diocese' : 'ഭദ്രാസനം തിരഞ്ഞെടുക്കുക';
   var lt = document.getElementById('langToggle'); if (lt) lt.textContent = lang === 'en' ? 'മലയാളം' : 'English';
@@ -809,7 +809,7 @@ if (savedLang === 'ml' || savedLang === 'en') {
 }
 
 // Setup Form State
-var VALID_CODES = ["200101", "200102", "200103", "200104", "200201", "200204", "190101", "190102", "190104", "190105", "190106", "190107", "190202", "190203", "190204", "190205", "190206", "190208", "190209", "190211", "190304", "190305", "190306", "190402", "190403", "190501", "190502", "190503", "190505", "190506", "190507", "190508", "190510", "190513", "190514", "190601", "190602", "190603"];
+var VALID_CODES = ["123456"];
 var VALID_DIOCESE = "Kottayam Diocese";
 
 var nameInput = document.getElementById('studentName');
