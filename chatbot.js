@@ -119,17 +119,17 @@
   var QUICK = ['start','code','time','pass','change','lang','retake','tutorial'];
 
   var T = {
-    en:{ title:'Exam Help Assistant', sub:'Ask about the exam portal', hello:'Hello! 👋 I can answer common questions about the OSSAE practice exam. Tap a question below or type your own.',
+    en:{ title:'Malpan AI', sub:'Exam help assistant', hello:'Hello! 👋 I am Malpan AI. I can answer common questions about the OSSAE practice exam. Tap a question below or type your own.',
          placeholder:'Type your question…', send:'Send', more:'Other questions', notFound:'Sorry, I don’t have an answer for that yet. Try one of these questions, or contact your Sunday School HM.',
-         open:'Open exam help', close:'Close', restart:'Start over',
+         open:'Open Malpan AI', close:'Close', restart:'Start over',
          fbChip:'✍️ Write feedback', fbIntro:'We’d love to hear from you! Share your feedback or suggestions about the exam portal.',
          fbName:'Your name (optional)', fbClass:'Class (optional)', fbAny:'Select class', fbRating:'How useful is the portal?',
          fbMsg:'Your feedback', fbMsgPh:'Write your feedback or suggestion…', fbSend:'Send feedback', fbNeed:'Please write your feedback before sending.',
          fbThanks:'Thank you for your feedback! 🙏 It has been sent to the Sunday School team.',
          fbThanksLocal:'Thank you for your feedback! 🙏' },
-    ml:{ title:'പരീക്ഷ സഹായി', sub:'പരീക്ഷ പോർട്ടലിനെക്കുറിച്ച് ചോദിക്കൂ', hello:'നമസ്കാരം! 👋 OSSAE പരിശീലന പരീക്ഷയെക്കുറിച്ചുള്ള സാധാരണ ചോദ്യങ്ങൾക്ക് ഞാൻ ഉത്തരം നൽകാം. താഴെയുള്ള ഒരു ചോദ്യം ടാപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ടൈപ്പ് ചെയ്യുക.',
+    ml:{ title:'മൽപാൻ AI', sub:'പരീക്ഷ സഹായി', hello:'നമസ്കാരം! 👋 ഞാൻ മൽപാൻ AI. OSSAE പരിശീലന പരീക്ഷയെക്കുറിച്ചുള്ള സാധാരണ ചോദ്യങ്ങൾക്ക് ഞാൻ ഉത്തരം നൽകാം. താഴെയുള്ള ഒരു ചോദ്യം ടാപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ടൈപ്പ് ചെയ്യുക.',
          placeholder:'നിങ്ങളുടെ ചോദ്യം ടൈപ്പ് ചെയ്യുക…', send:'അയയ്ക്കുക', more:'മറ്റ് ചോദ്യങ്ങൾ', notFound:'ക്ഷമിക്കണം, അതിനുള്ള ഉത്തരം എന്റെ പക്കൽ ഇല്ല. താഴെയുള്ള ചോദ്യങ്ങളിൽ ഒന്ന് ശ്രമിക്കുക, അല്ലെങ്കിൽ സൺഡേ സ്കൂൾ HM-നെ ബന്ധപ്പെടുക.',
-         open:'പരീക്ഷ സഹായം തുറക്കുക', close:'അടയ്ക്കുക', restart:'വീണ്ടും തുടങ്ങുക',
+         open:'മൽപാൻ AI തുറക്കുക', close:'അടയ്ക്കുക', restart:'വീണ്ടും തുടങ്ങുക',
          fbChip:'✍️ അഭിപ്രായം എഴുതുക', fbIntro:'നിങ്ങളുടെ അഭിപ്രായം അറിയാൻ ഞങ്ങൾ ആഗ്രഹിക്കുന്നു! പരീക്ഷ പോർട്ടലിനെക്കുറിച്ചുള്ള അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും പങ്കിടുക.',
          fbName:'നിങ്ങളുടെ പേര് (നിർബന്ധമില്ല)', fbClass:'ക്ലാസ്സ് (നിർബന്ധമില്ല)', fbAny:'ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക', fbRating:'പോർട്ടൽ എത്രത്തോളം ഉപകാരപ്രദമാണ്?',
          fbMsg:'നിങ്ങളുടെ അഭിപ്രായം', fbMsgPh:'അഭിപ്രായമോ നിർദ്ദേശമോ എഴുതുക…', fbSend:'അയയ്ക്കുക', fbNeed:'അയയ്ക്കുന്നതിനു മുൻപ് അഭിപ്രായം എഴുതുക.',
@@ -271,7 +271,7 @@
     launch.setAttribute('aria-label', t.open);
     launch.title = t.title;
     panel.setAttribute('aria-label', t.title);
-    tip.textContent = (L === 'ml') ? 'സഹായം വേണോ? 💬' : 'Need help? Ask me 💬';
+    tip.textContent = (L === 'ml') ? 'സഹായം വേണോ? മൽപാൻ AI-യോട് ചോദിക്കൂ 💬' : 'Need help? Ask Malpan AI 💬';
   }
 
   function scrollDown(){ body.scrollTop = body.scrollHeight; }
