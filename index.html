@@ -22,7 +22,7 @@
   <link rel="icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
   <script>
     // Apply saved theme before paint to avoid a flash
     (function(){
@@ -257,6 +257,29 @@
     .checklist li{ display:flex; gap:10px; font-size:.93rem; }
     .checklist li::before{ content:"✓"; color:var(--gold); font-weight:700; flex:none; }
 
+    /* Visit counter */
+    .visits{ display:flex; justify-content:center; padding:10px 0 4px; }
+    .visits-card{
+      display:flex; flex-direction:column; align-items:center; gap:12px;
+      background:linear-gradient(160deg, var(--navy), #0b1222); color:#fff;
+      border:1px solid color-mix(in srgb, var(--gold) 45%, transparent); border-top:3px solid var(--gold);
+      border-radius:20px; padding:18px 22px 16px; box-shadow:var(--shadow);
+    }
+    .visits-label{ font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#e0b25a; }
+    .odometer{ display:flex; gap:6px; }
+    .odo-digit{
+      width:38px; height:54px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+      font-family:'Orbitron', ui-monospace, monospace; font-weight:700; font-size:1.7rem;
+      color:#7dffb0; background:#04080f; border:1px solid #1d2a44;
+      box-shadow:inset 0 2px 8px rgba(0,0,0,.8), inset 0 -1px 0 rgba(255,255,255,.04);
+      text-shadow:0 0 8px rgba(74,222,128,.75), 0 0 18px rgba(74,222,128,.35);
+      position:relative; overflow:hidden;
+    }
+    .odo-digit::after{ content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(0,0,0,.6); }
+    .odo-digit.dim{ color:#2a4a38; text-shadow:none; }
+    .visits-sub{ font-size:.76rem; color:#aab3c8; }
+    @media (max-width:420px){ .odo-digit{ width:32px; height:46px; font-size:1.4rem; } .odometer{ gap:4px; } }
+
     /* Footer */
     footer{ margin-top:36px; border-top:1px solid var(--border); padding:26px 0 36px; }
     .footer-inner{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:.86rem; color:var(--muted); }
@@ -402,6 +425,14 @@
         </div>
       </div>
     </section>
+    <!-- Visit counter -->
+    <section class="visits" aria-live="polite">
+      <div class="visits-card">
+        <span class="visits-label" data-en="Site Visits" data-ml="സന്ദർശകർ">Site Visits</span>
+        <div class="odometer" id="visitOdometer" role="img" aria-label="Site visits"></div>
+        <span class="visits-sub" data-en="Thank you for visiting" data-ml="സന്ദർശിച്ചതിന് നന്ദി">Thank you for visiting</span>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -507,6 +538,42 @@
 
     document.getElementById('themeIcon').textContent = currentTheme() === 'dark' ? '☀' : '☾';
     applyLanguage(currentLang);
+
+    // Visit counter (free Abacus counter service). Counts once per browser session.
+    (function(){
+      var BASE = 'https://abacus.jasoncameron.dev/';
+      var KEY = 'ossaecentralregion-ruh/visits';
+      var DIGITS = 6;
+      var el = document.getElementById('visitOdometer');
+
+      function render(n){
+        var s = (n === null) ? '' : String(n);
+        var width = Math.max(DIGITS, s.length);
+        el.innerHTML = '';
+        for (var i = 0; i < width; i++){
+          var d = document.createElement('span');
+          var ch = s.charAt(i - (width - s.length));
+          d.className = 'odo-digit' + (ch ? '' : ' dim');
+          d.textContent = ch || (n === null ? '-' : '0');
+          el.appendChild(d);
+        }
+        el.setAttribute('aria-label', n === null ? 'Site visits unavailable' : n + ' site visits');
+      }
+
+      render(null);
+      var counted = false;
+      try { counted = sessionStorage.getItem('ss_visit_counted') === '1'; } catch(e){}
+
+      fetch(BASE + (counted ? 'get/' : 'hit/') + KEY)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (typeof data.value === 'number'){
+            render(data.value);
+            try { sessionStorage.setItem('ss_visit_counted', '1'); } catch(e){}
+          }
+        })
+        .catch(function(){ render(null); });
+    })();
   </script>
 </body>
 </html>
