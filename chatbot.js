@@ -121,10 +121,20 @@
   var T = {
     en:{ title:'Exam Help Assistant', sub:'Ask about the exam portal', hello:'Hello! 👋 I can answer common questions about the OSSAE practice exam. Tap a question below or type your own.',
          placeholder:'Type your question…', send:'Send', more:'Other questions', notFound:'Sorry, I don’t have an answer for that yet. Try one of these questions, or contact your Sunday School HM.',
-         open:'Open exam help', close:'Close', restart:'Start over' },
+         open:'Open exam help', close:'Close', restart:'Start over',
+         fbChip:'✍️ Write feedback', fbIntro:'We’d love to hear from you! Share your feedback or suggestions about the exam portal.',
+         fbName:'Your name (optional)', fbClass:'Class (optional)', fbAny:'Select class', fbRating:'How useful is the portal?',
+         fbMsg:'Your feedback', fbMsgPh:'Write your feedback or suggestion…', fbSend:'Send feedback', fbNeed:'Please write your feedback before sending.',
+         fbThanks:'Thank you for your feedback! 🙏 It has been sent to the Sunday School team.',
+         fbThanksLocal:'Thank you for your feedback! 🙏' },
     ml:{ title:'പരീക്ഷ സഹായി', sub:'പരീക്ഷ പോർട്ടലിനെക്കുറിച്ച് ചോദിക്കൂ', hello:'നമസ്കാരം! 👋 OSSAE പരിശീലന പരീക്ഷയെക്കുറിച്ചുള്ള സാധാരണ ചോദ്യങ്ങൾക്ക് ഞാൻ ഉത്തരം നൽകാം. താഴെയുള്ള ഒരു ചോദ്യം ടാപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ടൈപ്പ് ചെയ്യുക.',
          placeholder:'നിങ്ങളുടെ ചോദ്യം ടൈപ്പ് ചെയ്യുക…', send:'അയയ്ക്കുക', more:'മറ്റ് ചോദ്യങ്ങൾ', notFound:'ക്ഷമിക്കണം, അതിനുള്ള ഉത്തരം എന്റെ പക്കൽ ഇല്ല. താഴെയുള്ള ചോദ്യങ്ങളിൽ ഒന്ന് ശ്രമിക്കുക, അല്ലെങ്കിൽ സൺഡേ സ്കൂൾ HM-നെ ബന്ധപ്പെടുക.',
-         open:'പരീക്ഷ സഹായം തുറക്കുക', close:'അടയ്ക്കുക', restart:'വീണ്ടും തുടങ്ങുക' }
+         open:'പരീക്ഷ സഹായം തുറക്കുക', close:'അടയ്ക്കുക', restart:'വീണ്ടും തുടങ്ങുക',
+         fbChip:'✍️ അഭിപ്രായം എഴുതുക', fbIntro:'നിങ്ങളുടെ അഭിപ്രായം അറിയാൻ ഞങ്ങൾ ആഗ്രഹിക്കുന്നു! പരീക്ഷ പോർട്ടലിനെക്കുറിച്ചുള്ള അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും പങ്കിടുക.',
+         fbName:'നിങ്ങളുടെ പേര് (നിർബന്ധമില്ല)', fbClass:'ക്ലാസ്സ് (നിർബന്ധമില്ല)', fbAny:'ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക', fbRating:'പോർട്ടൽ എത്രത്തോളം ഉപകാരപ്രദമാണ്?',
+         fbMsg:'നിങ്ങളുടെ അഭിപ്രായം', fbMsgPh:'അഭിപ്രായമോ നിർദ്ദേശമോ എഴുതുക…', fbSend:'അയയ്ക്കുക', fbNeed:'അയയ്ക്കുന്നതിനു മുൻപ് അഭിപ്രായം എഴുതുക.',
+         fbThanks:'അഭിപ്രായത്തിന് നന്ദി! 🙏 അത് സൺഡേ സ്കൂൾ ടീമിന് അയച്ചിട്ടുണ്ട്.',
+         fbThanksLocal:'അഭിപ്രായത്തിന് നന്ദി! 🙏' }
   };
 
   function lang(){
@@ -184,6 +194,25 @@
   ':root[data-theme="dark"] .ssbot-send{background:var(--sb-gold2);color:#1a1405;}' +
   '@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ssbot-send{background:var(--sb-gold2);color:#1a1405;}}' +
   '.ssbot-send svg{width:18px;height:18px;}' +
+  '.ssbot-chip.fb{background:var(--sb-navy);color:#fff;border-color:var(--sb-navy);}' +
+  '.ssbot-chip.fb:hover{background:var(--sb-navy2);}' +
+  ':root[data-theme="dark"] .ssbot-chip.fb{background:var(--sb-gold2);color:#1a1405;border-color:var(--sb-gold2);}' +
+  '@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ssbot-chip.fb{background:var(--sb-gold2);color:#1a1405;border-color:var(--sb-gold2);}}' +
+  '.ssbot-fb{align-self:stretch;background:var(--sb-bg);border:1px solid var(--sb-border);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:9px;}' +
+  '.ssbot-fb label{font-size:.8rem;font-weight:700;color:var(--sb-muted);display:flex;flex-direction:column;gap:5px;}' +
+  '.ssbot-fb input,.ssbot-fb select,.ssbot-fb textarea{width:100%;padding:9px 11px;border-radius:10px;border:1.5px solid var(--sb-border);background:var(--sb-bg2);color:var(--sb-ink);font-size:.92rem;font-family:inherit;font-weight:400;}' +
+  '.ssbot-fb textarea{min-height:84px;resize:vertical;}' +
+  '.ssbot-fb input:focus,.ssbot-fb select:focus,.ssbot-fb textarea:focus{outline:none;border-color:var(--sb-gold);}' +
+  '.ssbot-stars{display:flex;gap:4px;}' +
+  '.ssbot-star{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--sb-border);background:var(--sb-bg2);color:#c9c2b2;font-size:1.2rem;cursor:pointer;line-height:1;}' +
+  '.ssbot-star.on{color:#e0a91b;border-color:#e0b25a;background:color-mix(in srgb,#e0b25a 15%,var(--sb-bg));}' +
+  '.ssbot-star:focus-visible{outline:2px solid var(--sb-gold);outline-offset:1px;}' +
+  '.ssbot-fb-err{color:#b91c1c;font-size:.82rem;font-weight:600;}' +
+  '.ssbot-fb-send{min-height:42px;border:none;border-radius:12px;background:var(--sb-navy);color:#fff;font-weight:700;font-size:.92rem;font-family:inherit;cursor:pointer;}' +
+  ':root[data-theme="dark"] .ssbot-fb-send{background:var(--sb-gold2);color:#1a1405;}' +
+  '@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ssbot-fb-send{background:var(--sb-gold2);color:#1a1405;}}' +
+  '.ssbot-fb-send:disabled{opacity:.5;cursor:default;}' +
+  '.ssbot-fb.done{opacity:.6;pointer-events:none;}' +
   'body.ssbot-ready footer{padding-bottom:84px;}' +
   '@media (max-width:480px){.ssbot-panel{right:12px;bottom:84px;}.ssbot-launch{right:14px;bottom:14px;width:56px;height:56px;}.ssbot-tip{display:none !important;}}' +
   '@media (prefers-reduced-motion: reduce){.ssbot *{animation:none !important;transition:none !important;}}';
@@ -280,8 +309,131 @@
       b.addEventListener('click', function(){ ask(f); });
       wrap.appendChild(b);
     });
+    var fb = document.createElement('button');
+    fb.type = 'button';
+    fb.className = 'ssbot-chip fb';
+    fb.textContent = T[L].fbChip;
+    fb.addEventListener('click', function(){ addMsg(T[L].fbChip.replace(/^\S+\s/, ''), 'user'); reply(showFeedbackForm); });
+    wrap.appendChild(fb);
     body.appendChild(wrap);
     scrollDown();
+  }
+
+  // ---------- Feedback ----------
+  var CLASSES = ['V','VI','VII','VIII','IX','X','XI','XII'];
+  var FEEDBACK_WORDS = ['feedback','suggest','suggestion','review the portal','opinion','comment','അഭിപ്രായ','നിർദ്ദേശ'];
+
+  function feedbackUrl(){
+    var c = window.SS_CONFIG || {};
+    var u = String(c.feedbackUrl || '').trim();
+    return /^https:\/\//.test(u) ? u : '';
+  }
+
+  function saveFeedbackLocal(item){
+    try {
+      var list = JSON.parse(localStorage.getItem('ss_feedback') || '[]');
+      list.unshift(item);
+      if (list.length > 200) list = list.slice(0, 200);
+      localStorage.setItem('ss_feedback', JSON.stringify(list));
+    } catch(e){}
+  }
+
+  function showFeedbackForm(){
+    var t = T[L];
+    addMsg(t.fbIntro, 'bot');
+    var card = document.createElement('form');
+    card.className = 'ssbot-fb';
+    card.noValidate = true;
+
+    var nameL = document.createElement('label');
+    nameL.textContent = t.fbName;
+    var name = document.createElement('input');
+    name.type = 'text'; name.maxLength = 80; name.autocomplete = 'name';
+    nameL.appendChild(name);
+
+    var clsL = document.createElement('label');
+    clsL.textContent = t.fbClass;
+    var cls = document.createElement('select');
+    var o0 = document.createElement('option'); o0.value = ''; o0.textContent = t.fbAny; cls.appendChild(o0);
+    CLASSES.forEach(function(c){ var o = document.createElement('option'); o.value = 'Class ' + c; o.textContent = (L === 'ml' ? 'ക്ലാസ്സ് ' : 'Class ') + c; cls.appendChild(o); });
+    clsL.appendChild(cls);
+
+    var rateL = document.createElement('div');
+    rateL.className = 'ssbot-label';
+    rateL.style.textTransform = 'none'; rateL.style.letterSpacing = '0'; rateL.style.fontSize = '.8rem';
+    rateL.textContent = t.fbRating;
+    var stars = document.createElement('div');
+    stars.className = 'ssbot-stars';
+    stars.setAttribute('role', 'radiogroup');
+    stars.setAttribute('aria-label', t.fbRating);
+    var rating = 0;
+    for (var s = 1; s <= 5; s++){
+      (function(n){
+        var st = document.createElement('button');
+        st.type = 'button'; st.className = 'ssbot-star'; st.textContent = '★';
+        st.setAttribute('role', 'radio');
+        st.setAttribute('aria-label', n + ' / 5');
+        st.setAttribute('aria-checked', 'false');
+        st.addEventListener('click', function(){
+          rating = n;
+          stars.querySelectorAll('.ssbot-star').forEach(function(b, i){
+            b.classList.toggle('on', i < n);
+            b.setAttribute('aria-checked', i === n - 1 ? 'true' : 'false');
+          });
+        });
+        stars.appendChild(st);
+      })(s);
+    }
+
+    var msgL = document.createElement('label');
+    msgL.textContent = t.fbMsg;
+    var msg = document.createElement('textarea');
+    msg.maxLength = 1000; msg.placeholder = t.fbMsgPh; msg.required = true;
+    msgL.appendChild(msg);
+
+    var err = document.createElement('div');
+    err.className = 'ssbot-fb-err'; err.hidden = true; err.textContent = t.fbNeed;
+
+    var send = document.createElement('button');
+    send.type = 'submit'; send.className = 'ssbot-fb-send'; send.textContent = t.fbSend;
+
+    [nameL, clsL, rateL, stars, msgL, err, send].forEach(function(el){ card.appendChild(el); });
+
+    card.addEventListener('submit', function(e){
+      e.preventDefault();
+      var text = msg.value.trim();
+      if (!text){ err.hidden = false; msg.focus(); return; }
+      err.hidden = true;
+      send.disabled = true;
+      var item = {
+        type: 'feedback',
+        id: 'fb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        timestamp: new Date().toISOString(),
+        name: name.value.trim(),
+        className: cls.value,
+        rating: rating || '',
+        message: text,
+        page: (location.pathname.split('/').pop() || 'index.html'),
+        lang: L
+      };
+      saveFeedbackLocal(item);
+      var url = feedbackUrl();
+      if (url){
+        try {
+          fetch(url, { method:'POST', mode:'no-cors', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify(item) })
+            .catch(function(){});
+        } catch(ex){}
+      }
+      card.classList.add('done');
+      reply(function(){
+        addMsg(url ? t.fbThanks : t.fbThanksLocal, 'bot');
+        addChips(QUICK, T[L].more);
+      });
+    });
+
+    body.appendChild(card);
+    scrollDown();
+    setTimeout(function(){ msg.focus(); }, 60);
   }
 
   function related(id){
@@ -361,6 +513,11 @@
     if (!text) return;
     input.value = '';
     addMsg(text, 'user');
+    var lower = text.toLowerCase();
+    if (FEEDBACK_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })){
+      reply(showFeedbackForm);
+      return;
+    }
     var f = match(text);
     reply(function(){
       if (f){

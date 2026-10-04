@@ -225,6 +225,23 @@
   .back-btn{ display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:.88rem; font-weight:600; margin-top:16px; }
   .back-btn:hover{ color:var(--gold); }
 
+  /* Feedback */
+  .fb-status{ font-size:.86rem; padding:10px 14px; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); background:var(--surface-2); color:var(--muted); }
+  .fb-status.ok{ background:var(--good-bg); color:var(--good); border-color:color-mix(in srgb, var(--good) 30%, transparent); }
+  .fb-status.warn{ background:var(--warn-bg); color:var(--warn); border-color:color-mix(in srgb, var(--warn) 30%, transparent); }
+  .fb-summary{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .fb-stat{ background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:8px 14px; font-size:.86rem; font-weight:600; color:var(--muted); }
+  .fb-stat b{ color:var(--ink); font-size:1.05rem; margin-right:4px; }
+  .fb-list{ display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:12px; }
+  .fb-card{ background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+  .fb-top{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .fb-who{ font-weight:700; }
+  .fb-meta{ font-size:.78rem; color:var(--muted); }
+  .fb-stars{ color:#e0a91b; letter-spacing:1px; white-space:nowrap; }
+  .fb-stars .off{ color:var(--border); }
+  .fb-msg{ font-size:.93rem; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .fb-src{ font-size:.72rem; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
+
   @media (max-width:1100px){
     .metrics-grid{ grid-template-columns:repeat(3, 1fr); }
     .class-pills-grid{ grid-template-columns:repeat(4, 1fr); }
@@ -426,6 +443,79 @@
         </div>
       </div>
     </section>
+    <!-- Student Feedback -->
+    <section class="panel" id="feedbackPanel">
+      <div class="panel-head">
+        <div class="panel-title">💬 Student Feedback</div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <span class="count-chip" id="fbCount">0 feedback</span>
+          <button type="button" class="btn btn-outline" onclick="loadFeedback()">🔄 Refresh</button>
+          <button type="button" class="btn btn-outline" onclick="exportFeedbackCSV()">📥 Export CSV</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="fbStatus" class="fb-status"></div>
+        <div class="fb-summary" id="fbSummary"></div>
+        <div class="filter-panel" style="grid-template-columns:2fr 1fr 1fr; margin-bottom:14px;">
+          <div class="filter-group fg-search">
+            <label for="fbSearch">Search feedback</label>
+            <div class="search-wrap"><input type="text" id="fbSearch" placeholder="Name, class or words in the message…"></div>
+          </div>
+          <div class="filter-group">
+            <label for="fbClassFilter">Class</label>
+            <select id="fbClassFilter">
+              <option value="">All Classes</option>
+              <option>Class V</option><option>Class VI</option><option>Class VII</option><option>Class VIII</option>
+              <option>Class IX</option><option>Class X</option><option>Class XI</option><option>Class XII</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="fbRatingFilter">Rating</label>
+            <select id="fbRatingFilter">
+              <option value="">All Ratings</option>
+              <option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option>
+              <option value="2">★★ (2)</option><option value="1">★ (1)</option><option value="none">No rating</option>
+            </select>
+          </div>
+        </div>
+        <div class="fb-list" id="fbList"></div>
+        <div class="empty-state" id="fbEmpty" style="padding:30px 16px;">
+          <div class="empty-icon">💬</div>
+          <h3>No feedback yet</h3>
+          <p>Feedback that students send from the “✍️ Write feedback” option in the help chatbot will appear here.</p>
+        </div>
+
+        <details class="howto" style="margin-top:14px;">
+          <summary>How to connect a Google Sheet to collect feedback from every student</summary>
+          <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
+            <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a> (for example “OSSAE Feedback”).</li>
+            <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>, delete any code there and paste the script below. Click <b>Save</b>.</li>
+            <li>Click <b>Deploy &rarr; New deployment</b>, choose type <b>Web app</b>, set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then <b>Deploy</b> and allow access.</li>
+            <li>Copy the <b>Web app URL</b> (it ends with <code>/exec</code>) and put it in <code>site-config.js</code> as <code>feedbackUrl</code> (or send it to your developer).</li>
+          </ol>
+          <pre class="code-block">function doPost(e) {
+  var d = JSON.parse(e.postData.contents);
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Feedback') || ss.insertSheet('Feedback');
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(['ID', 'Timestamp', 'Name', 'Class', 'Rating', 'Message', 'Page', 'Language']);
+  }
+  sh.appendRow([d.id, d.timestamp, d.name, d.className, d.rating, String(d.message).slice(0, 1000), d.page, d.lang]);
+  return ContentService.createTextOutput(JSON.stringify({status: 'ok'})).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Feedback');
+  var rows = sh ? sh.getDataRange().getValues().slice(1) : [];
+  var out = rows.map(function(r) {
+    return {id: r[0], timestamp: r[1], name: r[2], className: r[3], rating: r[4], message: r[5], page: r[6], lang: r[7]};
+  });
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+        </details>
+      </div>
+    </section>
+
     <footer style="text-align:center; font-size:.85rem; color:var(--muted); margin-top:28px;">&copy; 2026 OSSAE Desertland Central Region (Thrissur Diocese). All Rights Reserved.</footer>
   </main>
 </div>
@@ -603,6 +693,7 @@
     renderStats();
     renderTable();
   }
+  window.loadAttempts = loadAttempts;
 
   var ALL_CLASSES = ['Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'];
 
@@ -1292,6 +1383,143 @@
 
   // Init
   checkSessionAuth();
+})();
+</script>
+<script src="site-config.js?v=1"></script>
+<script>
+(function(){
+  "use strict";
+  var feedbackData = [];
+  var remoteState = 'none'; // none | ok | error
+
+  function esc(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+
+  function feedbackUrl(){
+    var u = String((window.SS_CONFIG || {}).feedbackUrl || '').trim();
+    return /^https:\/\//.test(u) ? u : '';
+  }
+
+  function localFeedback(){
+    try { var l = JSON.parse(localStorage.getItem('ss_feedback') || '[]'); return Array.isArray(l) ? l : []; } catch(e){ return []; }
+  }
+
+  function merge(remote, local){
+    var map = {};
+    local.forEach(function(f){ if (f && f.id) map[f.id] = Object.assign({ _src:'device' }, f); });
+    remote.forEach(function(f){ if (f && f.id) map[f.id] = Object.assign({ _src:'sheet' }, f); });
+    return Object.keys(map).map(function(k){ return map[k]; })
+      .sort(function(a, b){ return new Date(b.timestamp || 0) - new Date(a.timestamp || 0); });
+  }
+
+  window.loadFeedback = function(){
+    var url = feedbackUrl();
+    var local = localFeedback();
+    if (!url){
+      remoteState = 'none';
+      feedbackData = merge([], local);
+      render();
+      return;
+    }
+    feedbackData = merge([], local);
+    render('loading');
+    fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(rows){
+        remoteState = Array.isArray(rows) ? 'ok' : 'error';
+        feedbackData = merge(Array.isArray(rows) ? rows : [], local);
+        render();
+      })
+      .catch(function(){ remoteState = 'error'; render(); });
+  };
+
+  function filtered(){
+    var q = document.getElementById('fbSearch').value.trim().toLowerCase();
+    var c = document.getElementById('fbClassFilter').value;
+    var r = document.getElementById('fbRatingFilter').value;
+    return feedbackData.filter(function(f){
+      if (c && f.className !== c) return false;
+      if (r === 'none' && f.rating) return false;
+      if (r && r !== 'none' && String(f.rating) !== r) return false;
+      if (q && [f.name, f.className, f.message].join(' ').toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+  }
+
+  function stars(n){
+    n = parseInt(n, 10) || 0;
+    if (!n) return '<span class="fb-meta">No rating</span>';
+    var s = '';
+    for (var i = 1; i <= 5; i++) s += i <= n ? '★' : '<span class="off">★</span>';
+    return '<span class="fb-stars" title="' + n + ' / 5">' + s + '</span>';
+  }
+
+  function fmtDate(ts){
+    var d = new Date(ts);
+    if (isNaN(d)) return esc(ts || '-');
+    return d.toLocaleDateString('en-GB') + ' · ' + d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function render(state){
+    var status = document.getElementById('fbStatus');
+    if (state === 'loading'){
+      status.className = 'fb-status'; status.textContent = 'Loading feedback from Google Sheet…';
+    } else if (remoteState === 'ok'){
+      status.className = 'fb-status ok'; status.textContent = '✅ Connected to Google Sheet — showing feedback from all students.';
+    } else if (remoteState === 'error'){
+      status.className = 'fb-status warn'; status.textContent = '⚠️ Could not load feedback from the Google Sheet. Check the feedbackUrl in site-config.js and that the script is deployed with access “Anyone”. Showing feedback saved on this device only.';
+    } else {
+      status.className = 'fb-status warn'; status.textContent = '⚠️ Google Sheet not connected yet — only feedback written on this device is shown. Follow “How to connect a Google Sheet” below to collect feedback from every student.';
+    }
+
+    var all = feedbackData;
+    var rated = all.filter(function(f){ return parseInt(f.rating, 10) > 0; });
+    var avg = rated.length ? (rated.reduce(function(s, f){ return s + parseInt(f.rating, 10); }, 0) / rated.length).toFixed(1) : '-';
+    document.getElementById('fbCount').textContent = all.length + (all.length === 1 ? ' feedback' : ' feedback');
+    document.getElementById('fbSummary').innerHTML =
+      '<span class="fb-stat"><b>' + all.length + '</b>total</span>' +
+      '<span class="fb-stat"><b>' + avg + '</b>average rating' + (rated.length ? ' (' + rated.length + ' rated)' : '') + '</span>';
+
+    var list = filtered();
+    var box = document.getElementById('fbList');
+    box.innerHTML = '';
+    document.getElementById('fbEmpty').style.display = list.length ? 'none' : 'block';
+    list.forEach(function(f){
+      var card = document.createElement('article');
+      card.className = 'fb-card';
+      card.innerHTML =
+        '<div class="fb-top">' +
+          '<div><div class="fb-who">' + esc(f.name || 'Anonymous') + '</div>' +
+          '<div class="fb-meta">' + (f.className ? esc(f.className) + ' · ' : '') + fmtDate(f.timestamp) + '</div></div>' +
+          stars(f.rating) +
+        '</div>' +
+        '<div class="fb-msg">' + esc(f.message) + '</div>' +
+        '<div><span class="fb-src">' + (f._src === 'sheet' ? 'Google Sheet' : 'This device') + '</span></div>';
+      box.appendChild(card);
+    });
+  }
+
+  window.exportFeedbackCSV = function(){
+    var list = filtered();
+    if (!list.length){ alert('No feedback to export.'); return; }
+    var rows = [['ID', 'Date', 'Name', 'Class', 'Rating', 'Message', 'Page', 'Language']];
+    list.forEach(function(f){ rows.push([f.id, f.timestamp, f.name, f.className, f.rating, f.message, f.page, f.lang]); });
+    var csv = '﻿' + rows.map(function(r){
+      return r.map(function(v){ return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }).join(',');
+    }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+    a.download = 'OSSAE_Feedback_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  ['fbSearch', 'fbClassFilter', 'fbRatingFilter'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){ render(); });
+    el.addEventListener('change', function(){ render(); });
+  });
+  window.addEventListener('storage', function(e){ if (e.key === 'ss_feedback') window.loadFeedback(); });
+
+  window.loadFeedback();
 })();
 </script>
 </body>
