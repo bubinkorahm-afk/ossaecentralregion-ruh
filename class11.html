@@ -444,7 +444,6 @@ if (savedLang === 'ml' || savedLang === 'en') {
 
 // Setup Form State
 var VALID_CODES = ["123456"];
-var VALID_DIOCESE = "Kottayam Diocese";
 
 var nameInput = document.getElementById('studentName');
 var rollInput = document.getElementById('rollNumber');
@@ -477,7 +476,7 @@ function isCodeValid(code){
 }
 
 function isDioceseValid(diocese){
-  return diocese === VALID_DIOCESE;
+  return diocese !== ''; // any diocese is allowed with the common code
 }
 
 function validateSetup(){
