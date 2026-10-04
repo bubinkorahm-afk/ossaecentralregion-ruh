@@ -123,7 +123,7 @@
          placeholder:'Type your question…', send:'Send', more:'Other questions', notFound:'Sorry, I don’t have an answer for that yet. Try one of these questions, or contact your Sunday School HM.',
          open:'Open Malpan AI', close:'Close', restart:'Start over',
          fbChip:'✍️ Write feedback', fbIntro:'We’d love to hear from you! Share your feedback or suggestions about the exam portal.',
-         fbName:'Your name (optional)', fbClass:'Class (optional)', fbAny:'Select class', fbRating:'How useful is the portal?',
+         fbName:'Your name (optional)', fbPhone:'Phone number (optional)', fbClass:'Class (optional)', fbAny:'Select class', fbRating:'How useful is the portal?',
          fbMsg:'Your feedback', fbMsgPh:'Write your feedback or suggestion…', fbSend:'Send feedback', fbNeed:'Please write your feedback before sending.',
          fbThanks:'Thank you for your feedback! 🙏 It has been sent to the Sunday School team.',
          fbThanksLocal:'Thank you for your feedback! 🙏' },
@@ -131,7 +131,7 @@
          placeholder:'നിങ്ങളുടെ ചോദ്യം ടൈപ്പ് ചെയ്യുക…', send:'അയയ്ക്കുക', more:'മറ്റ് ചോദ്യങ്ങൾ', notFound:'ക്ഷമിക്കണം, അതിനുള്ള ഉത്തരം എന്റെ പക്കൽ ഇല്ല. താഴെയുള്ള ചോദ്യങ്ങളിൽ ഒന്ന് ശ്രമിക്കുക, അല്ലെങ്കിൽ സൺഡേ സ്കൂൾ HM-നെ ബന്ധപ്പെടുക.',
          open:'മൽപാൻ AI തുറക്കുക', close:'അടയ്ക്കുക', restart:'വീണ്ടും തുടങ്ങുക',
          fbChip:'✍️ അഭിപ്രായം എഴുതുക', fbIntro:'നിങ്ങളുടെ അഭിപ്രായം അറിയാൻ ഞങ്ങൾ ആഗ്രഹിക്കുന്നു! പരീക്ഷ പോർട്ടലിനെക്കുറിച്ചുള്ള അഭിപ്രായങ്ങളും നിർദ്ദേശങ്ങളും പങ്കിടുക.',
-         fbName:'നിങ്ങളുടെ പേര് (നിർബന്ധമില്ല)', fbClass:'ക്ലാസ്സ് (നിർബന്ധമില്ല)', fbAny:'ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക', fbRating:'പോർട്ടൽ എത്രത്തോളം ഉപകാരപ്രദമാണ്?',
+         fbName:'നിങ്ങളുടെ പേര് (നിർബന്ധമില്ല)', fbPhone:'ഫോൺ നമ്പർ (നിർബന്ധമില്ല)', fbClass:'ക്ലാസ്സ് (നിർബന്ധമില്ല)', fbAny:'ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക', fbRating:'പോർട്ടൽ എത്രത്തോളം ഉപകാരപ്രദമാണ്?',
          fbMsg:'നിങ്ങളുടെ അഭിപ്രായം', fbMsgPh:'അഭിപ്രായമോ നിർദ്ദേശമോ എഴുതുക…', fbSend:'അയയ്ക്കുക', fbNeed:'അയയ്ക്കുന്നതിനു മുൻപ് അഭിപ്രായം എഴുതുക.',
          fbThanks:'അഭിപ്രായത്തിന് നന്ദി! 🙏 അത് സൺഡേ സ്കൂൾ ടീമിന് അയച്ചിട്ടുണ്ട്.',
          fbThanksLocal:'അഭിപ്രായത്തിന് നന്ദി! 🙏' }
@@ -351,6 +351,13 @@
     name.type = 'text'; name.maxLength = 80; name.autocomplete = 'name';
     nameL.appendChild(name);
 
+    var phoneL = document.createElement('label');
+    phoneL.textContent = t.fbPhone;
+    var phone = document.createElement('input');
+    phone.type = 'tel'; phone.maxLength = 20; phone.autocomplete = 'tel'; phone.inputMode = 'tel';
+    phone.placeholder = '+966xxxxxxxx / +91xxxxxxxxxx';
+    phoneL.appendChild(phone);
+
     var clsL = document.createElement('label');
     clsL.textContent = t.fbClass;
     var cls = document.createElement('select');
@@ -397,7 +404,7 @@
     var send = document.createElement('button');
     send.type = 'submit'; send.className = 'ssbot-fb-send'; send.textContent = t.fbSend;
 
-    [nameL, clsL, rateL, stars, msgL, err, send].forEach(function(el){ card.appendChild(el); });
+    [nameL, phoneL, clsL, rateL, stars, msgL, err, send].forEach(function(el){ card.appendChild(el); });
 
     card.addEventListener('submit', function(e){
       e.preventDefault();
@@ -410,6 +417,7 @@
         id: 'fb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
         timestamp: new Date().toISOString(),
         name: name.value.trim(),
+        phone: phone.value.trim(),
         className: cls.value,
         rating: rating || '',
         message: text,

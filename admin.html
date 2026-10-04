@@ -455,11 +455,18 @@
       </div>
       <div class="panel-body">
         <div id="fbStatus" class="fb-status"></div>
+        <div style="display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px;">
+          <div class="filter-group" style="flex:1; min-width:220px;">
+            <label for="fbKeyInput">Sheet read key (kept only on this device)</label>
+            <input type="password" id="fbKeyInput" placeholder="Your secret word from the Apps Script" autocomplete="off">
+          </div>
+          <button type="button" class="btn btn-outline" onclick="saveFeedbackKey()">💾 Save key</button>
+        </div>
         <div class="fb-summary" id="fbSummary"></div>
         <div class="filter-panel" style="grid-template-columns:2fr 1fr 1fr; margin-bottom:14px;">
           <div class="filter-group fg-search">
             <label for="fbSearch">Search feedback</label>
-            <div class="search-wrap"><input type="text" id="fbSearch" placeholder="Name, class or words in the message…"></div>
+            <div class="search-wrap"><input type="text" id="fbSearch" placeholder="Name, phone, class or words in the message…"></div>
           </div>
           <div class="filter-group">
             <label for="fbClassFilter">Class</label>
@@ -489,26 +496,32 @@
           <summary>How to connect a Google Sheet to collect feedback from every student</summary>
           <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
             <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a> (for example “OSSAE Feedback”).</li>
-            <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>, delete any code there and paste the script below. Click <b>Save</b>.</li>
+            <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>, delete any code there and paste the script below. Change <code>CHANGE-ME-to-a-secret-word</code> to your own secret word, then click <b>Save</b>.</li>
             <li>Click <b>Deploy &rarr; New deployment</b>, choose type <b>Web app</b>, set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then <b>Deploy</b> and allow access.</li>
             <li>Copy the <b>Web app URL</b> (it ends with <code>/exec</code>) and put it in <code>site-config.js</code> as <code>feedbackUrl</code> (or send it to your developer).</li>
+            <li>Enter your secret word in <b>Sheet read key</b> above and click <b>Save key</b>. Only someone with this key can read the feedback, so student phone numbers stay private.</li>
           </ol>
-          <pre class="code-block">function doPost(e) {
+          <pre class="code-block">var READ_KEY = 'CHANGE-ME-to-a-secret-word';  // the admin page asks for this key
+
+function doPost(e) {
   var d = JSON.parse(e.postData.contents);
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName('Feedback') || ss.insertSheet('Feedback');
   if (sh.getLastRow() === 0) {
-    sh.appendRow(['ID', 'Timestamp', 'Name', 'Class', 'Rating', 'Message', 'Page', 'Language']);
+    sh.appendRow(['ID', 'Timestamp', 'Name', 'Phone', 'Class', 'Rating', 'Message', 'Page', 'Language']);
   }
-  sh.appendRow([d.id, d.timestamp, d.name, d.className, d.rating, String(d.message).slice(0, 1000), d.page, d.lang]);
+  sh.appendRow([d.id, d.timestamp, d.name, "'" + (d.phone || ''), d.className, d.rating, String(d.message).slice(0, 1000), d.page, d.lang]);
   return ContentService.createTextOutput(JSON.stringify({status: 'ok'})).setMimeType(ContentService.MimeType.JSON);
 }
 
 function doGet(e) {
+  if (!e || !e.parameter || e.parameter.key !== READ_KEY) {
+    return ContentService.createTextOutput(JSON.stringify({error: 'unauthorized'})).setMimeType(ContentService.MimeType.JSON);
+  }
   var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Feedback');
   var rows = sh ? sh.getDataRange().getValues().slice(1) : [];
   var out = rows.map(function(r) {
-    return {id: r[0], timestamp: r[1], name: r[2], className: r[3], rating: r[4], message: r[5], page: r[6], lang: r[7]};
+    return {id: r[0], timestamp: r[1], name: r[2], phone: String(r[3]), className: r[4], rating: r[5], message: r[6], page: r[7], lang: r[8]};
   });
   return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
 }</pre>
@@ -1422,10 +1435,12 @@ function doGet(e) {
     }
     feedbackData = merge([], local);
     render('loading');
-    fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now())
+    var key = '';
+    try { key = localStorage.getItem('ss_feedback_key') || ''; } catch(e){}
+    fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 'key=' + encodeURIComponent(key) + '&t=' + Date.now())
       .then(function(r){ return r.json(); })
       .then(function(rows){
-        remoteState = Array.isArray(rows) ? 'ok' : 'error';
+        remoteState = Array.isArray(rows) ? 'ok' : (rows && rows.error === 'unauthorized' ? 'key' : 'error');
         feedbackData = merge(Array.isArray(rows) ? rows : [], local);
         render();
       })
@@ -1440,7 +1455,7 @@ function doGet(e) {
       if (c && f.className !== c) return false;
       if (r === 'none' && f.rating) return false;
       if (r && r !== 'none' && String(f.rating) !== r) return false;
-      if (q && [f.name, f.className, f.message].join(' ').toLowerCase().indexOf(q) === -1) return false;
+      if (q && [f.name, f.phone, f.className, f.message].join(' ').toLowerCase().indexOf(q) === -1) return false;
       return true;
     });
   }
@@ -1465,6 +1480,8 @@ function doGet(e) {
       status.className = 'fb-status'; status.textContent = 'Loading feedback from Google Sheet…';
     } else if (remoteState === 'ok'){
       status.className = 'fb-status ok'; status.textContent = '✅ Connected to Google Sheet — showing feedback from all students.';
+    } else if (remoteState === 'key'){
+      status.className = 'fb-status warn'; status.textContent = '🔑 The Google Sheet needs the correct read key. Enter the secret word from your Apps Script in “Sheet read key” and click Save key. Showing feedback saved on this device only.';
     } else if (remoteState === 'error'){
       status.className = 'fb-status warn'; status.textContent = '⚠️ Could not load feedback from the Google Sheet. Check the feedbackUrl in site-config.js and that the script is deployed with access “Anyone”. Showing feedback saved on this device only.';
     } else {
@@ -1489,7 +1506,8 @@ function doGet(e) {
       card.innerHTML =
         '<div class="fb-top">' +
           '<div><div class="fb-who">' + esc(f.name || 'Anonymous') + '</div>' +
-          '<div class="fb-meta">' + (f.className ? esc(f.className) + ' · ' : '') + fmtDate(f.timestamp) + '</div></div>' +
+          '<div class="fb-meta">' + (f.className ? esc(f.className) + ' · ' : '') + fmtDate(f.timestamp) + '</div>' +
+          (f.phone ? '<div class="fb-meta">📞 <a href="tel:' + esc(f.phone) + '" style="color:inherit;">' + esc(f.phone) + '</a></div>' : '') + '</div>' +
           stars(f.rating) +
         '</div>' +
         '<div class="fb-msg">' + esc(f.message) + '</div>' +
@@ -1498,11 +1516,18 @@ function doGet(e) {
     });
   }
 
+  window.saveFeedbackKey = function(){
+    var v = document.getElementById('fbKeyInput').value.trim();
+    try { if (v) localStorage.setItem('ss_feedback_key', v); else localStorage.removeItem('ss_feedback_key'); } catch(e){}
+    window.loadFeedback();
+  };
+  try { document.getElementById('fbKeyInput').value = localStorage.getItem('ss_feedback_key') || ''; } catch(e){}
+
   window.exportFeedbackCSV = function(){
     var list = filtered();
     if (!list.length){ alert('No feedback to export.'); return; }
-    var rows = [['ID', 'Date', 'Name', 'Class', 'Rating', 'Message', 'Page', 'Language']];
-    list.forEach(function(f){ rows.push([f.id, f.timestamp, f.name, f.className, f.rating, f.message, f.page, f.lang]); });
+    var rows = [['ID', 'Date', 'Name', 'Phone', 'Class', 'Rating', 'Message', 'Page', 'Language']];
+    list.forEach(function(f){ rows.push([f.id, f.timestamp, f.name, f.phone, f.className, f.rating, f.message, f.page, f.lang]); });
     var csv = '﻿' + rows.map(function(r){
       return r.map(function(v){ return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }).join(',');
     }).join('\r\n');
