@@ -3,801 +3,509 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OSSAE RIYADH REGION</title>
-  <meta name="title" content="OSSAE RIYADH REGION">
-  <meta name="description" content="OSSAE Riyadh Region — Sunday School Exam Portal">
+  <title>OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)</title>
+  <meta name="title" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)">
+  <meta name="description" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE) — Sunday School Exam Portal">
 
   <!-- Open Graph / Facebook / WhatsApp Link Preview -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="OSSAE RIYADH REGION">
-  <meta property="og:description" content="OSSAE Riyadh Region — Sunday School Exam Portal">
+  <meta property="og:title" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)">
+  <meta property="og:description" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE) — Sunday School Exam Portal">
   <meta property="og:image" content="Header.jpg">
 
   <!-- Twitter Card -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:title" content="OSSAE RIYADH REGION">
-  <meta property="twitter:description" content="OSSAE Riyadh Region — Sunday School Exam Portal">
+  <meta property="twitter:title" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)">
+  <meta property="twitter:description" content="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE) — Sunday School Exam Portal">
   <meta property="twitter:image" content="Header.jpg">
+
+  <link rel="icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    // Apply saved theme before paint to avoid a flash
+    (function(){
+      try {
+        var t = localStorage.getItem('ss_theme');
+        if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+      } catch(e){}
+    })();
+  </script>
   <style>
-    :root {
-      --bg: #f4f7fb;
-      --surface: #ffffff;
-      --surface-2: #e9f0f8;
-      --ink: #0f172a;
-      --muted: #475569;
-      --border: #cbd5e1;
-      --primary: #1e3a8a;
-      --gold: #c28822;
-      --gold-light: #fef3c7;
-      --accent5: #1d4ed8;
-      --accent6: #0d9488;
-      --accent7: #9f1239;
-      --accent8: #7e22ce;
-      --accent9: #0284c7;
-      --accent10: #b45309;
-      --accent11: #4338ca;
-      --accent12: #6b21a8;
-      --shadow: 0 14px 34px -12px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
-      --shadow-hover: 0 22px 44px -14px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(194, 136, 34, 0.4);
-      --font-serif: 'Cormorant Garamond', Georgia, serif;
-      --font-sans: 'Source Sans 3', system-ui, sans-serif;
-      --font-ml: 'Noto Sans Malayalam', sans-serif;
+    :root{
+      --bg:#f6f4ef;
+      --surface:#ffffff;
+      --surface-2:#f3f1ec;
+      --ink:#14213d;
+      --muted:#5b6474;
+      --border:#e4dfd3;
+      --navy:#14213d;
+      --navy-2:#1f3160;
+      --gold:#b8862b;
+      --gold-soft:#f6ecd6;
+      --c5:#1d4ed8; --c6:#0d9488; --c7:#9f1239; --c8:#7e22ce;
+      --c9:#0284c7; --c10:#d97706; --c11:#4338ca; --c12:#6b21a8;
+      --shadow:0 1px 2px rgba(20,33,61,.06), 0 12px 32px -14px rgba(20,33,61,.22);
+      --shadow-hover:0 2px 4px rgba(20,33,61,.06), 0 22px 44px -16px rgba(20,33,61,.32);
+      --font-serif:'Cormorant Garamond', Georgia, serif;
+      --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-ml:'Noto Sans Malayalam', 'Source Sans 3', sans-serif;
+      color-scheme:light;
     }
-
-    [data-theme="dark"] {
-      --bg: #090e17;
-      --surface: #111a2e;
-      --surface-2: #1b2640;
-      --ink: #f8fafc;
-      --muted: #94a3b8;
-      --border: #233554;
-      --primary: #3b82f6;
-      --gold: #f59e0b;
-      --gold-light: #2b1f07;
-      --accent5: #60a5fa;
-      --accent6: #2dd4bf;
-      --accent7: #fb7185;
-      --accent8: #c084fc;
-      --accent9: #38bdf8;
-      --accent10: #f59e0b;
-      --accent11: #818cf8;
-      --accent12: #d8b4fe;
-      --shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
-      --shadow-hover: 0 24px 48px -14px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(245, 158, 11, 0.45);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background:
-        radial-gradient(850px 480px at 15% -5%, rgba(30, 58, 138, 0.09), transparent 60%),
-        radial-gradient(750px 450px at 85% 15%, rgba(194, 136, 34, 0.12), transparent 55%),
-        var(--bg);
-      background-attachment: fixed;
-      color: var(--ink);
-      font-family: var(--font-sans);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 24px 16px 40px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    [data-theme="dark"] body {
-      background:
-        radial-gradient(850px 480px at 15% -5%, rgba(37, 99, 235, 0.18), transparent 60%),
-        radial-gradient(750px 450px at 85% 15%, rgba(245, 158, 11, 0.14), transparent 55%),
-        var(--bg);
-    }
-
-    .header-img {
-      width: 100%;
-      max-width: 820px;
-      height: auto;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      box-shadow: 0 12px 28px -10px rgba(15, 23, 42, 0.16);
-      margin: 14px 0 20px;
-      display: block;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .header-img:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 36px -12px rgba(15, 23, 42, 0.24);
-    }
-
-    .ml-text {
-      font-family: var(--font-ml), var(--font-sans);
-    }
-
-    /* Top Bar Controls */
-    .top-bar {
-      width: 100%;
-      max-width: 820px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .ctrl-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--ink);
-      padding: 7px 14px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .ctrl-btn:hover {
-      border-color: var(--gold);
-      transform: translateY(-1px);
-    }
-
-/* Footer styling */
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 8px 0;
-}
-.footer-btn {
-  background: var(--surface-2);
-  color: var(--ink);
-  font-weight: bold;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  text-decoration: none;
-}
-
-
-    .wrap {
-      width: 100%;
-      max-width: 820px;
-      text-align: center;
-      animation: fadeUp 0.45s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Header & Branding */
-    .org-header {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin: 0 0 16px;
-    }
-
-    .logo-container {
-      margin: 0 auto 14px;
-      width: 72px;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      box-shadow: var(--shadow);
-      padding: 8px;
-    }
-
-    .logo-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .logo-svg {
-      width: 44px;
-      height: 44px;
-    }
-
-    h1 {
-      font-family: var(--font-serif);
-      font-weight: 700;
-      font-size: 2.75rem;
-      line-height: 1.15;
-      margin: 0 0 10px;
-      color: var(--ink);
-    }
-
-    .sub {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 580px;
-      margin: 0 auto 28px;
-      line-height: 1.5;
-    }
-
-    /* Sections */
-    .section-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 32px 0 14px;
-    }
-
-    .section-label {
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gold);
-      white-space: nowrap;
-    }
-
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Available Cards Grid */
-    .grid-active {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      padding: 28px 24px 24px;
-      text-decoration: none;
-      color: var(--ink);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      font-family: inherit;
-      text-align: left;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-    }
-
-    .card.c5::before {
-      background: linear-gradient(90deg, var(--accent5), var(--gold));
-    }
-
-    .card.c10::before {
-      background: linear-gradient(90deg, var(--accent10), var(--gold));
-    }
-
-    .card.c11::before {
-      background: linear-gradient(90deg, var(--accent11), var(--gold));
-    }
-
-    .card.c12::before {
-      background: linear-gradient(90deg, var(--accent12), var(--gold));
-    }
-
-    .card.c6::before {
-      background: linear-gradient(90deg, var(--accent6), var(--gold));
-    }
-
-    .card.c7::before {
-      background: linear-gradient(90deg, var(--accent7), var(--gold));
-    }
-
-    .card.c8::before {
-      background: linear-gradient(90deg, var(--accent8), var(--gold));
-    }
-
-    .card.c9::before {
-      background: linear-gradient(90deg, var(--accent9), var(--gold));
-    }
-
-    .card.wip::before {
-      background: linear-gradient(90deg, #888888, #cccccc);
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--gold);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .card:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 3px;
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .card h2 {
-      font-family: var(--font-serif);
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin: 0;
-    }
-
-    .card-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-
-    .badge-c5 {
-      background: color-mix(in srgb, var(--accent5) 14%, transparent);
-      color: var(--accent5);
-    }
-
-    .badge-c10 {
-      background: color-mix(in srgb, var(--accent10) 14%, transparent);
-      color: var(--accent10);
-    }
-
-    .badge-c11 {
-      background: color-mix(in srgb, var(--accent11) 14%, transparent);
-      color: var(--accent11);
-    }
-
-    .badge-c12 {
-      background: color-mix(in srgb, var(--accent12) 14%, transparent);
-      color: var(--accent12);
-    }
-
-    .badge-c6 {
-      background: color-mix(in srgb, var(--accent6) 14%, transparent);
-      color: var(--accent6);
-    }
-
-    .badge-c7 {
-      background: color-mix(in srgb, var(--accent7) 14%, transparent);
-      color: var(--accent7);
-    }
-
-    .badge-c8 {
-      background: color-mix(in srgb, var(--accent8) 14%, transparent);
-      color: var(--accent8);
-    }
-
-    .badge-c9 {
-      background: color-mix(in srgb, var(--accent9) 14%, transparent);
-      color: var(--accent9);
-    }
-
-    .card p {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin: 0 0 18px;
-      line-height: 1.45;
-    }
-
-    .card-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--gold);
-      transition: gap 0.2s ease;
-    }
-
-    .card:hover .card-action {
-      gap: 10px;
-    }
-
-    /* WIP / Coming Soon Grid */
-    .grid-wip {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    @media (min-width: 620px) {
-      .grid-wip {
-        grid-template-columns: repeat(3, 1fr);
+    @media (prefers-color-scheme: dark){
+      :root:not([data-theme="light"]){
+        --bg:#0a1020; --surface:#111a2e; --surface-2:#18233b; --ink:#eef2f8; --muted:#9aa6b8;
+        --border:#26324a; --gold:#e0b25a; --gold-soft:#2a2210;
+        --c5:#60a5fa; --c6:#2dd4bf; --c7:#fb7185; --c8:#c084fc;
+        --c9:#38bdf8; --c10:#fbbf24; --c11:#818cf8; --c12:#d8b4fe;
+        --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -16px rgba(0,0,0,.75);
+        --shadow-hover:0 1px 0 rgba(255,255,255,.05) inset, 0 24px 48px -16px rgba(0,0,0,.9);
+        color-scheme:dark;
       }
     }
-
-    .card.wip {
-      padding: 20px 16px 18px;
-      text-align: center;
-      align-items: center;
-      background: var(--surface);
+    :root[data-theme="dark"]{
+      --bg:#0a1020; --surface:#111a2e; --surface-2:#18233b; --ink:#eef2f8; --muted:#9aa6b8;
+      --border:#26324a; --gold:#e0b25a; --gold-soft:#2a2210;
+      --c5:#60a5fa; --c6:#2dd4bf; --c7:#fb7185; --c8:#c084fc;
+      --c9:#38bdf8; --c10:#fbbf24; --c11:#818cf8; --c12:#d8b4fe;
+      --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -16px rgba(0,0,0,.75);
+      --shadow-hover:0 1px 0 rgba(255,255,255,.05) inset, 0 24px 48px -16px rgba(0,0,0,.9);
+      color-scheme:dark;
     }
 
-    .card.wip h2 {
-      font-size: 1.35rem;
-      margin-bottom: 4px;
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    html{ scroll-behavior:smooth; }
+    body{
+      background:var(--bg); color:var(--ink); font-family:var(--font-sans);
+      line-height:1.5; min-height:100vh; -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+    body.ml, .ml-text{ font-family:var(--font-ml); }
+    a{ color:inherit; }
+    .container{ width:100%; max-width:1080px; margin:0 auto; padding:0 16px; }
+
+    /* ---------- Top bar ---------- */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter:saturate(1.4) blur(10px); -webkit-backdrop-filter:saturate(1.4) blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar-inner{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:64px; }
+    .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; min-width:0; }
+    .brand img{ width:38px; height:38px; border-radius:999px; background:#fff; border:1px solid var(--border); object-fit:contain; padding:3px; flex:none; }
+    .brand-text{ display:flex; flex-direction:column; line-height:1.15; min-width:0; }
+    .brand-text strong{ font-size:.95rem; letter-spacing:.04em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brand-text span{ font-size:.74rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .controls{ display:flex; gap:8px; flex:none; }
+    .ctrl-btn{
+      height:38px; padding:0 14px; border-radius:999px; border:1px solid var(--border);
+      background:var(--surface); color:var(--ink); font:600 .85rem/1 var(--font-sans);
+      cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:border-color .15s ease;
+    }
+    .ctrl-btn:hover{ border-color:var(--gold); }
+    .ctrl-btn:focus-visible, .btn:focus-visible, .class-card:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+    #langLabel{ font-family:var(--font-ml), var(--font-sans); }
+    .theme-btn{ width:38px; padding:0; justify-content:center; font-size:1rem; }
+
+    /* ---------- Hero ---------- */
+    .hero{ padding:40px 0 28px; }
+    .hero-grid{ display:grid; grid-template-columns:1.05fr 1fr; gap:40px; align-items:center; }
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--gold);
+    }
+    .eyebrow::before{ content:""; width:22px; height:2px; background:var(--gold); border-radius:2px; }
+    .hero h1{
+      font-family:var(--font-serif); font-weight:700; font-size:clamp(2.3rem, 5vw, 3.6rem);
+      line-height:1.05; margin:14px 0 14px; letter-spacing:-.01em; text-wrap:balance;
+    }
+    body.ml .hero h1{ font-family:var(--font-ml); font-size:clamp(1.8rem, 4vw, 2.6rem); line-height:1.3; }
+    .hero-title{ text-align:center; margin-bottom:30px; }
+    .portal-title{
+      font-family:var(--font-serif); font-weight:700; color:var(--gold);
+      font-size:clamp(2rem, 5vw, 3.2rem); line-height:1.1; letter-spacing:.01em; margin:4px 0 0;
+    }
+    body.ml .portal-title{ font-family:var(--font-ml); font-size:clamp(1.6rem, 4vw, 2.4rem); line-height:1.35; }
+    .title-rule{ display:flex; align-items:center; justify-content:center; gap:12px; margin-top:12px; color:var(--gold); font-size:.9rem; }
+    .title-rule::before, .title-rule::after{ content:""; width:min(120px, 22vw); height:1px; background:linear-gradient(90deg, transparent, var(--gold)); }
+    .title-rule::after{ background:linear-gradient(90deg, var(--gold), transparent); }
+    .org-heading{
+      display:inline-block; margin-bottom:14px; padding:8px 14px; border-radius:12px;
+      background:var(--navy); color:#fff; border-left:4px solid var(--gold);
+      font-weight:700; font-size:.92rem; letter-spacing:.06em; line-height:1.35;
+    }
+    .org-heading span{ color:#e0b25a; white-space:nowrap; }
+    .hero h1 em{ font-style:normal; color:var(--gold); }
+    .hero-lead{ font-size:1.08rem; color:var(--muted); max-width:520px; margin-bottom:24px; }
+    .hero-actions{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px;
+      padding:0 22px; border-radius:14px; font:700 .98rem/1 var(--font-sans); text-decoration:none;
+      cursor:pointer; transition:transform .15s ease, filter .15s ease, border-color .15s ease; border:1.5px solid transparent;
+    }
+    .btn-primary{ background:var(--navy); color:#fff; box-shadow:0 12px 24px -14px rgba(20,33,61,.8); }
+    :root[data-theme="dark"] .btn-primary{ background:var(--gold); color:#1a1405; }
+    @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .btn-primary{ background:var(--gold); color:#1a1405; } }
+    .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.1); }
+    .btn-ghost{ background:var(--surface); color:var(--ink); border-color:var(--border); }
+    .btn-ghost:hover{ border-color:var(--gold); }
+
+    .stats{ display:flex; gap:10px; flex-wrap:wrap; }
+    .stat{
+      flex:1 1 0; min-width:96px; background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:12px 14px;
+    }
+    .stat b{ display:block; font-family:var(--font-serif); font-size:1.7rem; line-height:1.1; font-variant-numeric:tabular-nums; }
+    .stat span{ font-size:.8rem; color:var(--muted); font-weight:600; }
+
+    .hero-visual{ position:relative; }
+    .hero-frame{
+      position:relative; border-radius:24px; overflow:hidden; background:var(--navy);
+      box-shadow:var(--shadow-hover); border:1px solid var(--border);
+    }
+    .hero-frame img{ display:block; width:100%; height:auto; }
+    .hero-frame figcaption{
+      display:flex; align-items:center; gap:10px; padding:14px 18px; color:#fff;
+      background:linear-gradient(135deg, var(--navy), var(--navy-2)); border-top:3px solid var(--gold);
+      font-size:.88rem; font-weight:600;
+    }
+    .hero-frame figcaption .dot{ width:8px; height:8px; border-radius:999px; background:#4ade80; box-shadow:0 0 0 4px rgba(74,222,128,.2); flex:none; }
+    .hero-visual::before{
+      content:""; position:absolute; inset:16px -12px -12px 16px; border-radius:28px; z-index:-1;
+      background:linear-gradient(135deg, color-mix(in srgb, var(--gold) 30%, transparent), transparent 60%);
     }
 
-    .card.wip p {
-      font-size: 0.8rem;
-      margin-bottom: 10px;
+    /* ---------- Sections ---------- */
+    section.block{ padding:28px 0; }
+    .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+    .section-head h2{
+      font-family:var(--font-serif); font-size:clamp(1.7rem, 3.4vw, 2.3rem); font-weight:700; line-height:1.15; margin-top:6px;
     }
+    body.ml .section-head h2{ font-family:var(--font-ml); font-size:clamp(1.3rem, 2.8vw, 1.8rem); }
+    .section-head p{ color:var(--muted); max-width:420px; font-size:.95rem; }
 
-    .wip-badge {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      background: rgba(140, 140, 140, 0.12);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 3px 10px;
+    .group-label{
+      display:flex; align-items:center; gap:12px; margin:22px 0 12px;
+      font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
     }
+    .group-label::after{ content:""; flex:1; height:1px; background:var(--border); }
 
-    /* Under Construction Modal */
-    .uc-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+    .class-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; }
+    .class-card{
+      --c:var(--c5);
+      position:relative; display:flex; flex-direction:column; gap:14px;
+      background:var(--surface); border:1px solid var(--border); border-radius:20px;
+      padding:20px; text-decoration:none; color:var(--ink); box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; overflow:hidden;
     }
+    .class-card::after{
+      content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c);
+    }
+    .class-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover); border-color:color-mix(in srgb, var(--c) 45%, var(--border)); }
+    .cc-top{ display:flex; align-items:center; gap:14px; }
+    .numeral{
+      flex:none; width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-serif); font-weight:700; font-size:1.45rem; letter-spacing:.02em;
+      color:var(--c); background:color-mix(in srgb, var(--c) 12%, var(--surface));
+      border:1.5px solid color-mix(in srgb, var(--c) 35%, transparent);
+    }
+    .cc-title{ font-size:1.12rem; font-weight:700; line-height:1.2; }
+    .cc-sub{ font-size:.84rem; color:var(--muted); margin-top:2px; }
+    .cc-meta{ display:flex; flex-wrap:wrap; gap:6px; }
+    .pill{
+      font-size:.76rem; font-weight:700; padding:4px 10px; border-radius:999px;
+      background:var(--surface-2); color:var(--muted); border:1px solid var(--border);
+      font-variant-numeric:tabular-nums;
+    }
+    .pill.strong{ color:var(--c); background:color-mix(in srgb, var(--c) 10%, var(--surface)); border-color:color-mix(in srgb, var(--c) 30%, transparent); }
+    .cc-cta{
+      margin-top:auto; display:flex; align-items:center; justify-content:space-between;
+      padding-top:12px; border-top:1px solid var(--border); font-size:.9rem; font-weight:700; color:var(--c);
+    }
+    .cc-cta .arrow{ transition:transform .18s ease; }
+    .class-card:hover .cc-cta .arrow{ transform:translateX(4px); }
 
-    .uc-overlay.active {
-      display: flex;
-      animation: fadeIn 0.2s ease;
+    /* Steps */
+    .steps{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; counter-reset:step; }
+    .step{
+      background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px 20px;
+      box-shadow:var(--shadow);
     }
+    .step-num{
+      width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+      background:var(--navy); color:#fff; font-family:var(--font-serif); font-size:1.3rem; font-weight:700; margin-bottom:14px;
+    }
+    :root[data-theme="dark"] .step-num{ background:var(--gold); color:#1a1405; }
+    @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .step-num{ background:var(--gold); color:#1a1405; } }
+    .step h3{ font-size:1.05rem; margin-bottom:6px; }
+    .step p{ font-size:.92rem; color:var(--muted); }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* Checklist */
+    .notice{
+      display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:start;
+      background:var(--gold-soft); border:1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+      border-radius:20px; padding:22px;
     }
-
-    .uc-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: 0 32px 64px -20px rgba(0, 0, 0, 0.5);
-      padding: 36px 30px 28px;
-      max-width: 380px;
-      width: 100%;
-      text-align: center;
-      animation: slideUp 0.25s ease;
+    .notice-icon{
+      width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+      background:var(--surface); border:1px solid color-mix(in srgb, var(--gold) 35%, transparent); font-size:1.3rem;
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: none; opacity: 1; }
-    }
-
-    .uc-icon {
-      font-size: 3.2rem;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .uc-box h3 {
-      font-family: var(--font-serif);
-      font-size: 1.65rem;
-      margin: 0 0 8px;
-      color: var(--gold);
-    }
-
-    .uc-box p {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin: 0 0 24px;
-      line-height: 1.6;
-    }
-
-    .uc-close {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 32px;
-      font-size: 0.92rem;
-      font-weight: 600;
-      font-family: inherit;
-      color: var(--ink);
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-
-    .uc-close:hover {
-      background: var(--border);
-      border-color: var(--gold);
-    }
+    .notice h3{ font-size:1.1rem; margin-bottom:10px; }
+    .checklist{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:8px 22px; }
+    .checklist li{ display:flex; gap:10px; font-size:.93rem; }
+    .checklist li::before{ content:"✓"; color:var(--gold); font-weight:700; flex:none; }
 
     /* Footer */
-    footer {
-      text-align: center;
-      font-size: 0.74rem;
-      color: var(--muted);
-      margin-top: 48px;
-      line-height: 1.6;
-    }
+    footer{ margin-top:36px; border-top:1px solid var(--border); padding:26px 0 36px; }
+    .footer-inner{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:.86rem; color:var(--muted); }
+    .footer-inner a{ text-underline-offset:3px; }
+    .footer-inner a:hover{ color:var(--gold); }
+    .footer-links{ display:flex; gap:14px; flex-wrap:wrap; }
 
-    footer a {
-      color: inherit;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      transition: color 0.15s ease;
+    @media (max-width:860px){
+      .hero-grid{ grid-template-columns:1fr; gap:28px; }
+      .hero-visual{ order:-1; }
+      .steps{ grid-template-columns:1fr; }
     }
-
-    footer a:hover {
-      color: var(--gold);
+    @media (max-width:560px){
+      .hero{ padding-top:22px; }
+      .brand-text span{ display:none; }
+      #langIcon{ display:none; }
+      .checklist{ grid-template-columns:1fr; }
+      .notice{ grid-template-columns:1fr; }
+      .class-grid{ grid-template-columns:1fr; }
     }
-
-    @media (max-width: 480px) {
-      .org-header { font-size: 0.92rem; }
-      h1 { font-size: 2.15rem; }
-      .sub { font-size: 0.95rem; }
-      .card { padding: 22px 18px 18px; }
-      .grid-active { grid-template-columns: 1fr; }
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+      html{ scroll-behavior:auto; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Controls -->
-  <div class="top-bar">
-    <button class="ctrl-btn" id="langToggleBtn" onclick="toggleLanguage()" title="Toggle Language">
-      <span id="langIcon">A / അ</span>
-      <span id="langLabel">മലയാളം</span>
-    </button>
-    <button class="ctrl-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-      <span id="themeIcon">☾</span>
-      <span id="themeLabel">Dark</span>
-    </button>
-  </div>
-
-  <div class="wrap">
-
-<img src="Header.jpg" alt="Header Image" class="header-img" style="max-width:100%;height:auto;margin:16px 0;">
-    <h1 data-en="OSSAE RIYADH REGION" data-ml="ഒ.എസ്.എസ്.എ.ഇ റിയാദ് റീജിയൻ">OSSAE RIYADH REGION</h1>
-    <p class="sub" data-en="Sunday School Exam Portal — Classes 5 to 12 · Choose your class to begin the practice exam" data-ml="സൺഡേ സ്കൂൾ പരീക്ഷ പോർട്ടൽ — ക്ലാസ്സ് 5 മുതൽ 12 വരെ · പരിശീലന പരീക്ഷ ആരംഭിക്കാൻ നിങ്ങളുടെ ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Sunday School Exam Portal — Classes 5 to 12 · Choose your class to begin the practice exam</p>
-
-    <!-- Classes Section -->
-    <div class="section-head">
-      <span class="section-label" data-en="Select Your Class" data-ml="ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Select Your Class</span>
-      <div class="section-line"></div>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="">
+        <span class="brand-text">
+          <strong>OSSAE DESERT LAND CENTRAL REGION</strong>
+          <span data-en="(Thrissur Diocese) · Sunday School Exam Portal" data-ml="(തൃശ്ശൂർ ഭദ്രാസനം) · സൺഡേ സ്കൂൾ പരീക്ഷ പോർട്ടൽ">(Thrissur Diocese) · Sunday School Exam Portal</span>
+        </span>
+      </a>
+      <div class="controls">
+        <button class="ctrl-btn" id="langToggleBtn" onclick="toggleLanguage()" title="Toggle Language">
+          <span id="langIcon">A / അ</span>
+          <span id="langLabel">മലയാളം</span>
+        </button>
+        <button class="ctrl-btn theme-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle dark mode">
+          <span id="themeIcon">☾</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <div class="grid-active">
-      <a class="card c5" href="class5.html">
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-title">
+        <p class="org-heading">OSSAE DESERT LAND CENTRAL REGION <span>(THRISSUR DIOCESE)</span></p>
+        <h2 class="portal-title" data-en="Sunday School Exam Portal" data-ml="സൺഡേ സ്കൂൾ പരീക്ഷ പോർട്ടൽ">Sunday School Exam Portal</h2>
+        <div class="title-rule" aria-hidden="true"><span>✦</span></div>
+      </div>
+      <div class="container hero-grid">
         <div>
-          <div class="card-top">
-            <h2 data-en="Class V" data-ml="ക്ലാസ്സ് V">Class V</h2>
-            <span class="card-badge badge-c5" data-en="181 Questions" data-ml="181 ചോദ്യങ്ങൾ">181 Questions</span>
+          <h1 data-en="Practice today. Shine on exam day." data-ml="ഇന്ന് പരിശീലിക്കൂ. പരീക്ഷയിൽ തിളങ്ങൂ.">Practice today. Shine on exam day.</h1>
+          <p class="hero-lead" data-en="Timed practice exams for Classes V to XII, built from the official OSSAE question banks — in English and Malayalam." data-ml="ഔദ്യോഗിക OSSAE ചോദ്യബാങ്കുകളിൽ നിന്ന് തയ്യാറാക്കിയ, ക്ലാസ്സ് V മുതൽ XII വരെയുള്ള സമയബന്ധിത പരിശീലന പരീക്ഷകൾ — ഇംഗ്ലീഷിലും മലയാളത്തിലും.">Timed practice exams for Classes V to XII, built from the official OSSAE question banks — in English and Malayalam.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#classes"><span data-en="Choose your class" data-ml="ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Choose your class</span> <span aria-hidden="true">&darr;</span></a>
+            <a class="btn btn-ghost" href="support.html"><span aria-hidden="true">▶</span> <span data-en="Watch tutorial" data-ml="ട്യൂട്ടോറിയൽ കാണുക">Watch tutorial</span></a>
           </div>
-          <p data-en="25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="25 അധ്യായങ്ങൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam</p>
+          <div class="stats">
+            <div class="stat"><b>8</b><span data-en="Classes" data-ml="ക്ലാസ്സുകൾ">Classes</span></div>
+            <div class="stat"><b id="statQuestions">2,689</b><span data-en="Questions" data-ml="ചോദ്യങ്ങൾ">Questions</span></div>
+            <div class="stat"><b>2</b><span data-en="Languages" data-ml="ഭാഷകൾ">Languages</span></div>
+          </div>
         </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
+        <div class="hero-visual">
+          <figure class="hero-frame">
+            <img src="Header.jpg" alt="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)">
+            <figcaption><span class="dot" aria-hidden="true"></span><span data-en="Practice exams are open for all classes" data-ml="എല്ലാ ക്ലാസ്സുകൾക്കും പരിശീലന പരീക്ഷ ലഭ്യമാണ്">Practice exams are open for all classes</span></figcaption>
+          </figure>
         </div>
-      </a>
+      </div>
+    </section>
 
-      <a class="card c6" href="class6.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class VI" data-ml="ക്ലാസ്സ് VI">Class VI</h2>
-            <span class="card-badge badge-c6" data-en="182 Questions" data-ml="182 ചോദ്യങ്ങൾ">182 Questions</span>
+    <!-- Classes -->
+    <section class="block" id="classes">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow" data-en="Step 1" data-ml="ഘട്ടം 1">Step 1</span>
+            <h2 data-en="Select your class" data-ml="നിങ്ങളുടെ ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Select your class</h2>
           </div>
-          <p data-en="25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="25 അധ്യായങ്ങൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam</p>
+          <p data-en="Every attempt picks a fresh random set of questions, so you can practise as many times as you like." data-ml="ഓരോ തവണയും പുതിയ ചോദ്യങ്ങൾ ക്രമരഹിതമായി തിരഞ്ഞെടുക്കുന്നു — എത്ര തവണ വേണമെങ്കിലും പരിശീലിക്കാം.">Every attempt picks a fresh random set of questions, so you can practise as many times as you like.</p>
         </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
 
-      <a class="card c7" href="class7.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class VII" data-ml="ക്ലാസ്സ് VII">Class VII</h2>
-            <span class="card-badge badge-c7" data-en="171 Questions" data-ml="171 ചോദ്യങ്ങൾ">171 Questions</span>
-          </div>
-          <p data-en="25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="25 അധ്യായങ്ങൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">25 Chapters · English &amp; Malayalam · 25 questions randomly selected per exam</p>
-        </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
+        <div class="group-label" data-en="Classes V – IX" data-ml="ക്ലാസ്സ് V – IX">Classes V – IX</div>
+        <div class="class-grid" id="gridJunior"></div>
 
-      <a class="card c8" href="class8.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class VIII" data-ml="ക്ലാസ്സ് VIII">Class VIII</h2>
-            <span class="card-badge badge-c8" data-en="450 Questions" data-ml="450 ചോദ്യങ്ങൾ">450 Questions</span>
-          </div>
-          <p data-en="9 Units · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="9 യൂണിറ്റുകൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">9 Units · English &amp; Malayalam · 25 questions randomly selected per exam</p>
-        </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
+        <div class="group-label" data-en="Classes X – XII · Certificate &amp; Vedapraveen" data-ml="ക്ലാസ്സ് X – XII · സർട്ടിഫിക്കറ്റ് &amp; വേദപ്രവീൺ">Classes X – XII · Certificate &amp; Vedapraveen</div>
+        <div class="class-grid" id="gridSenior"></div>
+      </div>
+    </section>
 
-      <a class="card c9" href="class9.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class IX" data-ml="ക്ലാസ്സ് IX">Class IX</h2>
-            <span class="card-badge badge-c9" data-en="435 Questions" data-ml="435 ചോദ്യങ്ങൾ">435 Questions</span>
+    <!-- How it works -->
+    <section class="block">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow" data-en="How it works" data-ml="എങ്ങനെ പ്രവർത്തിക്കുന്നു">How it works</span>
+            <h2 data-en="Three simple steps" data-ml="മൂന്ന് ലളിതമായ ഘട്ടങ്ങൾ">Three simple steps</h2>
           </div>
-          <p data-en="9 Units · English &amp; Malayalam · 25 questions randomly selected per exam" data-ml="9 യൂണിറ്റുകൾ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 25 ചോദ്യങ്ങൾ">9 Units · English &amp; Malayalam · 25 questions randomly selected per exam</p>
         </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3 data-en="Pick your class" data-ml="ക്ലാസ്സ് തിരഞ്ഞെടുക്കുക">Pick your class</h3>
+            <p data-en="Open the practice exam for the class you are studying in this year." data-ml="ഈ വർഷം നിങ്ങൾ പഠിക്കുന്ന ക്ലാസ്സിന്റെ പരിശീലന പരീക്ഷ തുറക്കുക.">Open the practice exam for the class you are studying in this year.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3 data-en="Register your details" data-ml="വിവരങ്ങൾ നൽകുക">Register your details</h3>
+            <p data-en="Enter your name, roll number, phone, Sunday School name, Sunday School code and diocese." data-ml="പേര്, റോൾ നമ്പർ, ഫോൺ, സൺഡേ സ്കൂളിന്റെ പേര്, സൺഡേ സ്കൂൾ കോഡ്, ഭദ്രാസനം എന്നിവ നൽകുക.">Enter your name, roll number, phone, Sunday School name, Sunday School code and diocese.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3 data-en="Answer &amp; see your score" data-ml="ഉത്തരം നൽകി സ്കോർ കാണുക">Answer &amp; see your score</h3>
+            <p data-en="Answer before the timer ends, then review every answer and share your result." data-ml="സമയം തീരുന്നതിനു മുൻപ് ഉത്തരം നൽകുക, തുടർന്ന് ഉത്തരങ്ങൾ പരിശോധിച്ച് ഫലം പങ്കിടുക.">Answer before the timer ends, then review every answer and share your result.</p>
+          </div>
         </div>
-      </a>
+      </div>
+    </section>
 
-      <a class="card c10" href="class10.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class X — Secondary" data-ml="ക്ലാസ്സ് X — സെക്കൻഡറി">Class X — Secondary</h2>
-            <span class="card-badge badge-c10" data-en="323 Questions" data-ml="323 ചോദ്യങ്ങൾ">323 Questions</span>
+    <!-- Before you start -->
+    <section class="block">
+      <div class="container">
+        <div class="notice">
+          <div class="notice-icon" aria-hidden="true">📋</div>
+          <div>
+            <h3 data-en="Before you start" data-ml="ആരംഭിക്കുന്നതിനു മുൻപ്">Before you start</h3>
+            <ul class="checklist">
+              <li data-en="Keep your Sunday School name and code ready — ask your HM if you don't know the code." data-ml="സൺഡേ സ്കൂളിന്റെ പേരും കോഡും തയ്യാറാക്കി വെക്കുക — കോഡ് അറിയില്ലെങ്കിൽ HM-നോട് ചോദിക്കുക.">Keep your Sunday School name and code ready — ask your HM if you don't know the code.</li>
+              <li data-en="Classes V–IX: 25 questions in 25 minutes. Classes X–XII: 30 questions in 30 minutes." data-ml="ക്ലാസ്സ് V–IX: 25 മിനിറ്റിൽ 25 ചോദ്യങ്ങൾ. ക്ലാസ്സ് X–XII: 30 മിനിറ്റിൽ 30 ചോദ്യങ്ങൾ.">Classes V–IX: 25 questions in 25 minutes. Classes X–XII: 30 questions in 30 minutes.</li>
+              <li data-en="Use a stable internet connection and don't close the page during the exam." data-ml="സ്ഥിരതയുള്ള ഇന്റർനെറ്റ് ഉപയോഗിക്കുക, പരീക്ഷയ്ക്കിടെ പേജ് അടയ്ക്കരുത്.">Use a stable internet connection and don't close the page during the exam.</li>
+              <li data-en="Switch between English and Malayalam at any time — even mid-question." data-ml="ഏതു സമയത്തും ഇംഗ്ലീഷിനും മലയാളത്തിനുമിടയിൽ മാറാം — ചോദ്യത്തിനിടയിലും.">Switch between English and Malayalam at any time — even mid-question.</li>
+            </ul>
           </div>
-          <p data-en="Secondary Certificate · English &amp; Malayalam · 30 questions randomly selected per exam" data-ml="സെക്കൻഡറി സർട്ടിഫിക്കറ്റ് · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 30 ചോദ്യങ്ങൾ">Secondary Certificate · English &amp; Malayalam · 30 questions randomly selected per exam</p>
         </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
+      </div>
+    </section>
+  </main>
 
-      <a class="card c11" href="class11.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class XI — Vedapraveen" data-ml="ക്ലാസ്സ് XI — വേദപ്രവീൺ">Class XI — Vedapraveen</h2>
-            <span class="card-badge badge-c11" data-en="378 Questions" data-ml="378 ചോദ്യങ്ങൾ">378 Questions</span>
-          </div>
-          <p data-en="Vedapraveen Part I · English &amp; Malayalam · 30 questions randomly selected per exam" data-ml="വേദപ്രവീൺ പാർട്ട് 1 · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 30 ചോദ്യങ്ങൾ">Vedapraveen Part I · English &amp; Malayalam · 30 questions randomly selected per exam</p>
-        </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
-
-      <a class="card c12" href="class12.html">
-        <div>
-          <div class="card-top">
-            <h2 data-en="Class XII — Vedapraveen" data-ml="ക്ലാസ്സ് XII — വേദപ്രവീൺ">Class XII — Vedapraveen</h2>
-            <span class="card-badge badge-c12" data-en="569 Questions" data-ml="569 ചോദ്യങ്ങൾ">569 Questions</span>
-          </div>
-          <p data-en="Vedapraveen Diploma · English &amp; Malayalam · 30 questions randomly selected per exam" data-ml="വേദപ്രവീൺ ഡിപ്ലോമ · ഇംഗ്ലീഷ് &amp; മലയാളം · പരീക്ഷയിൽ 30 ചോദ്യങ്ങൾ">Vedapraveen Diploma · English &amp; Malayalam · 30 questions randomly selected per exam</p>
-        </div>
-        <div class="card-action">
-          <span data-en="Start Practice Exam" data-ml="പരീക്ഷ തുടങ്ങുക">Start Practice Exam</span> &rarr;
-        </div>
-      </a>
+  <footer>
+    <div class="container footer-inner">
+      <span><span data-en="Practice exam for" data-ml="പരിശീലന പരീക്ഷ —">Practice exam for</span> <strong>OSSAE RIYADH REGION</strong> &middot; <span data-en="developed by" data-ml="വികസിപ്പിച്ചത്">developed by</span> <a href="https://portfolio-pi-roan-40.vercel.app/" target="_blank" rel="noopener noreferrer">bubinkm</a></span>
+      <span class="footer-links">
+        <a href="support.html" data-en="Exam Tutorial" data-ml="പരീക്ഷ ട്യൂട്ടോറിയൽ">Exam Tutorial</a>
+      </span>
     </div>
-
-    <footer>
-      Practice exam for OSSAE RIYADH REGION &middot; developed by <a href="https://portfolio-pi-roan-40.vercel.app/" target="_blank" rel="noopener noreferrer">bubinkm</a> &middot; <a href="support.html" style="font-weight:bold; padding:4px 8px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2);">Exam Tutorial</a>
-    </footer>
-  </div>
-
-  <!-- Under Construction Modal -->
-  <div class="uc-overlay" id="ucOverlay" role="dialog" aria-modal="true" aria-labelledby="ucTitle">
-    <div class="uc-box">
-      <span class="uc-icon">🚧</span>
-      <h3 id="ucTitle">Under Construction</h3>
-      <p id="ucMsg">Questions for this class are being prepared. Please check back soon!</p>
-      <button class="uc-close" id="ucCloseBtn" onclick="closeWIP()">Got it</button>
-    </div>
-  </div>
+  </footer>
 
   <script>
-    var currentLang = localStorage.getItem('ss_lang') || 'en';
-    var currentTheme = localStorage.getItem('ss_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var CLASSES = [
+      { id:5,  roman:'V',    href:'class5.html',  q:181, n:25, min:25, color:'--c5',
+        en:{ title:'Class V',  sub:'25 Chapters' },             ml:{ title:'ക്ലാസ്സ് V',  sub:'25 അധ്യായങ്ങൾ' } },
+      { id:6,  roman:'VI',   href:'class6.html',  q:182, n:25, min:25, color:'--c6',
+        en:{ title:'Class VI', sub:'25 Chapters' },             ml:{ title:'ക്ലാസ്സ് VI', sub:'25 അധ്യായങ്ങൾ' } },
+      { id:7,  roman:'VII',  href:'class7.html',  q:171, n:25, min:25, color:'--c7',
+        en:{ title:'Class VII', sub:'25 Chapters' },            ml:{ title:'ക്ലാസ്സ് VII', sub:'25 അധ്യായങ്ങൾ' } },
+      { id:8,  roman:'VIII', href:'class8.html',  q:450, n:25, min:25, color:'--c8',
+        en:{ title:'Class VIII', sub:'9 Units' },               ml:{ title:'ക്ലാസ്സ് VIII', sub:'9 യൂണിറ്റുകൾ' } },
+      { id:9,  roman:'IX',   href:'class9.html',  q:435, n:25, min:25, color:'--c9',
+        en:{ title:'Class IX', sub:'9 Units' },                 ml:{ title:'ക്ലാസ്സ് IX', sub:'9 യൂണിറ്റുകൾ' } },
+      { id:10, roman:'X',    href:'class10.html', q:323, n:30, min:30, color:'--c10',
+        en:{ title:'Class X', sub:'Secondary Certificate' },    ml:{ title:'ക്ലാസ്സ് X', sub:'സെക്കൻഡറി സർട്ടിഫിക്കറ്റ്' } },
+      { id:11, roman:'XI',   href:'class11.html', q:378, n:30, min:30, color:'--c11',
+        en:{ title:'Class XI', sub:'Vedapraveen Part I' },      ml:{ title:'ക്ലാസ്സ് XI', sub:'വേദപ്രവീൺ പാർട്ട് 1' } },
+      { id:12, roman:'XII',  href:'class12.html', q:569, n:30, min:30, color:'--c12',
+        en:{ title:'Class XII', sub:'Vedapraveen Diploma' },    ml:{ title:'ക്ലാസ്സ് XII', sub:'വേദപ്രവീൺ ഡിപ്ലോമ' } }
+    ];
 
-    function applyTheme(theme) {
-      currentTheme = theme;
-      if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.getElementById('themeIcon').textContent = '☀';
-        document.getElementById('themeLabel').textContent = 'Light';
-      } else {
-        document.documentElement.removeAttribute('data-theme');
-        document.getElementById('themeIcon').textContent = '☾';
-        document.getElementById('themeLabel').textContent = 'Dark';
-      }
-      localStorage.setItem('ss_theme', theme);
-    }
+    var STR = {
+      en:{ qBank:'questions', perExam:'Qs', mins:'min', start:'Start practice exam', both:'EN · ML' },
+      ml:{ qBank:'ചോദ്യങ്ങൾ', perExam:'ചോദ്യം', mins:'മിനിറ്റ്', start:'പരീക്ഷ തുടങ്ങുക', both:'EN · ML' }
+    };
 
-    function toggleTheme() {
-      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
-    }
+    var currentLang = 'en';
+    try { currentLang = localStorage.getItem('ss_lang') === 'ml' ? 'ml' : 'en'; } catch(e){}
 
-    function applyLanguage(lang) {
-      currentLang = lang;
-      document.querySelectorAll('[data-en]').forEach(function(el) {
-        var text = el.getAttribute('data-' + lang);
-        if (text) {
-          el.textContent = text;
-          if (lang === 'ml') {
-            el.classList.add('ml-text');
-          } else {
-            el.classList.remove('ml-text');
-          }
-        }
+    function renderClasses(){
+      var s = STR[currentLang];
+      var junior = document.getElementById('gridJunior');
+      var senior = document.getElementById('gridSenior');
+      junior.innerHTML = ''; senior.innerHTML = '';
+      CLASSES.forEach(function(c){
+        var t = c[currentLang];
+        var a = document.createElement('a');
+        a.className = 'class-card';
+        a.href = c.href;
+        a.style.setProperty('--c', 'var(' + c.color + ')');
+        a.innerHTML =
+          '<div class="cc-top">' +
+            '<span class="numeral" aria-hidden="true">' + c.roman + '</span>' +
+            '<div><div class="cc-title"></div><div class="cc-sub"></div></div>' +
+          '</div>' +
+          '<div class="cc-meta">' +
+            '<span class="pill strong">' + c.q + ' ' + s.qBank + '</span>' +
+            '<span class="pill">' + c.n + ' ' + s.perExam + ' · ' + c.min + ' ' + s.mins + '</span>' +
+            '<span class="pill">' + s.both + '</span>' +
+          '</div>' +
+          '<div class="cc-cta"><span></span><span class="arrow" aria-hidden="true">&rarr;</span></div>';
+        a.querySelector('.cc-title').textContent = t.title;
+        a.querySelector('.cc-sub').textContent = t.sub;
+        a.querySelector('.cc-cta span').textContent = s.start;
+        (c.id <= 9 ? junior : senior).appendChild(a);
       });
-
-      var langLabel = document.getElementById('langLabel');
-      if (lang === 'en') {
-        langLabel.textContent = 'മലയാളം';
-      } else {
-        langLabel.textContent = 'English';
-      }
-
-      document.getElementById('ucCloseBtn').textContent = lang === 'en' ? 'Got it' : 'ശരി';
-      localStorage.setItem('ss_lang', lang);
+      var total = CLASSES.reduce(function(sum, c){ return sum + c.q; }, 0);
+      document.getElementById('statQuestions').textContent = total.toLocaleString('en-US');
     }
 
-    function toggleLanguage() {
+    function currentTheme(){
+      var a = document.documentElement.getAttribute('data-theme');
+      if (a) return a;
+      return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme){
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀' : '☾';
+      try { localStorage.setItem('ss_theme', theme); } catch(e){}
+    }
+
+    function toggleTheme(){
+      applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+    }
+
+    function applyLanguage(lang){
+      currentLang = lang;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        var text = el.getAttribute('data-' + lang);
+        if (text) el.textContent = text;
+      });
+      document.body.classList.toggle('ml', lang === 'ml');
+      document.documentElement.lang = lang === 'ml' ? 'ml' : 'en';
+      document.getElementById('langLabel').textContent = lang === 'en' ? 'മലയാളം' : 'English';
+      renderClasses();
+      try { localStorage.setItem('ss_lang', lang); } catch(e){}
+    }
+
+    function toggleLanguage(){
       applyLanguage(currentLang === 'en' ? 'ml' : 'en');
     }
 
-    // Modal WIP
-    var overlay = document.getElementById('ucOverlay');
-    function showWIP(cls) {
-      if (currentLang === 'ml') {
-        document.getElementById('ucTitle').textContent = cls + ' — ഉടൻ ലഭ്യമാകും';
-        document.getElementById('ucMsg').textContent = cls + '-ലെ ചോദ്യങ്ങൾ തയ്യാറായിവരുന്നു. ഉടൻ ലഭ്യമാകും!';
-      } else {
-        document.getElementById('ucTitle').textContent = cls + ' — Coming Soon';
-        document.getElementById('ucMsg').textContent = 'Questions for ' + cls + ' are being prepared. Please check back soon!';
-      }
-      overlay.classList.add('active');
-    }
-
-    function closeWIP() {
-      overlay.classList.remove('active');
-    }
-
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeWIP();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeWIP();
-    });
-
-    // Initialize state
-    applyTheme(currentTheme);
+    document.getElementById('themeIcon').textContent = currentTheme() === 'dark' ? '☀' : '☾';
     applyLanguage(currentLang);
   </script>
 </body>

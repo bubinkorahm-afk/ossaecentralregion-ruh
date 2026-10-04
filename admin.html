@@ -3,602 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSSAE Exam Admin Portal — Attempt Logs & Marksheet</title>
+<title>OSSAE Admin — Results Dashboard</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  (function(){ try { var t = localStorage.getItem('ss_theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch(e){} })();
+</script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&display=swap');
-
   :root{
-    --bg:#f4f7fb;
-    --surface:#ffffff;
-    --surface-2:#e9f0f8;
-    --ink:#0f172a;
-    --muted:#475569;
-    --border:#cbd5e1;
-    --accent:#1e3a8a;
-    --accent-ink:#ffffff;
-    --gold:#c28822;
-    --good:#15803d;
-    --good-bg:#dcfce7;
-    --bad:#b91c1c;
-    --bad-bg:#fee2e2;
-    --warn:#b45309;
-    --warn-bg:#fef3c7;
-    --shadow: 0 14px 34px -12px rgba(15,23,42,.14);
+    --bg:#f6f4ef; --surface:#ffffff; --surface-2:#f3f1ec; --ink:#14213d; --muted:#5b6474; --border:#e4dfd3;
+    --navy:#14213d; --navy-2:#1f3160; --gold:#b8862b; --gold-soft:#f6ecd6;
+    --accent:#1f3160; --accent-ink:#ffffff;
+    --good:#15803d; --good-bg:#dcfce7; --bad:#b91c1c; --bad-bg:#fee2e2; --warn:#b45309; --warn-bg:#fef3c7;
+    --c5:#1d4ed8; --c6:#0d9488; --c7:#9f1239; --c8:#7e22ce; --c9:#0284c7; --c10:#d97706; --c11:#4338ca; --c12:#6b21a8;
+    --shadow:0 1px 2px rgba(20,33,61,.06), 0 12px 32px -16px rgba(20,33,61,.22);
+    --font-serif:'Cormorant Garamond', Georgia, serif;
+    --font-sans:'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color-scheme:light;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#090e17;
-      --surface:#111a2e;
-      --surface-2:#1b2640;
-      --ink:#f8fafc;
-      --muted:#94a3b8;
-      --border:#233554;
-      --accent:#3b82f6;
-      --accent-ink:#0b1120;
-      --gold:#f59e0b;
-      --good:#4ade80;
-      --good-bg:#14532d33;
-      --bad:#f87171;
-      --bad-bg:#7f1d1d33;
-      --warn:#fbbf24;
-      --warn-bg:#78350f33;
-      --shadow: 0 16px 36px -12px rgba(0,0,0,.7);
+      --bg:#0a1020; --surface:#111a2e; --surface-2:#18233b; --ink:#eef2f8; --muted:#9aa6b8; --border:#26324a;
+      --gold:#e0b25a; --gold-soft:#2a2210; --accent:#e0b25a; --accent-ink:#1a1405;
+      --good:#4ade80; --good-bg:#14532d40; --bad:#f87171; --bad-bg:#7f1d1d40; --warn:#fbbf24; --warn-bg:#78350f40;
+      --c5:#60a5fa; --c6:#2dd4bf; --c7:#fb7185; --c8:#c084fc; --c9:#38bdf8; --c10:#fbbf24; --c11:#818cf8; --c12:#d8b4fe;
+      --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -16px rgba(0,0,0,.75);
+      color-scheme:dark;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#090e17;
-    --surface:#111a2e;
-    --surface-2:#1b2640;
-    --ink:#f8fafc;
-    --muted:#94a3b8;
-    --border:#233554;
-    --accent:#3b82f6;
-    --accent-ink:#0b1120;
-    --gold:#f59e0b;
-    --good:#4ade80;
-    --good-bg:#14532d33;
-    --bad:#f87171;
-    --bad-bg:#7f1d1d33;
-    --warn:#fbbf24;
-    --warn-bg:#78350f33;
-    --shadow: 0 16px 36px -12px rgba(0,0,0,.7);
+    --bg:#0a1020; --surface:#111a2e; --surface-2:#18233b; --ink:#eef2f8; --muted:#9aa6b8; --border:#26324a;
+    --gold:#e0b25a; --gold-soft:#2a2210; --accent:#e0b25a; --accent-ink:#1a1405;
+    --good:#4ade80; --good-bg:#14532d40; --bad:#f87171; --bad-bg:#7f1d1d40; --warn:#fbbf24; --warn-bg:#78350f40;
+    --c5:#60a5fa; --c6:#2dd4bf; --c7:#fb7185; --c8:#c084fc; --c9:#38bdf8; --c10:#fbbf24; --c11:#818cf8; --c12:#d8b4fe;
+    --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -16px rgba(0,0,0,.75);
+    color-scheme:dark;
   }
 
-  *{box-sizing:border-box;}
+  *{ box-sizing:border-box; }
   body{
-    margin:0;
-    background:
-      radial-gradient(720px 420px at 10% -5%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
-      radial-gradient(640px 460px at 100% 5%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 55%),
-      var(--bg);
-    background-attachment:fixed;
-    color:var(--ink);
-    font-family:'Source Sans 3', system-ui, sans-serif;
-    padding-inline:16px;
-    padding-block:24px 48px;
-    min-height:100vh;
+    margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:var(--font-sans); line-height:1.5; -webkit-font-smoothing:antialiased;
   }
-  .malayalam, [lang="ml"]{ font-family: 'Noto Sans Malayalam', 'Source Sans 3', sans-serif; }
+  a{ color:inherit; }
+  .container{ max-width:1300px; margin:0 auto; padding:0 16px; }
 
-  .container{
-    max-width:1180px;
-    margin:0 auto;
+  /* ---------- App bar ---------- */
+  .appbar{
+    background:linear-gradient(135deg, var(--navy), var(--navy-2)); color:#fff;
+    border-bottom:3px solid var(--gold); position:sticky; top:0; z-index:40;
   }
-
-  /* Header */
-  .top-nav{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:20px;
-    flex-wrap:wrap;
-  }
-  .back-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    color:var(--muted);
-    text-decoration:none;
-    font-size:.85rem;
-    font-weight:600;
-    transition:color .15s ease;
-  }
-  .back-btn:hover{ color:var(--accent); }
-
-  .nav-controls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
+  .appbar-inner{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:64px; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; min-width:0; color:#fff; }
+  .brand img{ width:38px; height:38px; border-radius:999px; background:#fff; object-fit:contain; padding:3px; flex:none; }
+  .brand strong{ display:block; font-size:.95rem; letter-spacing:.04em; white-space:nowrap; }
+  .brand span{ display:block; font-size:.74rem; color:#c8cfe0; white-space:nowrap; }
+  .nav-controls{ display:flex; align-items:center; gap:8px; }
   .btn-ctrl{
-    border:1px solid var(--border);
-    background:var(--surface);
-    color:var(--ink);
-    border-radius:999px;
-    padding:6px 14px;
-    font-size:.82rem;
-    font-weight:600;
-    cursor:pointer;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-family:inherit;
-    transition:all .15s ease;
+    height:38px; padding:0 14px; border-radius:999px; border:1px solid rgba(255,255,255,.22);
+    background:rgba(255,255,255,.08); color:#fff; font:600 .85rem/1 var(--font-sans);
+    cursor:pointer; display:inline-flex; align-items:center; gap:6px; text-decoration:none; transition:background .15s ease;
   }
-  .btn-ctrl:hover{
-    border-color:var(--gold);
-    transform:translateY(-1px);
-  }
+  .btn-ctrl:hover{ background:rgba(255,255,255,.16); }
+  .btn-ctrl:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 
-  .header-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:24px 28px;
-    box-shadow:var(--shadow);
-    margin-bottom:24px;
-    position:relative;
-    overflow:hidden;
-  }
-  .header-card::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:4px;
-    background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent));
-  }
-  .header-title-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    flex-wrap:wrap;
-  }
-  .header-brand h1{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:2rem;
-    margin:0 0 4px;
-    line-height:1.15;
-    color:var(--ink);
-  }
-  .header-brand p{
-    margin:0;
-    color:var(--muted);
-    font-size:.88rem;
-  }
+  main{ padding:26px 0 48px; }
 
-  /* Metric KPIs */
-  .metrics-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
-    gap:14px;
-    margin-bottom:24px;
-  }
-  .metric-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:18px 20px;
-    box-shadow:var(--shadow);
-  }
-  .metric-label{
-    font-size:.78rem;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:var(--muted);
-    font-weight:700;
-    margin-bottom:6px;
-  }
-  .metric-value{
-    font-family:'Cormorant Garamond', serif;
-    font-size:2.2rem;
-    font-weight:700;
-    color:var(--accent);
-    line-height:1;
-    margin-bottom:4px;
-  }
-  .metric-sub{
-    font-size:.78rem;
-    color:var(--muted);
-    font-weight:600;
-  }
+  /* ---------- Page header ---------- */
+  .page-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:.76rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
+  .eyebrow::before{ content:""; width:22px; height:2px; background:var(--gold); border-radius:2px; }
+  .page-head h1{ font-family:var(--font-serif); font-weight:700; font-size:clamp(1.9rem, 3.6vw, 2.6rem); line-height:1.1; margin:6px 0 4px; }
+  .page-head p{ margin:0; color:var(--muted); font-size:.95rem; }
+  .head-actions{ display:flex; gap:8px; flex-wrap:wrap; }
 
-  /* Class Breakdown Section */
-  .class-breakdown-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:18px 22px;
-    box-shadow:var(--shadow);
-    margin-bottom:22px;
-  }
-  .class-breakdown-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:14px;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .class-breakdown-title{
-    font-size:.88rem;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:var(--gold);
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  .class-pills-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
-    gap:10px;
-  }
-  .class-pill-card{
-    background:var(--surface-2);
-    border:1.5px solid var(--border);
-    border-radius:14px;
-    padding:10px 12px;
-    cursor:pointer;
-    transition:all .2s ease;
-    text-align:left;
-    user-select:none;
-    display:block;
-  }
-  .class-pill-card:hover{
-    border-color:var(--gold);
-    transform:translateY(-2px);
-    box-shadow:0 6px 14px rgba(0,0,0,.08);
-  }
-  .class-pill-card.active{
-    border-color:var(--accent);
-    background:color-mix(in srgb, var(--accent) 12%, var(--surface));
-    box-shadow:0 0 0 2px var(--accent);
-  }
-  .class-pill-name{
-    font-weight:700;
-    font-size:.84rem;
-    margin-bottom:3px;
-    color:var(--ink);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-  }
-  .class-pill-count{
-    font-size:1.15rem;
-    font-weight:700;
-    color:var(--ink);
-    line-height:1.1;
-  }
-  .class-pill-sub{
-    font-size:.72rem;
-    color:var(--muted);
-    margin-top:3px;
-  }
-
-  /* Actions Bar */
-  .toolbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:16px;
-  }
-  .toolbar-left, .toolbar-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
+  /* ---------- Buttons ---------- */
   .btn{
-    padding:9px 16px;
-    border-radius:10px;
-    font-size:.85rem;
-    font-weight:700;
-    cursor:pointer;
-    font-family:inherit;
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    transition:all .15s ease;
-    border:1px solid transparent;
+    min-height:42px; padding:0 16px; border-radius:12px; font:700 .88rem/1 var(--font-sans);
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    transition:transform .15s ease, filter .15s ease, border-color .15s ease, background .15s ease;
+    border:1.5px solid transparent; white-space:nowrap;
   }
-  .btn:hover{ transform:translateY(-1px); }
-  .btn-primary{
-    background:var(--accent);
-    color:var(--accent-ink);
+  .btn:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); box-shadow:0 10px 20px -14px rgba(20,33,61,.8); }
+  .btn-primary:hover{ filter:brightness(1.1); transform:translateY(-1px); }
+  .btn-gold{ background:var(--gold); color:#1a1405; }
+  .btn-outline{ background:var(--surface); border-color:var(--border); color:var(--ink); }
+  .btn-outline:hover{ border-color:var(--gold); }
+  .btn-danger{ background:var(--surface); border-color:color-mix(in srgb, var(--bad) 45%, transparent); color:var(--bad); }
+  .btn-danger:hover{ background:var(--bad-bg); }
+
+  /* ---------- KPI cards ---------- */
+  .metrics-grid{ display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; margin-bottom:18px; }
+  .metric-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px 18px;
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
   }
-  .btn-gold{
-    background:var(--gold);
-    color:#fff;
+  .metric-card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--m, var(--gold)); }
+  .metric-label{ display:flex; align-items:center; gap:8px; font-size:.8rem; font-weight:700; color:var(--muted); margin-bottom:8px; }
+  .metric-icon{ width:28px; height:28px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; background:var(--surface-2); font-size:.9rem; }
+  .metric-value{ font-family:var(--font-serif); font-size:2.3rem; font-weight:700; line-height:1; margin-bottom:6px; font-variant-numeric:tabular-nums; }
+  .metric-sub{ font-size:.8rem; color:var(--muted); font-weight:600; }
+
+  /* ---------- Panels ---------- */
+  .panel{ background:var(--surface); border:1px solid var(--border); border-radius:20px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .panel-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:16px 20px; border-bottom:1px solid var(--border); }
+  .panel-title{ font-size:1rem; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .panel-hint{ font-size:.8rem; color:var(--muted); font-weight:600; }
+  .panel-body{ padding:16px 20px 20px; }
+
+  /* Class performance */
+  .class-pills-grid{ display:grid; grid-template-columns:repeat(8, 1fr); gap:10px; }
+  .class-pill-card{
+    --c:var(--gold);
+    background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:12px;
+    cursor:pointer; transition:all .18s ease; user-select:none; position:relative; overflow:hidden;
   }
-  .btn-outline{
-    background:var(--surface);
-    border-color:var(--border);
-    color:var(--ink);
-  }
-  .btn-outline:hover{
-    border-color:var(--gold);
-    background:var(--surface-2);
-  }
-  .btn-danger{
-    background:var(--bad-bg);
-    border-color:var(--bad);
-    color:var(--bad);
-  }
+  .class-pill-card::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--c); opacity:.8; }
+  .class-pill-card:hover{ border-color:var(--c); transform:translateY(-2px); }
+  .class-pill-card.active{ border-color:var(--c); background:color-mix(in srgb, var(--c) 10%, var(--surface)); box-shadow:0 0 0 2px color-mix(in srgb, var(--c) 40%, transparent); }
+  .class-pill-name{ display:flex; align-items:center; justify-content:space-between; gap:6px; font-weight:700; font-size:.84rem; margin-bottom:6px; color:var(--c); }
+  .class-pill-count{ font-family:var(--font-serif); font-size:1.6rem; font-weight:700; line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .class-pill-sub{ font-size:.72rem; color:var(--muted); margin-top:5px; line-height:1.35; }
 
   /* Filters */
-  .filter-panel{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:16px 20px;
-    margin-bottom:20px;
-    box-shadow:var(--shadow);
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-    gap:12px;
-  }
-  .filter-group label{
-    display:block;
-    font-size:.74rem;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    font-weight:700;
-    color:var(--muted);
-    margin-bottom:5px;
-  }
+  .filter-panel{ display:grid; grid-template-columns:2fr 1fr 1.3fr 1fr 1fr; gap:12px; }
+  .filter-group label{ display:block; font-size:.8rem; font-weight:700; color:var(--muted); margin-bottom:6px; }
   .filter-group input, .filter-group select{
-    width:100%;
-    padding:9px 12px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:var(--surface-2);
-    color:var(--ink);
-    font-size:.88rem;
-    font-family:inherit;
+    width:100%; min-height:44px; padding:0 12px; border-radius:12px; border:1.5px solid var(--border);
+    background:var(--surface); color:var(--ink); font-size:.92rem; font-family:inherit; transition:border-color .15s ease, box-shadow .15s ease;
   }
-  .filter-group input:focus, .filter-group select:focus{
-    outline:2px solid var(--accent);
-    outline-offset:1px;
-  }
+  .filter-group input:focus, .filter-group select:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 4px color-mix(in srgb, var(--gold) 20%, transparent); }
+  .search-wrap{ position:relative; }
+  .search-wrap input{ padding-left:38px; }
+  .search-wrap::before{ content:"⌕"; position:absolute; left:13px; top:50%; transform:translateY(-52%); color:var(--muted); font-size:1.2rem; pointer-events:none; }
 
-  /* Table styling */
-  .table-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:18px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  .table-header-meta{
-    padding:14px 20px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    font-size:.85rem;
-    color:var(--muted);
-  }
-  .table-responsive{
-    width:100%;
-    overflow-x:auto;
-  }
-  table{
-    width:100%;
-    border-collapse:collapse;
-    text-align:left;
-    font-size:.86rem;
-  }
+  /* Toolbar */
+  .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .toolbar-right{ display:flex; gap:8px; flex-wrap:wrap; }
+  .count-chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; background:var(--gold-soft); color:var(--ink); font-size:.84rem; font-weight:700; }
+
+  /* Table */
+  .table-responsive{ width:100%; overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; text-align:left; font-size:.88rem; }
   th{
-    background:var(--surface-2);
-    color:var(--muted);
-    font-weight:700;
-    font-size:.76rem;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    padding:12px 14px;
-    border-bottom:1px solid var(--border);
-    white-space:nowrap;
+    position:sticky; top:0; background:var(--surface-2); color:var(--muted); font-weight:700; font-size:.76rem;
+    text-transform:uppercase; letter-spacing:.05em; padding:12px 10px; border-bottom:1px solid var(--border); white-space:nowrap;
   }
-  td{
-    padding:12px 14px;
-    border-bottom:1px solid var(--border);
-    color:var(--ink);
-    vertical-align:middle;
-  }
-  tr:last-child td{ border-bottom:none; }
-  tr:hover td{ background:color-mix(in srgb, var(--accent) 4%, transparent); }
+  td{ padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr:hover td{ background:color-mix(in srgb, var(--gold) 6%, transparent); }
+  .cell-main{ font-weight:700; color:var(--ink); }
+  .cell-sub{ font-size:.78rem; color:var(--muted); margin-top:2px; white-space:nowrap; }
+  .cell-clip{ max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  td code{ font-family:ui-monospace, Consolas, monospace; font-size:.8rem; background:var(--surface-2); padding:1px 6px; border-radius:6px; }
 
-  .badge{
-    display:inline-block;
-    padding:3px 8px;
-    border-radius:999px;
-    font-size:.74rem;
-    font-weight:700;
-    letter-spacing:.02em;
-  }
-  .badge-class{
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    color:var(--accent);
-  }
+  .badge{ display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:999px; font-size:.75rem; font-weight:700; white-space:nowrap; }
+  .badge-class{ --c:var(--gold); color:var(--c); background:color-mix(in srgb, var(--c) 12%, var(--surface)); border:1px solid color-mix(in srgb, var(--c) 30%, transparent); }
+  .badge-class-c5{ --c:var(--c5); } .badge-class-c6{ --c:var(--c6); } .badge-class-c7{ --c:var(--c7); } .badge-class-c8{ --c:var(--c8); }
+  .badge-class-c9{ --c:var(--c9); } .badge-class-c10{ --c:var(--c10); } .badge-class-c11{ --c:var(--c11); } .badge-class-c12{ --c:var(--c12); }
   .badge-pass{ background:var(--good-bg); color:var(--good); }
   .badge-fail{ background:var(--bad-bg); color:var(--bad); }
-  .badge-inprogress{ background:var(--warn-bg); color:var(--warn); border:1px solid rgba(180,83,9,.3); }
-  .badge-aborted{ background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
+  .badge-inprogress{ background:var(--warn-bg); color:var(--warn); }
+  .badge-aborted{ background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
 
-  .badge-class-c5 { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
-  .badge-class-c6 { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
-  .badge-class-c7 { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
-  .badge-class-c8 { background: #fff1f2; color: #9f1239; border-color: #fecdd3; }
-  .badge-class-c9 { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
-  .badge-class-c10 { background: #fffbeb; color: #b45309; border-color: #fde68a; }
-  .badge-class-c11 { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
-  .badge-class-c12 { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
-
-  [data-theme="dark"] .badge-class-c5 { background: #082f49; color: #7dd3fc; border-color: #0369a1; }
-  [data-theme="dark"] .badge-class-c6 { background: #064e3b; color: #6ee7b7; border-color: #047857; }
-  [data-theme="dark"] .badge-class-c7 { background: #4a044e; color: #f472b6; border-color: #701a75; }
-  [data-theme="dark"] .badge-class-c8 { background: #4c0519; color: #fda4af; border-color: #881337; }
-  [data-theme="dark"] .badge-class-c9 { background: #042f2e; color: #5eead4; border-color: #115e59; }
-  [data-theme="dark"] .badge-class-c10 { background: #451a03; color: #fcd34d; border-color: #78350f; }
-  [data-theme="dark"] .badge-class-c11 { background: #1e1b4b; color: #a5b4fc; border-color: #3730a3; }
-  [data-theme="dark"] .badge-class-c12 { background: #3b0764; color: #d8b4fe; border-color: #581c87; }
-  [data-theme="dark"] .badge-inprogress{ background:#3d2c14; color:#fcd34d; border-color:#78350f; }
-  [data-theme="dark"] .badge-aborted{ background:#1e293b; color:#94a3b8; border-color:#334155; }
-
-  .score-cell{
-    font-weight:700;
-    font-variant-numeric:tabular-nums;
-  }
-  .pct-bar{
-    height:5px;
-    border-radius:999px;
-    background:var(--surface-2);
-    width:80px;
-    overflow:hidden;
-    margin-top:3px;
-  }
-  .pct-bar-fill{
-    height:100%;
-    border-radius:999px;
-    background:var(--accent);
-  }
+  .score-cell{ font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .pct-bar{ height:6px; border-radius:999px; background:var(--surface-2); width:90px; overflow:hidden; margin-top:5px; border:1px solid var(--border); }
+  .pct-bar-fill{ height:100%; border-radius:999px; background:var(--good); }
 
   .btn-row-action{
-    background:transparent;
-    border:1px solid var(--border);
-    border-radius:6px;
-    padding:4px 8px;
-    font-size:.76rem;
-    color:var(--ink);
-    cursor:pointer;
-    font-family:inherit;
-    transition:all .15s ease;
+    min-height:32px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:0 10px;
+    font-size:.8rem; font-weight:600; color:var(--ink); cursor:pointer; font-family:inherit; transition:all .15s ease;
   }
-  .btn-row-action:hover{
-    border-color:var(--gold);
-    color:var(--gold);
-  }
-  .btn-row-action.delete:hover{
-    border-color:var(--bad);
-    color:var(--bad);
-  }
+  .btn-row-action:hover{ border-color:var(--gold); color:var(--gold); }
+  .btn-row-action.delete:hover{ border-color:var(--bad); color:var(--bad); }
 
-  .empty-state{
-    text-align:center;
-    padding:48px 24px;
-    color:var(--muted);
-  }
-  .empty-icon{
-    font-size:3.2rem;
-    display:block;
-    margin-bottom:12px;
-    opacity:.6;
-  }
+  .empty-state{ text-align:center; padding:52px 24px; color:var(--muted); }
+  .empty-icon{ width:64px; height:64px; margin:0 auto 14px; border-radius:18px; display:flex; align-items:center; justify-content:center; background:var(--gold-soft); font-size:1.8rem; }
+  .empty-state h3{ margin:0 0 6px; font-family:var(--font-serif); font-size:1.5rem; color:var(--ink); }
+  .empty-state p{ margin:0 auto 16px; font-size:.92rem; max-width:460px; }
 
   /* Modals */
-  .modal-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.6);
-    backdrop-filter:blur(4px);
-    z-index:999;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-  }
+  .modal-overlay{ display:none; position:fixed; inset:0; background:rgba(8,12,24,.62); backdrop-filter:blur(5px); z-index:999; align-items:center; justify-content:center; padding:16px; }
   .modal-overlay.active{ display:flex; animation:fadeIn .2s ease; }
   @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
-
-  .modal-box{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:28px;
-    max-width:520px;
-    width:100%;
-    box-shadow:0 24px 60px -20px rgba(0,0,0,.5);
-    animation:slideUp .2s ease;
-  }
+  .modal-box{ background:var(--surface); border:1px solid var(--border); border-radius:22px; padding:24px; max-width:540px; width:100%; max-height:calc(100vh - 32px); overflow:auto; box-shadow:0 30px 60px -20px rgba(0,0,0,.55); animation:slideUp .2s ease; }
   @keyframes slideUp{ from{transform:translateY(16px);opacity:0;} to{transform:none;opacity:1;} }
+  .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .modal-header h3{ margin:0; font-family:var(--font-serif); font-size:1.6rem; }
+  .modal-close{ width:36px; height:36px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); font-size:1.2rem; cursor:pointer; color:var(--muted); }
+  .modal-close:hover{ color:var(--ink); border-color:var(--gold); }
+  .modal-actions{ margin-top:18px; display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; }
+  #modalDetailContent{ font-size:.92rem; line-height:1.75; }
+  .field-label{ display:block; font-size:.82rem; font-weight:700; margin-bottom:6px; color:var(--muted); }
+  .field-input{ width:100%; min-height:44px; padding:0 12px; border-radius:12px; border:1.5px solid var(--border); background:var(--surface); color:var(--ink); font-family:inherit; font-size:.92rem; }
+  .field-input:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 4px color-mix(in srgb, var(--gold) 20%, transparent); }
+  details.howto{ font-size:.86rem; color:var(--muted); background:var(--surface-2); padding:12px 14px; border-radius:12px; border:1px solid var(--border); }
+  details.howto summary{ font-weight:700; cursor:pointer; color:var(--gold); }
+  pre.code-block{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; font-size:.76rem; overflow-x:auto; color:var(--ink); font-family:ui-monospace, Consolas, monospace; }
 
-  .modal-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:16px;
-  }
-  .modal-header h3{
-    margin:0;
-    font-family:'Cormorant Garamond', serif;
-    font-size:1.6rem;
-    color:var(--ink);
-  }
-  .modal-close{
-    background:transparent;
-    border:none;
-    font-size:1.4rem;
-    cursor:pointer;
-    color:var(--muted);
-  }
-
-  /* Lock Screen */
+  /* Lock screen */
   .auth-overlay{
-    display:flex;
-    position:fixed;
-    inset:0;
-    background:var(--bg);
-    z-index:1000;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
+    display:flex; position:fixed; inset:0; z-index:1000; align-items:center; justify-content:center; padding:16px;
+    background:
+      radial-gradient(600px 300px at 20% 0%, color-mix(in srgb, var(--gold) 22%, transparent), transparent 70%),
+      linear-gradient(160deg, var(--navy), #0a1020);
   }
-  .auth-box{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:24px;
-    padding:36px 30px;
-    max-width:400px;
-    width:100%;
-    text-align:center;
-    box-shadow:var(--shadow);
-    position:relative;
-    overflow:hidden;
-  }
-  .auth-box::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:4px;
-    background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent));
-  }
+  .auth-box{ background:var(--surface); border-radius:24px; padding:34px 28px 26px; max-width:400px; width:100%; text-align:center; box-shadow:0 30px 70px -20px rgba(0,0,0,.6); border-top:4px solid var(--gold); }
+  .auth-logo{ width:72px; height:72px; border-radius:999px; background:#fff; border:1px solid var(--border); object-fit:contain; padding:6px; margin:0 auto 12px; display:block; }
+  .auth-box h2{ font-family:var(--font-serif); font-size:1.8rem; margin:0 0 4px; }
+  .auth-box p{ color:var(--muted); font-size:.92rem; margin:0 0 14px; }
   .auth-box input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid var(--border);
-    background:var(--surface-2);
-    color:var(--ink);
-    font-size:1.1rem;
-    text-align:center;
-    letter-spacing:.2em;
-    margin:16px 0;
-    font-family:inherit;
+    width:100%; min-height:50px; padding:0 14px; border-radius:12px; border:1.5px solid var(--border);
+    background:var(--surface-2); color:var(--ink); font-size:1.1rem; text-align:center; letter-spacing:.25em; margin:6px 0 12px; font-family:inherit;
   }
-  .auth-box input:focus{ outline:2px solid var(--accent); }
+  .auth-box input:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 4px color-mix(in srgb, var(--gold) 20%, transparent); }
+  #authError{ color:var(--bad); font-size:.86rem; margin-bottom:12px; display:none; font-weight:600; }
+  .back-btn{ display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:.88rem; font-weight:600; margin-top:16px; }
+  .back-btn:hover{ color:var(--gold); }
 
-  pre.code-block{
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:12px;
-    font-size:.78rem;
-    overflow-x:auto;
-    color:var(--ink);
-    font-family:monospace;
+  @media (max-width:1100px){
+    .metrics-grid{ grid-template-columns:repeat(3, 1fr); }
+    .class-pills-grid{ grid-template-columns:repeat(4, 1fr); }
+    .filter-panel{ grid-template-columns:1fr 1fr; }
+    .filter-panel .fg-search{ grid-column:1 / -1; }
   }
+  @media (max-width:640px){
+    .metrics-grid{ grid-template-columns:1fr 1fr; }
+    .class-pills-grid{ grid-template-columns:1fr 1fr; }
+    .filter-panel{ grid-template-columns:1fr; }
+    .brand span, .btn-ctrl .lbl{ display:none; }
+    .head-actions .btn, .toolbar-right .btn{ flex:1 1 auto; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
@@ -606,206 +246,199 @@
 <!-- Passcode Authentication Screen -->
 <div class="auth-overlay" id="authScreen">
   <div class="auth-box">
-    <span style="font-size:3rem; display:block; margin-bottom:10px;">🔐</span>
-    <h2 style="font-family:'Cormorant Garamond', serif; font-size:1.75rem; margin:0 0 6px;">OSSAE Admin Portal</h2>
-    <p style="color:var(--muted); font-size:.88rem; margin:0 0 16px;">Enter your admin passcode to access candidate attempt logs.</p>
+    <img src="logo.png" alt="" class="auth-logo">
+    <span class="eyebrow">Admin Access</span>
+    <h2>OSSAE Results Dashboard</h2>
+    <p>Enter your admin passcode to view student exam records.</p>
     <form id="authForm">
-      <input type="password" id="authPinInput" placeholder="••••••••" autocomplete="current-password" autofocus>
-      <div id="authError" style="color:var(--bad); font-size:.82rem; margin-bottom:12px; display:none;">Incorrect passcode. Try again.</div>
-      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;">Unlock Dashboard</button>
+      <input type="password" id="authPinInput" placeholder="••••••••" autocomplete="current-password" aria-label="Admin passcode" autofocus>
+      <div id="authError">Incorrect passcode. Try again.</div>
+      <button type="submit" class="btn btn-primary" style="width:100%; min-height:50px;">🔓 Unlock Dashboard</button>
     </form>
-    <a href="index.html" class="back-btn" style="margin-top:16px; justify-content:center;">&larr; Back to Exam Portal</a>
+    <a href="index.html" class="back-btn">&larr; Back to Exam Portal</a>
   </div>
 </div>
 
-<div class="container" id="dashboardContent" style="display:none;">
-  <!-- Navigation -->
-  <div class="top-nav">
-    <a href="index.html" class="back-btn">&larr; Back to Home</a>
-    <div class="nav-controls">
-      <button class="btn-ctrl" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-        <span id="themeIcon">☾</span>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button class="btn-ctrl" onclick="lockDashboard()" title="Lock Dashboard">
-        <span>🔒</span>
-        <span>Lock</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Header Card -->
-  <div class="header-card">
-    <div class="header-title-row">
-      <div class="header-brand">
-        <h1>Sunday School Exam Admin Portal</h1>
-        <p>Candidate Attempt Logs &amp; Marksheet &middot; All Classes (Classes 5 to 12)</p>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <button type="button" class="btn btn-outline" onclick="loadAttempts()" title="Refresh attempt records from storage">
-          <span>🔄</span> <span>Refresh</span>
+<div id="dashboardContent" style="display:none;">
+  <header class="appbar">
+    <div class="container appbar-inner">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="">
+        <div><strong>OSSAE DESERT LAND CENTRAL REGION</strong><span>(Thrissur Diocese) · Admin · Results Dashboard</span></div>
+      </a>
+      <div class="nav-controls">
+        <a class="btn-ctrl" href="index.html" title="Back to Home">🏠 <span class="lbl">Home</span></a>
+        <button class="btn-ctrl" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">☾</span> <span class="lbl" id="themeLabel">Dark</span>
         </button>
-        <button type="button" class="btn btn-primary" onclick="exportCSV()">
-          <span>📥</span> <span>Export CSV / Excel</span>
-        </button>
-        <button type="button" class="btn btn-outline" onclick="openCloudModal()">
-          <span>☁️</span> <span>Cloud Sync</span>
-        </button>
+        <button class="btn-ctrl" onclick="lockDashboard()" title="Lock Dashboard">🔒 <span class="lbl">Lock</span></button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Primary Metrics Grid -->
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-label">Total Attempts</div>
-      <div class="metric-value" id="statTotal">0</div>
-      <div class="metric-sub" id="statTotalSub">Classes 5 to 12</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Pass Rate</div>
-      <div class="metric-value" id="statPassRate">0%</div>
-      <div class="metric-sub" id="statPassCount">0 passed &middot; 0 failed</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Average Score</div>
-      <div class="metric-value" id="statAvgScore">0%</div>
-      <div class="metric-sub" id="statAvgMarks">0 marks avg</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Dioceses Represented</div>
-      <div class="metric-value" id="statDioceses">0</div>
-      <div class="metric-sub">out of 32 Dioceses</div>
-    </div>
-  </div>
-
-  <!-- Class-Wise Performance & Marks Breakdown -->
-  <div class="class-breakdown-card">
-    <div class="class-breakdown-head">
-      <div class="class-breakdown-title">
-        <span>📚</span>
-        <span>Class-Wise Performance &amp; Marks Records</span>
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <span class="eyebrow">Sunday School Exam</span>
+        <h1>Results Dashboard</h1>
+        <p>Student attempts, marks and Sunday School records · Classes V to XII</p>
       </div>
-      <span style="font-size:.76rem; color:var(--muted); font-weight:600;">Click any class to filter table</span>
+      <div class="head-actions">
+        <button type="button" class="btn btn-outline" onclick="loadAttempts()" title="Refresh attempt records from storage">🔄 Refresh</button>
+        <button type="button" class="btn btn-outline" onclick="openCloudModal()">☁️ Cloud Sync</button>
+        <button type="button" class="btn btn-primary" onclick="exportCSV()">📥 Export CSV / Excel</button>
+      </div>
     </div>
-    <div class="class-pills-grid" id="classPillsGrid">
-      <!-- Generated dynamically for Class 5 to Class 12 -->
-    </div>
-  </div>
 
-  <!-- Filter & Search Panel -->
-  <div class="filter-panel">
-    <div class="filter-group" style="grid-column: span 2;">
-      <label>Search Candidates</label>
-      <input type="text" id="searchInput" placeholder="Search by name, roll no, phone, code, or class...">
+    <!-- KPI cards -->
+    <div class="metrics-grid">
+      <div class="metric-card" style="--m:var(--c5);">
+        <div class="metric-label"><span class="metric-icon">📝</span>Total Attempts</div>
+        <div class="metric-value" id="statTotal">0</div>
+        <div class="metric-sub" id="statTotalSub">Classes 5 to 12</div>
+      </div>
+      <div class="metric-card" style="--m:var(--good);">
+        <div class="metric-label"><span class="metric-icon">✅</span>Pass Rate</div>
+        <div class="metric-value" id="statPassRate">0%</div>
+        <div class="metric-sub" id="statPassCount">0 passed &middot; 0 failed</div>
+      </div>
+      <div class="metric-card" style="--m:var(--gold);">
+        <div class="metric-label"><span class="metric-icon">⭐</span>Average Score</div>
+        <div class="metric-value" id="statAvgScore">0%</div>
+        <div class="metric-sub" id="statAvgMarks">0 marks avg</div>
+      </div>
+      <div class="metric-card" style="--m:var(--c8);">
+        <div class="metric-label"><span class="metric-icon">⛪</span>Sunday Schools</div>
+        <div class="metric-value" id="statSchools">0</div>
+        <div class="metric-sub" id="statSchoolsSub">schools with attempts</div>
+      </div>
+      <div class="metric-card" style="--m:var(--c10);">
+        <div class="metric-label"><span class="metric-icon">🗺️</span>Dioceses</div>
+        <div class="metric-value" id="statDioceses">0</div>
+        <div class="metric-sub">out of 32 Dioceses</div>
+      </div>
     </div>
-    <div class="filter-group">
-      <label>Filter by Class</label>
-      <select id="classFilter">
-        <option value="">All Classes (Classes 5 – 12)</option>
-        <option value="Class 5">Class 5</option>
-        <option value="Class 6">Class 6</option>
-        <option value="Class 7">Class 7</option>
-        <option value="Class 8">Class 8</option>
-        <option value="Class 9">Class 9</option>
-        <option value="Class 10">Class 10</option>
-        <option value="Class 11">Class 11</option>
-        <option value="Class 12">Class 12</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Filter by Diocese</label>
-      <select id="dioceseFilter">
-        <option value="">All 32 Dioceses</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Filter by Status</label>
-      <select id="statusFilter">
-        <option value="">All Statuses</option>
-        <option value="PASS">Passed Only</option>
-        <option value="FAIL">Failed Only</option>
-        <option value="IN PROGRESS">In Progress Only</option>
-        <option value="ABORTED">Aborted Only</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Sort By</label>
-      <select id="sortBy">
-        <option value="date_desc">Date (Newest First)</option>
-        <option value="date_asc">Date (Oldest First)</option>
-        <option value="score_desc">Score (Highest First)</option>
-        <option value="score_asc">Score (Lowest First)</option>
-        <option value="name_asc">Student Name (A-Z)</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- Toolbar with Secondary Actions -->
-  <div class="toolbar">
-    <div class="toolbar-left">
-      <span style="font-size:.85rem; font-weight:700;" id="tableCountBadge">Showing 0 attempts</span>
-    </div>
-    <div class="toolbar-right">
-      <button type="button" class="btn btn-outline" onclick="addSampleData()" title="Add 2 sample test records to test the dashboard">
-        <span>➕</span> <span>Add Sample Data</span>
-      </button>
-      <button type="button" class="btn btn-outline" onclick="exportJSON()">
-        <span>📤</span> <span>Backup JSON</span>
-      </button>
-      <button type="button" class="btn btn-outline" onclick="triggerImportJSON()">
-        <span>📥</span> <span>Import JSON</span>
-      </button>
-      <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleImportJSON(event)">
-      <button type="button" class="btn btn-danger" onclick="clearAllAttempts()">
-        <span>🗑️</span> <span>Clear Logs</span>
-      </button>
-    </div>
-  </div>
+    <!-- Class performance -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">📚 Class-wise Performance</div>
+        <span class="panel-hint">Tap a class to filter the records below</span>
+      </div>
+      <div class="panel-body">
+        <div class="class-pills-grid" id="classPillsGrid"></div>
+      </div>
+    </section>
 
-  <!-- Attempt Table -->
-  <div class="table-card">
-    <div class="table-responsive">
-      <table id="attemptsTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date & Time</th>
-            <th>Class</th>
-            <th>Candidate Name</th>
-            <th>Roll No</th>
-            <th>Phone Number</th>
-            <th>School Code</th>
-            <th>Diocese</th>
-            <th>Score</th>
-            <th>Status</th>
-            <th>Duration</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="attemptsTbody">
-          <!-- Rows inserted dynamically -->
-        </tbody>
-      </table>
-    </div>
-    <div id="emptyState" class="empty-state">
-      <span class="empty-icon">📋</span>
-      <h3 style="margin:0 0 6px; font-family:'Cormorant Garamond', serif; font-size:1.4rem;">No Student Attempts Recorded Yet</h3>
-      <p style="margin:0 0 16px; font-size:.88rem;">Once students complete an exam for any class (Classes 5 to 12), their marks, score percentage, and credentials will appear here automatically.</p>
-      <button type="button" class="btn btn-outline" onclick="addSampleData()">Add Sample Attempts</button>
-    </div>
-  </div>
+    <!-- Records -->
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">🗂️ Student Records</div>
+        <span class="count-chip" id="tableCountBadge">Showing 0 attempts</span>
+      </div>
+      <div class="panel-body">
+        <div class="filter-panel">
+          <div class="filter-group fg-search">
+            <label for="searchInput">Search</label>
+            <div class="search-wrap">
+              <input type="text" id="searchInput" placeholder="Name, roll no, phone, Sunday School, code…">
+            </div>
+          </div>
+          <div class="filter-group">
+            <label for="classFilter">Class</label>
+            <select id="classFilter">
+              <option value="">All Classes</option>
+              <option value="Class 5">Class 5</option>
+              <option value="Class 6">Class 6</option>
+              <option value="Class 7">Class 7</option>
+              <option value="Class 8">Class 8</option>
+              <option value="Class 9">Class 9</option>
+              <option value="Class 10">Class 10</option>
+              <option value="Class 11">Class 11</option>
+              <option value="Class 12">Class 12</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="dioceseFilter">Diocese</label>
+            <select id="dioceseFilter">
+              <option value="">All 32 Dioceses</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="PASS">Passed Only</option>
+              <option value="FAIL">Failed Only</option>
+              <option value="IN PROGRESS">In Progress Only</option>
+              <option value="ABORTED">Aborted Only</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="sortBy">Sort By</label>
+            <select id="sortBy">
+              <option value="date_desc">Newest First</option>
+              <option value="date_asc">Oldest First</option>
+              <option value="score_desc">Highest Score</option>
+              <option value="score_asc">Lowest Score</option>
+              <option value="name_asc">Name (A–Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="attemptsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date &amp; Time</th>
+              <th>Class</th>
+              <th>Student</th>
+              <th>Sunday School</th>
+              <th>Diocese</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Duration</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="attemptsTbody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h3>No student attempts yet</h3>
+        <p>When students finish an exam on this device, their marks, Sunday School and details will appear here automatically.</p>
+        <button type="button" class="btn btn-outline" onclick="addSampleData()">Add Sample Attempts</button>
+      </div>
+
+      <div class="panel-body" style="border-top:1px solid var(--border);">
+        <div class="toolbar">
+          <span class="panel-hint">Data tools</span>
+          <div class="toolbar-right">
+            <button type="button" class="btn btn-outline" onclick="addSampleData()" title="Add sample test records">➕ Sample Data</button>
+            <button type="button" class="btn btn-outline" onclick="exportJSON()">📤 Backup JSON</button>
+            <button type="button" class="btn btn-outline" onclick="triggerImportJSON()">📥 Import JSON</button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleImportJSON(event)">
+            <button type="button" class="btn btn-danger" onclick="clearAllAttempts()">🗑️ Clear Logs</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer style="text-align:center; font-size:.85rem; color:var(--muted); margin-top:28px;"><strong>OSSAE RIYADH REGION</strong> &middot; Sunday School Exam Admin</footer>
+  </main>
 </div>
 
 <!-- Attempt Details Modal -->
 <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3>Candidate Attempt Details</h3>
-      <button type="button" class="modal-close" onclick="closeDetailModal()">&times;</button>
+      <h3>Attempt Details</h3>
+      <button type="button" class="modal-close" onclick="closeDetailModal()" aria-label="Close">&times;</button>
     </div>
-    <div id="modalDetailContent" style="font-size:.9rem; line-height:1.7;"></div>
-    <div style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+    <div id="modalDetailContent"></div>
+    <div class="modal-actions">
       <button type="button" class="btn btn-outline" onclick="copyDetailText()">Copy Summary</button>
       <button type="button" class="btn btn-primary" onclick="closeDetailModal()">Close</button>
     </div>
@@ -814,45 +447,40 @@
 
 <!-- Cloud Sync Setup Modal -->
 <div class="modal-overlay" id="cloudModal" role="dialog" aria-modal="true">
-  <div class="modal-box" style="max-width:580px;">
+  <div class="modal-box" style="max-width:600px;">
     <div class="modal-header">
-      <h3>Google Sheets & Cloud Sync</h3>
-      <button type="button" class="modal-close" onclick="closeCloudModal()">&times;</button>
+      <h3>Google Sheets &amp; Cloud Sync</h3>
+      <button type="button" class="modal-close" onclick="closeCloudModal()" aria-label="Close">&times;</button>
     </div>
-    <p style="font-size:.85rem; color:var(--muted); margin:0 0 14px;">
-      Connect a free Google Sheet to automatically receive student exam attempts live from their mobile phones or computers.
+    <p style="font-size:.9rem; color:var(--muted); margin:0 0 14px;">
+      Connect a free Google Sheet to receive student exam attempts live from their phones or computers.
     </p>
-
     <div style="margin-bottom:14px;">
-      <label style="display:block; font-size:.78rem; font-weight:700; text-transform:uppercase; margin-bottom:6px; color:var(--muted);">
-        Google Apps Script Web App URL / Webhook
-      </label>
-      <input type="url" id="cloudUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink); font-family:inherit;">
+      <label class="field-label" for="cloudUrlInput">Google Apps Script Web App URL / Webhook</label>
+      <input type="url" id="cloudUrlInput" class="field-input" placeholder="https://script.google.com/macros/s/.../exec">
     </div>
-
-    <div style="display:flex; gap:10px; margin-bottom:18px;">
+    <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
       <button type="button" class="btn btn-primary" onclick="saveCloudEndpoint()">Save URL</button>
       <button type="button" class="btn btn-outline" onclick="testCloudSync()">Test Connection</button>
       <button type="button" class="btn btn-outline" onclick="syncAllToCloud()">Push All Local Records</button>
     </div>
-
-    <details style="font-size:.82rem; color:var(--muted); background:var(--surface-2); padding:10px 14px; border-radius:10px; border:1px solid var(--border);">
-      <summary style="font-weight:700; cursor:pointer; color:var(--gold);">How to set up a free Google Sheet (1 minute)</summary>
+    <details class="howto">
+      <summary>How to set up a free Google Sheet (1 minute)</summary>
       <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
-        <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" style="color:var(--accent);">Google Sheets</a>.</li>
+        <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a>.</li>
         <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>.</li>
         <li>Paste the script below and click <b>Deploy &rarr; New Deployment &rarr; Select type: Web App</b>.</li>
-        <li>Set <b>Who has access</b> to <b>Anyone</b>, then click <b>Deploy</b> and copy the URL here!</li>
+        <li>Set <b>Who has access</b> to <b>Anyone</b>, then click <b>Deploy</b> and copy the URL here.</li>
       </ol>
       <pre class="code-block">function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["ID", "Timestamp", "Class", "Student Name", "Roll No", "Phone", "School Code", "Diocese", "Score", "Total", "Percentage", "Status", "Duration"]);
+    sheet.appendRow(["ID", "Timestamp", "Class", "Student Name", "Roll No", "Phone", "Sunday School", "School Code", "Diocese", "Score", "Total", "Percentage", "Status", "Duration"]);
   }
   var data = JSON.parse(e.postData.contents);
   sheet.appendRow([
     data.id, data.timestamp, data.className, data.studentName,
-    data.rollNumber, data.studentPhone, data.schoolCode, data.diocese,
+    data.rollNumber, data.studentPhone, data.schoolName || '', data.schoolCode, data.diocese,
     data.score, data.totalQuestions, data.percentage + '%', data.status, data.durationStr
   ]);
   return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);
@@ -996,6 +624,7 @@
     var scoreSum = 0;
     var totalQSum = 0;
     var diocesesSet = new Set();
+    var schoolsSet = new Set();
 
     var classStats = {};
     ALL_CLASSES.forEach(function(c){
@@ -1037,6 +666,7 @@
 
       classStats[c].totalQuestions = a.totalQuestions || classStats[c].totalQuestions || 25;
       if (a.diocese) diocesesSet.add(a.diocese);
+      if (a.schoolName) schoolsSet.add(a.schoolName.trim().toLowerCase());
     });
 
     var avgPct = completedCount ? Math.round(scorePctSum / completedCount) : 0;
@@ -1054,6 +684,7 @@
     document.getElementById('statAvgScore').textContent = avgPct + '%';
     document.getElementById('statAvgMarks').textContent = completedCount ? (avgMarks + ' / ' + avgTotalQ + ' marks avg') : 'No completed tests yet';
     document.getElementById('statDioceses').textContent = diocesesSet.size;
+    document.getElementById('statSchools').textContent = schoolsSet.size;
 
     // Subtitle breakdown for total
     var subParts = [];
@@ -1074,6 +705,7 @@
         var stat = classStats[c];
         var card = document.createElement('div');
         card.className = 'class-pill-card' + (activeFilter === c ? ' active' : '');
+        card.style.setProperty('--c', 'var(--c' + c.replace(/[^0-9]/g, '') + ')');
         var cComp = stat.completed || 0;
         var cAvg = cComp ? Math.round(stat.scorePctSum / cComp) : 0;
         var cPassPct = cComp ? Math.round((stat.pass / cComp) * 100) : 0;
@@ -1129,6 +761,7 @@
           a.studentName || '',
           a.rollNumber || '',
           a.studentPhone || '',
+          a.schoolName || '',
           a.schoolCode || '',
           a.diocese || '',
           a.className || '',
@@ -1202,21 +835,24 @@
           '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + (item.percentage || 0) + '%"></div></div>';
       }
 
-      var dt = (item.dateStr || '') + ' ' + (item.timeStr || '');
+      var dDate = item.dateStr || '';
+      var dTime = item.timeStr || '';
       if (!item.dateStr && item.timestamp) {
         var dObj = new Date(item.timestamp);
-        dt = dObj.toLocaleDateString() + ' ' + dObj.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        dDate = dObj.toLocaleDateString();
+        dTime = dObj.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
       }
 
       tr.innerHTML =
         '<td>' + (idx + 1) + '</td>' +
-        '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + dt + '</td>' +
+        '<td style="white-space:nowrap;"><div style="font-weight:600;">' + escapeHtml(dDate) + '</div><div class="cell-sub">' + escapeHtml(dTime) + '</div></td>' +
         '<td><span class="badge ' + getClassBadgeClass(item.className) + '">' + escapeHtml(item.className || 'Exam') + '</span></td>' +
-        '<td><strong>' + escapeHtml(item.studentName || '-') + '</strong></td>' +
-        '<td><code>' + escapeHtml(item.rollNumber || '-') + '</code></td>' +
-        '<td><a href="tel:' + escapeHtml(item.studentPhone || '') + '" style="color:inherit; text-decoration:none; font-variant-numeric:tabular-nums;">' + escapeHtml(item.studentPhone || '-') + '</a></td>' +
-        '<td><code>' + escapeHtml(item.schoolCode || '-') + '</code></td>' +
-        '<td style="max-width:180px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="' + escapeHtml(item.diocese || '-') + '">' + escapeHtml(item.diocese || '-') + '</td>' +
+        '<td><div class="cell-main">' + escapeHtml(item.studentName || '-') + '</div>' +
+          '<div class="cell-sub">Roll <code>' + escapeHtml(item.rollNumber || '-') + '</code> · ' +
+          '<a href="tel:' + escapeHtml(item.studentPhone || '') + '" style="color:inherit; text-decoration:none; font-variant-numeric:tabular-nums;">' + escapeHtml(item.studentPhone || '-') + '</a></div></td>' +
+        '<td><div class="cell-main cell-clip" title="' + escapeHtml(item.schoolName || '-') + '">' + escapeHtml(item.schoolName || '-') + '</div>' +
+          '<div class="cell-sub">Code <code>' + escapeHtml(item.schoolCode || '-') + '</code></div></td>' +
+        '<td><div class="cell-clip" style="max-width:180px;" title="' + escapeHtml(item.diocese || '-') + '">' + escapeHtml(item.diocese || '-') + '</div></td>' +
         '<td>' + scoreCellHtml + '</td>' +
         '<td>' + statusBadgeHtml + '</td>' +
         '<td style="white-space:nowrap; font-size:.8rem; color:var(--muted);">' + escapeHtml(item.durationStr || (item.timeTakenSeconds ? item.timeTakenSeconds + 's' : '-')) + '</td>' +
@@ -1267,6 +903,7 @@
         '<div><strong>Candidate:</strong> ' + escapeHtml(item.studentName || '-') + '</div>' +
         '<div><strong>Roll Number:</strong> ' + escapeHtml(item.rollNumber || '-') + '</div>' +
         '<div><strong>Phone Number:</strong> ' + escapeHtml(item.studentPhone || '-') + '</div>' +
+        '<div><strong>Sunday School:</strong> ' + escapeHtml(item.schoolName || '-') + '</div>' +
         '<div><strong>Sunday School Code:</strong> ' + escapeHtml(item.schoolCode || '-') + '</div>' +
         '<div><strong>Diocese:</strong> ' + escapeHtml(item.diocese || '-') + '</div>' +
       '</div>' +
@@ -1293,6 +930,7 @@
       'Candidate: ' + (activeModalItem.studentName || '') + '\n' +
       'Roll No: ' + (activeModalItem.rollNumber || '') + '\n' +
       'Phone: ' + (activeModalItem.studentPhone || '') + '\n' +
+      'Sunday School: ' + (activeModalItem.schoolName || '') + '\n' +
       'Sunday School Code: ' + (activeModalItem.schoolCode || '') + '\n' +
       'Diocese: ' + (activeModalItem.diocese || '') + '\n' +
       'Score: ' + (activeModalItem.score || 0) + ' / ' + (activeModalItem.totalQuestions || 30) + ' (' + (activeModalItem.percentage || 0) + '%)\n' +
@@ -1330,6 +968,7 @@
         studentName: "Alen Mathew",
         rollNumber: "X-101",
         studentPhone: "+91 98471 23456",
+        schoolName: "St. Thomas Sunday School",
         schoolCode: "260310",
         diocese: "Thrissur Diocese",
         score: 28,
@@ -1348,6 +987,7 @@
         studentName: "Sneha Rachel George",
         rollNumber: "XII-204",
         studentPhone: "+966 50 123 4567",
+        schoolName: "St. Mary's Sunday School",
         schoolCode: "260310",
         diocese: "Kottayam Diocese",
         score: 26,
@@ -1366,6 +1006,7 @@
         studentName: "Joel Jacob Thomas",
         rollNumber: "XI-115",
         studentPhone: "+91 94470 98765",
+        schoolName: "St. George Sunday School",
         schoolCode: "260310",
         diocese: "Thrissur Diocese",
         score: 27,
@@ -1384,6 +1025,7 @@
         studentName: "Hannah Mary Thomas",
         rollNumber: "IX-042",
         studentPhone: "+91 98950 12345",
+        schoolName: "St. Thomas Sunday School",
         schoolCode: "260310",
         diocese: "Thrissur Diocese",
         score: 23,
@@ -1402,6 +1044,7 @@
         studentName: "Kevin Paul",
         rollNumber: "VIII-018",
         studentPhone: "+91 94471 11223",
+        schoolName: "St. Mary's Sunday School",
         schoolCode: "260101",
         diocese: "Thrissur Diocese",
         score: 22,
@@ -1420,6 +1063,7 @@
         studentName: "Riya Susan",
         rollNumber: "V-009",
         studentPhone: "+91 98460 55443",
+        schoolName: "St. George Sunday School",
         schoolCode: "260103",
         diocese: "Thrissur Diocese",
         score: 24,
@@ -1448,7 +1092,7 @@
       return;
     }
 
-    var headers = ["Attempt ID", "Date", "Time", "Class", "Student Name", "Roll Number", "Phone Number", "Sunday School Code", "Diocese", "Score", "Total Questions", "Percentage", "Status", "Duration"];
+    var headers = ["Attempt ID", "Date", "Time", "Class", "Student Name", "Roll Number", "Phone Number", "Sunday School Name", "Sunday School Code", "Diocese", "Score", "Total Questions", "Percentage", "Status", "Duration"];
     var rows = [headers];
 
     list.forEach(function(a){
@@ -1460,6 +1104,7 @@
         a.studentName || '',
         a.rollNumber || '',
         a.studentPhone || '',
+        a.schoolName || '',
         a.schoolCode || '',
         a.diocese || '',
         a.score || 0,
@@ -1561,6 +1206,7 @@
         studentName: "Admin Test",
         rollNumber: "TEST-01",
         studentPhone: "+00 000000",
+        schoolName: "St. Thomas Sunday School",
         schoolCode: "260310",
         diocese: "Thrissur Diocese",
         score: 30,

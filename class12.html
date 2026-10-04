@@ -4,523 +4,126 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class XII — Vedapraveen Diploma Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="exam.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&display=swap');
-
-  :root{
-    --bg:#f4f7fb;
-    --surface:#ffffff;
-    --surface-2:#e9f0f8;
-    --ink:#0f172a;
-    --muted:#475569;
-    --border:#cbd5e1;
-    --accent:#6b21a8;
-    --accent-ink:#ffffff;
-    --gold:#c28822;
-    --good:#15803d;
-    --good-bg:#dcfce7;
-    --bad:#b91c1c;
-    --bad-bg:#fee2e2;
-    --warn:#b45309;
-    --warn-bg:#fef3c7;
-    --shadow: 0 14px 34px -12px rgba(15,23,42,.14);
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#090e17;
-      --surface:#111a2e;
-      --surface-2:#1b2640;
-      --ink:#f8fafc;
-      --muted:#94a3b8;
-      --border:#233554;
-      --accent:#d8b4fe;
-      --accent-ink:#0b1120;
-      --gold:#f59e0b;
-      --good:#4ade80;
-      --good-bg:#14532d33;
-      --bad:#f87171;
-      --bad-bg:#7f1d1d33;
-      --warn:#fbbf24;
-      --warn-bg:#78350f33;
-      --shadow: 0 16px 36px -12px rgba(0,0,0,.7);
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#090e17;
-    --surface:#111a2e;
-    --surface-2:#1b2640;
-    --ink:#f8fafc;
-    --muted:#94a3b8;
-    --border:#233554;
-    --accent:#d8b4fe;
-    --accent-ink:#0b1120;
-    --gold:#f59e0b;
-    --good:#4ade80;
-    --good-bg:#14532d33;
-    --bad:#f87171;
-    --bad-bg:#7f1d1d33;
-    --warn:#fbbf24;
-    --warn-bg:#78350f33;
-    --shadow: 0 16px 36px -12px rgba(0,0,0,.7);
-  }
-
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:
-      radial-gradient(720px 420px at 12% -8%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
-      radial-gradient(640px 460px at 108% 8%, color-mix(in srgb, var(--gold) 16%, transparent), transparent 55%),
-      var(--bg);
-    background-attachment:fixed;
-    color:var(--ink);
-    font-family:'Source Sans 3', system-ui, sans-serif;
-    padding-inline:16px;
-    padding-block:32px;
-    display:flex;
-    justify-content:center;
-  }
-  .malayalam, [lang="ml"]{ font-family: 'Noto Sans Malayalam', 'Source Sans 3', sans-serif; }
-
-  .app{ width:100%; max-width:660px; animation:fadeUp .45s ease both; }
-  @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
-
-  header.top{
-    display:flex; align-items:flex-start; justify-content:space-between;
-    gap:12px; margin-bottom:22px;
-  }
-  .brand{ display:flex; gap:12px; align-items:center; }
-  .brand svg{ width:40px; height:40px; flex:none; }
-  .brand h1{
-    font-family:'Cormorant Garamond', serif; font-weight:700; font-size:1.55rem;
-    line-height:1.15; margin:0; text-wrap:balance;
-  }
-  .brand p{ margin:2px 0 0; font-size:.8rem; color:var(--muted); letter-spacing:.02em; }
-  .home-link{
-    font-size:.74rem; color:var(--muted); text-decoration:none; display:inline-block; margin-bottom:6px;
-    font-weight:600;
-  }
-  .home-link:hover{ color:var(--accent); }
-  .org-header{
-    text-align:center; font-size:.72rem; font-weight:700; letter-spacing:.06em;
-    text-transform:uppercase; color:var(--gold); margin:0 0 4px;
-  }
-  .dev-credit{ text-align:center; font-size:.68rem; color:var(--muted); margin-top:14px; }
-  .dev-credit a{ color:inherit; text-decoration:underline; text-underline-offset:2px; transition:color .15s ease; }
-  .dev-credit a:hover{ color:var(--gold); }
-  #langToggle{
-    border:1px solid var(--border); background:var(--surface); color:var(--ink);
-    border-radius:999px; padding:6px 14px; font-size:.8rem; font-weight:600;
-    cursor:pointer; white-space:nowrap;
-  }
-  #langToggle:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-
-  .card{
-    background:var(--surface); border:1px solid var(--border); border-radius:22px;
-    box-shadow:var(--shadow); padding:30px; position:relative; overflow:hidden;
-  }
-  .card::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:5px;
-    background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent));
-    background-size:200% 100%;
-    animation:sheen 6s linear infinite;
-  }
-  @keyframes sheen{ to{ background-position:200% 0; } }
-
-  .field{ margin-bottom:18px; }
-  .field label{
-    display:block; font-weight:600; font-size:.82rem; margin-bottom:6px;
-    color:var(--muted); text-transform:uppercase; letter-spacing:.04em;
-  }
-  input[type="text"], select{
-    width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--border);
-    background:var(--surface-2); color:var(--ink); font-size:1rem; font-family:inherit;
-  }
-  input[type="text"]:focus-visible, select:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
-
-    .lang-chips{
-    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;
-  }
-  .lang-chip{
-    border:1.5px solid var(--border); background:var(--surface-2); color:var(--ink);
-    padding:11px 14px; border-radius:12px; cursor:pointer; font-size:.92rem;
-    font-weight:700; text-align:center; display:flex; align-items:center;
-    justify-content:center; gap:8px; transition:all .18s ease; user-select:none; font-family:inherit;
-  }
-  .lang-chip:hover{
-    border-color:var(--gold); transform:translateY(-1px);
-    box-shadow:0 4px 12px -6px rgba(0,0,0,.2);
-  }
-  .lang-chip.selected{
-    background:var(--accent); color:var(--accent-ink); border-color:var(--accent);
-    box-shadow:0 6px 18px -6px color-mix(in srgb, var(--accent) 70%, transparent);
-  }
-
-  .school-chips{
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;
-  }
-  @media (min-width: 480px){
-      .lang-chips{
-    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;
-  }
-  .lang-chip{
-    border:1.5px solid var(--border); background:var(--surface-2); color:var(--ink);
-    padding:11px 14px; border-radius:12px; cursor:pointer; font-size:.92rem;
-    font-weight:700; text-align:center; display:flex; align-items:center;
-    justify-content:center; gap:8px; transition:all .18s ease; user-select:none; font-family:inherit;
-  }
-  .lang-chip:hover{
-    border-color:var(--gold); transform:translateY(-1px);
-    box-shadow:0 4px 12px -6px rgba(0,0,0,.2);
-  }
-  .lang-chip.selected{
-    background:var(--accent); color:var(--accent-ink); border-color:var(--accent);
-    box-shadow:0 6px 18px -6px color-mix(in srgb, var(--accent) 70%, transparent);
-  }
-
-  .school-chips{ grid-template-columns:repeat(4, 1fr); }
-  }
-  .school-chip{
-    border:1px solid var(--border); background:var(--surface-2); color:var(--ink);
-    padding:10px 8px; border-radius:10px; cursor:pointer; font-size:.88rem;
-    font-weight:700; text-align:center; letter-spacing:.03em;
-    transition:all .15s ease; user-select:none;
-  }
-  .school-chip:hover{ border-color:var(--gold); transform:translateY(-1px); }
-  .school-chip.selected{
-    background:var(--accent); color:var(--accent-ink); border-color:var(--accent);
-    box-shadow:0 6px 16px -8px color-mix(in srgb, var(--accent) 70%, transparent);
-  }
-
-  .btn-primary{
-    width:100%; margin-top:8px; padding:14px 18px; border-radius:12px; border:none;
-    background:linear-gradient(135deg,var(--accent),color-mix(in srgb, var(--accent) 65%, var(--gold)));
-    color:var(--accent-ink); font-size:1.02rem; font-weight:700;
-    cursor:pointer; font-family:inherit; box-shadow:0 10px 24px -12px color-mix(in srgb, var(--accent) 60%, transparent);
-    transition:transform .15s ease, filter .15s ease;
-  }
-  .btn-primary:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none; }
-  .btn-primary:not(:disabled):hover{ filter:brightness(1.06); transform:translateY(-1px); }
-  .btn-primary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
-
-  .btn-secondary{
-    width:100%; margin-top:10px; padding:11px 18px; border-radius:12px; border:1px solid var(--border);
-    background:transparent; color:var(--ink); font-size:.95rem; font-weight:600;
-    cursor:pointer; font-family:inherit;
-  }
-  .btn-secondary:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-
-  .btn-share{
-    width:100%; margin-top:12px; padding:12px 18px; border-radius:12px;
-    background:var(--surface-2); border:1px solid var(--border); color:var(--ink);
-    font-size:.92rem; font-weight:700; cursor:pointer; font-family:inherit;
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    transition:all .15s ease;
-  }
-  .btn-share:hover{ border-color:var(--gold); transform:translateY(-1px); }
-
-  .hint{ font-size:.82rem; color:var(--muted); margin-top:4px; margin-bottom:18px; line-height:1.5; }
-
-  /* Student Info Bar on Quiz Screen */
-  .student-bar{
-    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    gap:8px; padding:8px 14px; border-radius:10px; background:var(--surface-2);
-    font-size:.82rem; font-weight:600; color:var(--muted); margin-bottom:16px;
-    border:1px solid var(--border);
-  }
-  .student-bar strong{ color:var(--ink); }
-
-  .progress-wrap{
-    display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
-    font-size:.82rem; color:var(--muted); font-weight:600;
-  }
-  .progress-track{ height:8px; border-radius:999px; background:var(--surface-2); overflow:hidden; margin-bottom:18px; }
-  .progress-fill{
-    height:100%; background:linear-gradient(90deg,var(--accent),var(--gold));
-    border-radius:999px; transition:width .35s cubic-bezier(.4,0,.2,1);
-  }
-  
-  .q-meta-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:8px;
-  }
-  .q-topic{
-    font-size:.76rem;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:var(--gold);
-    font-weight:700;
-    margin-bottom:0;
-  }
-  .btn-translate{
-    border:1px solid var(--border);
-    background:var(--surface-2);
-    color:var(--ink);
-    border-radius:999px;
-    padding:4px 12px;
-    font-size:.82rem;
-    font-weight:700;
-    cursor:pointer;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    transition:all .15s ease;
-    user-select:none;
-    font-family:inherit;
-    flex-shrink:0;
-  }
-  .btn-translate:hover{
-    border-color:var(--gold);
-    color:var(--gold);
-    background:color-mix(in srgb, var(--gold) 10%, var(--surface-2));
-    transform:translateY(-1px);
-  }
-
-  /* Old topic */
-  .q-topic-old{
-    font-size:.76rem; text-transform:uppercase; letter-spacing:.05em; color:var(--gold);
-    font-weight:700; margin-bottom:6px;
-  }
-  .q-text{
-    font-family:'Cormorant Garamond', serif; font-size:1.35rem; font-weight:600;
-    line-height:1.35; margin:0 0 18px; text-wrap:balance;
-  }
-  .options{ display:flex; flex-direction:column; gap:10px; margin-bottom:22px; }
-  .option{
-    display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:13px 15px;
-    border-radius:12px; border:1px solid var(--border); background:var(--surface-2); color:var(--ink);
-    font-size:.98rem; font-family:inherit; cursor:pointer;
-    transition:transform .12s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease;
-  }
-  .option .letter{
-    flex:none; width:26px; height:26px; border-radius:999px; border:1px solid var(--border);
-    display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700;
-    color:var(--muted); background:var(--surface); transition:inherit;
-  }
-  .option:hover{ border-color:var(--gold); transform:translateX(2px); box-shadow:0 4px 14px -10px rgba(0,0,0,.4); }
-  .option:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  .option[data-state="selected"]{ border-color:var(--accent); background:color-mix(in srgb, var(--accent) 10%, var(--surface-2)); }
-  .option[data-state="correct"]{ border-color:var(--good); background:var(--good-bg); }
-  .option[data-state="correct"] .letter{ background:var(--good); color:#fff; border-color:var(--good); }
-  .option[data-state="wrong"]{ border-color:var(--bad); background:var(--bad-bg); }
-  .option[data-state="wrong"] .letter{ background:var(--bad); color:#fff; border-color:var(--bad); }
-  .option:disabled{ cursor:default; }
-
-  /* Timer Badge */
-  .timer-badge{
-    display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:999px;
-    background:var(--surface-2); border:1px solid var(--border); font-size:.82rem;
-    font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums;
-    transition:all .2s ease;
-  }
-  .timer-badge.warning{
-    background:var(--warn-bg); border-color:var(--warn); color:var(--warn);
-  }
-  .timer-badge.danger{
-    background:var(--bad-bg); border-color:var(--bad); color:var(--bad);
-    animation:pulse 1s infinite;
-  }
-  @keyframes pulse{
-    0%, 100%{ transform:scale(1); }
-    50%{ transform:scale(1.04); }
-  }
-
-  .nextRow{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-  }
-  #nextBtn{
-    padding:11px 24px; border-radius:10px; border:none; background:var(--accent); color:var(--accent-ink);
-    font-weight:700; font-size:.95rem; cursor:pointer; font-family:inherit;
-    min-width:140px;
-    transition:all .15s ease;
-  }
-  #nextBtn:disabled{ opacity:.4; cursor:not-allowed; }
-  #nextBtn:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
-
-  .btn-abort{
-    padding:10px 16px; border-radius:10px; border:1px solid var(--bad);
-    background:transparent; color:var(--bad); font-weight:700; font-size:.88rem;
-    cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px;
-    transition:all .15s ease;
-  }
-  .btn-abort:hover{ background:var(--bad-bg); transform:translateY(-1px); }
-  .btn-abort:focus-visible{ outline:2px solid var(--bad); outline-offset:2px; }
-
-  @media (max-width:440px){
-    .nextRow{ flex-direction:column-reverse; gap:10px; }
-    .btn-abort, #nextBtn{ width:100%; justify-content:center; }
-  }
-
-  /* Abort Confirmation Modal */
-  .modal-overlay{
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
-    backdrop-filter:blur(5px); z-index:1000; align-items:center; justify-content:center; padding:16px;
-  }
-  .modal-overlay.active{ display:flex; animation:fadeIn .2s ease; }
-  .modal-box{
-    background:var(--surface); border:1px solid var(--border); border-radius:20px;
-    box-shadow:0 24px 48px -16px rgba(0,0,0,.5); padding:28px 24px 22px; max-width:400px;
-    width:100%; text-align:center; animation:slideUp .22s ease;
-  }
-  .modal-icon{ font-size:2.8rem; margin-bottom:8px; display:block; }
-  .modal-box h3{ font-family:'Cormorant Garamond', serif; font-size:1.55rem; margin:0 0 8px; color:var(--bad); }
-  .modal-box p{ color:var(--muted); font-size:.9rem; margin:0 0 20px; line-height:1.5; }
-  .modal-actions{ display:flex; gap:10px; justify-content:center; }
-  .btn-modal-cancel{
-    flex:1; padding:10px 16px; border-radius:10px; border:1px solid var(--border);
-    background:var(--surface-2); color:var(--ink); font-weight:600; font-size:.88rem;
-    cursor:pointer; font-family:inherit; transition:background .15s ease;
-  }
-  .btn-modal-cancel:hover{ background:var(--border); }
-  .btn-modal-confirm{
-    flex:1; padding:10px 16px; border-radius:10px; border:none; background:var(--bad);
-    color:#fff; font-weight:700; font-size:.88rem; cursor:pointer; font-family:inherit;
-    transition:filter .15s ease;
-  }
-  .btn-modal-confirm:hover{ filter:brightness(1.1); }
-
-
-  /* Result screen */
-  .score-hero{ text-align:center; padding-block:6px 12px; }
-  .result-details{
-    display:inline-block; text-align:left; background:var(--surface-2); border:1px solid var(--border);
-    border-radius:14px; padding:12px 20px; font-size:.88rem; margin:10px 0 16px; line-height:1.6;
-  }
-  .result-details div{ display:flex; gap:12px; justify-content:space-between; }
-  .result-details span.label{ color:var(--muted); font-weight:600; }
-  .result-details span.val{ color:var(--ink); font-weight:700; }
-  .score-num{
-    font-family:'Cormorant Garamond', serif; font-weight:700; font-size:3.5rem; line-height:1;
-    font-variant-numeric: tabular-nums; margin:8px 0 4px; color:var(--accent);
-  }
-  .score-pct{ font-size:1.1rem; font-weight:700; color:var(--muted); }
-  .verdict{
-    display:inline-block; margin-top:12px; padding:6px 18px; border-radius:999px;
-    font-weight:700; font-size:.88rem; letter-spacing:.04em;
-  }
-  .verdict.pass{ background:var(--good-bg); color:var(--good); }
-  .verdict.fail{ background:var(--bad-bg); color:var(--bad); }
-
-  .review{ margin-top:26px; border-top:1px solid var(--border); padding-top:18px; }
-  .review h3{ font-family:'Cormorant Garamond', serif; font-size:1.25rem; margin:0 0 12px; }
-  .review-item{ padding:12px 0; border-bottom:1px solid var(--border); font-size:.92rem; }
-  .review-item:last-child{ border-bottom:none; }
-  .review-q{ font-weight:600; margin-bottom:6px; }
-  .review-a{ color:var(--muted); font-size:.88rem; line-height:1.45; }
-  .review-a b{ color:var(--good); font-weight:700; }
-  .review-a .wrong-pick{ color:var(--bad); font-weight:700; }
-
-  footer.credit{ text-align:center; font-size:.75rem; color:var(--muted); margin-top:20px; line-height:1.6; }
-
-  [hidden]{ display:none !important; }
-
-  @media (max-width:440px){
-    .card{ padding:20px 16px; }
-    .score-num{ font-size:2.9rem; }
-  }
+  :root{ --accent:#6b21a8; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --accent:#d8b4fe; } }
+  :root[data-theme="dark"]{ --accent:#d8b4fe; }
 </style>
 </head>
 <body>
 
 <div class="app">
-  <img src="Header.jpg" alt="Header Image" class="header-img" style="max-width:100%;height:auto;margin:16px 0;">
-  <a class="home-link" id="homeLink" href="index.html" data-t="homeLink">&larr; Choose another class</a>
-  
-  <header class="top">
-    <div class="brand">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="20" cy="20" r="19" stroke="var(--gold)" stroke-width="1.4"/>
-        <path d="M20 7v26M11 16h18" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"/>
-      </svg>
+  <nav class="topnav">
+    <a class="home-link" id="homeLink" href="index.html" data-t="homeLink">&larr; Choose another class</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">☾</button>
+  </nav>
+
+  <header class="hero">
+    <img src="Header.jpg" alt="OSSAE DESERT LAND CENTRAL REGION (THRISSUR DIOCESE)" class="hero-img">
+    <div class="hero-body">
+      <span class="class-badge" aria-hidden="true">XII</span>
       <div>
+        <p class="org-line">OSSAE DESERT LAND CENTRAL REGION <span>(THRISSUR DIOCESE)</span></p>
         <h1 data-t="brandTitle">Class XII — Vedapraveen Diploma</h1>
         <p data-t="brandSub">O.S.S.A.E. &middot; All Divisions</p>
       </div>
     </div>
-    
   </header>
 
     <!-- Setup Screen -->
-  <section class="card" id="screenSetup">
-    <div class="field">
-      <label data-t="lblLang">Choose Exam Language</label>
+  <section class="card setup" id="screenSetup">
+    <div class="setup-head">
+      <span class="eyebrow" data-t="setupEyebrow">Candidate Registration</span>
+      <h2 class="setup-title" data-t="setupTitle">Fill in your details to begin</h2>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title"><span class="step-num">1</span><span data-t="lblLang">Choose Exam Language</span></div>
       <div class="lang-chips" id="langChips">
-        <button type="button" class="lang-chip selected" data-lang="en">
-          <span>🇬🇧</span> English
-        </button>
-        <button type="button" class="lang-chip" data-lang="ml">
-          <span>🇮🇳</span> മലയാളം
-        </button>
+        <button type="button" class="lang-chip selected" data-lang="en"><span>🇬🇧</span> English</button>
+        <button type="button" class="lang-chip" data-lang="ml"><span>🇮🇳</span> മലയാളം</button>
       </div>
     </div>
 
-    <div class="field">
-      <label data-t="lblName">Student Name</label>
-      <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="name">
+    <div class="form-section">
+      <div class="form-section-title"><span class="step-num">2</span><span data-t="secStudent">Student Details</span></div>
+      <div class="field">
+        <label for="studentName" data-t="lblName">Student Name</label>
+        <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="name">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="rollNumber" data-t="lblRoll">Roll Number</label>
+          <input type="text" id="rollNumber" placeholder="Enter your roll number" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="studentPhone" data-t="lblPhone">Phone Number</label>
+          <input type="tel" id="studentPhone" placeholder="+966xxxxxxxx / +91xxxxxxxxxx" autocomplete="tel">
+        </div>
+      </div>
     </div>
 
-    <div class="field">
-      <label data-t="lblRoll">Roll Number</label>
-      <input type="text" id="rollNumber" placeholder="Enter your roll number" autocomplete="off">
+    <div class="form-section">
+      <div class="form-section-title"><span class="step-num">3</span><span data-t="secSchool">Sunday School Details</span></div>
+      <div class="field">
+        <label for="schoolName" data-t="lblSchoolName">Sunday School Name</label>
+        <input type="text" id="schoolName" placeholder="e.g. St. Thomas Sunday School" autocomplete="organization">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="schoolCode" data-t="lblSchoolCode">Sunday School Code (eg: 123456)</label>
+          <input type="text" id="schoolCode" inputmode="numeric" placeholder="e.g. 123456" autocomplete="off">
+          <div id="schoolCodeError" data-t="codeErrorInline">Wrong code. Please contact your Sunday school HM.</div>
+        </div>
+        <div class="field">
+          <label for="dioceseSelect" data-t="lblDiocese">Diocese</label>
+          <select id="dioceseSelect">
+          <option value="" disabled selected data-t="selectDiocese">Select your Diocese</option>
+          <option value="Thiruvananthapuram Diocese">Thiruvananthapuram Diocese (തിരുവനന്തപുരം)</option>
+          <option value="Kollam Diocese">Kollam Diocese (കൊല്ലം)</option>
+          <option value="Kottarakara – Punalur Diocese">Kottarakara – Punalur Diocese (കൊട്ടാരക്കര – പുനലൂർ)</option>
+          <option value="Adoor – Kadampanadu Diocese">Adoor – Kadampanadu Diocese (അടൂർ – കടമ്പനാട്)</option>
+          <option value="Thumpamon Diocese">Thumpamon Diocese (തുമ്പമൺ)</option>
+          <option value="Mavelikara Diocese">Mavelikara Diocese (മാവേലിക്കര)</option>
+          <option value="Niranam Diocese">Niranam Diocese (നിരണം)</option>
+          <option value="Chengannur Diocese">Chengannur Diocese (ചെങ്ങന്നൂർ)</option>
+          <option value="Kottayam Diocese">Kottayam Diocese (കോട്ടയം)</option>
+          <option value="Kottayam Central Diocese">Kottayam Central Diocese (കോട്ടയം സെൻട്രൽ)</option>
+          <option value="Idukki Diocese">Idukki Diocese (ഇടുക്കി)</option>
+          <option value="Kandanad East Diocese">Kandanad East Diocese (കണ്ടനാട് ഈസ്റ്റ്)</option>
+          <option value="Kandanad West Diocese">Kandanad West Diocese (കണ്ടനാട് വെസ്റ്റ്)</option>
+          <option value="Kochi Diocese">Kochi Diocese (കൊച്ചി)</option>
+          <option value="Angamaly Diocese">Angamaly Diocese (അങ്കമാലി)</option>
+          <option value="Angamaly East Diocese">Angamaly East Diocese (അങ്കമാലി ഈസ്റ്റ്)</option>
+          <option value="Angamaly West Diocese">Angamaly West Diocese (അങ്കമാലി വെസ്റ്റ്)</option>
+          <option value="Thrissur Diocese">Thrissur Diocese (തൃശ്ശൂർ)</option>
+          <option value="Kunnamkulam Diocese">Kunnamkulam Diocese (കുന്നംകുളം)</option>
+          <option value="Malabar Diocese">Malabar Diocese (മലബാർ)</option>
+          <option value="Sulthan Bathery Diocese">Sulthan Bathery Diocese (സുൽത്താൻ ബത്തേരി)</option>
+          <option value="Nilackal Diocese">Nilackal Diocese (നിലയ്ക്കൽ)</option>
+          <option value="Bangalore Diocese">Bangalore Diocese (ബാംഗ്ലൂർ)</option>
+          <option value="Bombay Diocese">Bombay Diocese (ബോംബെ)</option>
+          <option value="Calcutta Diocese">Calcutta Diocese (കൽക്കട്ട)</option>
+          <option value="Delhi Diocese">Delhi Diocese (ഡൽഹി)</option>
+          <option value="Ahmedabad Diocese">Ahmedabad Diocese (അഹമ്മദാബാദ്)</option>
+          <option value="Brahmavar Diocese">Brahmavar Diocese (ബ്രഹ്മവാർ)</option>
+          <option value="Madras Diocese">Madras Diocese (മദ്രാസ്)</option>
+          <option value="Diocese of North America (Northeast American Diocese)">Diocese of North America (Northeast American Diocese)</option>
+          <option value="Diocese of Southwest America">Diocese of Southwest America</option>
+          <option value="Diocese of UK, Europe, and Africa">Diocese of UK, Europe, and Africa</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div class="field">
-      <label data-t="lblPhone">Phone Number (+966xxxxxxxx, +91xxxxxxxxxx)</label>
-      <input type="tel" id="studentPhone" placeholder="" autocomplete="tel">
+    <div class="exam-info">
+      <span class="exam-info-icon" aria-hidden="true">📝</span>
+      <p class="hint" data-t="hintPool">30 questions are randomly selected from the complete Vedapraveen Diploma bank (569 questions) &mdash; every attempt is different.</p>
     </div>
-
-    <div class="field">
-      <label data-t="lblSchoolCode">Sunday School Code (eg: 123456)</label>
-      <input type="text" id="schoolCode" placeholder="Enter Sunday School Code (eg: 123456)" autocomplete="off">
-      <div id="schoolCodeError" style="display:none; color:var(--bad); font-size:.82rem; margin-top:5px; font-weight:600;" data-t="codeErrorInline">Wrong code. Please contact your Sunday school HM.</div>
-    </div>
-
-    <div class="field">
-      <label data-t="lblDiocese">Diocese</label>
-      <select id="dioceseSelect">
-        <option value="" disabled selected data-t="selectDiocese">Select your Diocese</option>
-        <option value="Thiruvananthapuram Diocese">Thiruvananthapuram Diocese (തിരുവനന്തപുരം)</option>
-        <option value="Kollam Diocese">Kollam Diocese (കൊല്ലം)</option>
-        <option value="Kottarakara – Punalur Diocese">Kottarakara – Punalur Diocese (കൊട്ടാരക്കര – പുനലൂർ)</option>
-        <option value="Adoor – Kadampanadu Diocese">Adoor – Kadampanadu Diocese (അടൂർ – കടമ്പനാട്)</option>
-        <option value="Thumpamon Diocese">Thumpamon Diocese (തുമ്പമൺ)</option>
-        <option value="Mavelikara Diocese">Mavelikara Diocese (മാവേലിക്കര)</option>
-        <option value="Niranam Diocese">Niranam Diocese (നിരണം)</option>
-        <option value="Chengannur Diocese">Chengannur Diocese (ചെങ്ങന്നൂർ)</option>
-        <option value="Kottayam Diocese">Kottayam Diocese (കോട്ടയം)</option>
-        <option value="Kottayam Central Diocese">Kottayam Central Diocese (കോട്ടയം സെൻട്രൽ)</option>
-        <option value="Idukki Diocese">Idukki Diocese (ഇടുക്കി)</option>
-        <option value="Kandanad East Diocese">Kandanad East Diocese (കണ്ടനാട് ഈസ്റ്റ്)</option>
-        <option value="Kandanad West Diocese">Kandanad West Diocese (കണ്ടനാട് വെസ്റ്റ്)</option>
-        <option value="Kochi Diocese">Kochi Diocese (കൊച്ചി)</option>
-        <option value="Angamaly Diocese">Angamaly Diocese (അങ്കമാലി)</option>
-        <option value="Angamaly East Diocese">Angamaly East Diocese (അങ്കമാലി ഈസ്റ്റ്)</option>
-        <option value="Angamaly West Diocese">Angamaly West Diocese (അങ്കമാലി വെസ്റ്റ്)</option>
-        <option value="Thrissur Diocese">Thrissur Diocese (തൃശ്ശൂർ)</option>
-        <option value="Kunnamkulam Diocese">Kunnamkulam Diocese (കുന്നംകുളം)</option>
-        <option value="Malabar Diocese">Malabar Diocese (മലബാർ)</option>
-        <option value="Sulthan Bathery Diocese">Sulthan Bathery Diocese (സുൽത്താൻ ബത്തേരി)</option>
-        <option value="Nilackal Diocese">Nilackal Diocese (നിലയ്ക്കൽ)</option>
-        <option value="Bangalore Diocese">Bangalore Diocese (ബാംഗ്ലൂർ)</option>
-        <option value="Bombay Diocese">Bombay Diocese (ബോംബെ)</option>
-        <option value="Calcutta Diocese">Calcutta Diocese (കൽക്കട്ട)</option>
-        <option value="Delhi Diocese">Delhi Diocese (ഡൽഹി)</option>
-        <option value="Ahmedabad Diocese">Ahmedabad Diocese (അഹമ്മദാബാദ്)</option>
-        <option value="Brahmavar Diocese">Brahmavar Diocese (ബ്രഹ്മവാർ)</option>
-        <option value="Madras Diocese">Madras Diocese (മദ്രാസ്)</option>
-        <option value="Diocese of North America (Northeast American Diocese)">Diocese of North America (Northeast American Diocese)</option>
-        <option value="Diocese of Southwest America">Diocese of Southwest America</option>
-        <option value="Diocese of UK, Europe, and Africa">Diocese of UK, Europe, and Africa</option>
-      </select>
-    </div>
-
-    <p class="hint" data-t="hintPool">30 questions are randomly selected from the complete Vedapraveen Diploma bank (569 questions) &mdash; every attempt is different.</p>
 
     <button class="btn-primary" id="startBtn" disabled data-t="btnStart">Start Exam (30 Questions)</button>
   </section>
@@ -528,8 +131,17 @@
   <!-- Quiz Screen -->
   <section class="card" id="screenQuiz" hidden>
     <div class="student-bar" id="studentBar">
-      <div><span data-t="studentPrefix">Candidate:</span> <strong id="barName">Name</strong> &middot; <strong id="barPhone">+00</strong></div>
-      <div><span data-t="rollPrefix">Roll:</span> <strong id="barRoll">00</strong> &middot; <span data-t="codePrefix">Code:</span> <strong id="barCode">260310</strong> &middot; <strong id="barDiocese">Diocese</strong></div>
+      <div class="sb-block">
+        <span class="sb-avatar" aria-hidden="true">✝</span>
+        <div class="sb-text">
+          <strong id="barName">Name</strong>
+          <span class="sb-sub"><span data-t="rollPrefix">Roll:</span> <span id="barRoll">00</span> &middot; <span id="barPhone">+00</span></span>
+        </div>
+      </div>
+      <div class="sb-text sb-school">
+        <strong id="barSchool">-</strong>
+        <span class="sb-sub"><span data-t="codePrefix">Code:</span> <span id="barCode">-</span> &middot; <span id="barDiocese">Diocese</span></span>
+      </div>
     </div>
 
     <div class="progress-wrap">
@@ -561,6 +173,7 @@
         <div><span class="label" data-t="resNameLbl">Student:</span> <span class="val" id="resName">-</span></div>
         <div><span class="label" data-t="resRollLbl">Roll Number:</span> <span class="val" id="resRoll">-</span></div>
         <div><span class="label" data-t="resPhoneLbl">Phone Number:</span> <span class="val" id="resPhone">-</span></div>
+        <div><span class="label" data-t="resSchoolLbl">Sunday School:</span> <span class="val" id="resSchool">-</span></div>
         <div><span class="label" data-t="resCodeLbl">Sunday School Code:</span> <span class="val" id="resCode">-</span></div>
         <div><span class="label" data-t="resDioceseLbl">Diocese:</span> <span class="val" id="resDiocese">-</span></div>
         <div><span class="label" data-t="resTimeLbl">Time Taken:</span> <span class="val" id="resTime">-</span></div>
@@ -576,7 +189,7 @@
     </button>
     <button class="btn-primary" id="retryBtn" data-t="btnRetry">Take Exam Again</button>
     <button class="btn-secondary" id="reviewToggle" data-t="btnReview">Show Answer Review</button>
-    <a href="index.html" class="btn-secondary" id="btnHomeLink" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+    <a href="index.html" class="btn-secondary" id="btnHomeLink" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
       <span>🏠</span> <span data-t="btnHome">Back to Home Page</span>
     </a>
 
@@ -584,7 +197,7 @@
   </section>
 
   <footer class="credit" data-t="credit">Practice exam for Sunday School Class XII &mdash; Vedapraveen Diploma &middot; Prepared from OSSAE Question Bank</footer>
-  <p class="dev-credit">developed by <a href="https://portfolio-pi-roan-40.vercel.app/" target="_blank" rel="noopener noreferrer">bubinkm</a></p>
+  <p class="dev-credit"><strong>OSSAE RIYADH REGION</strong> &middot; developed by <a href="https://portfolio-pi-roan-40.vercel.app/" target="_blank" rel="noopener noreferrer">bubinkm</a></p>
 </div>
 
 <!-- Abort Confirmation Modal -->
@@ -637,9 +250,15 @@ var UI = {
     lblLang:"Choose Exam Language",
     lblName:"Student Name",
     lblRoll:"Roll Number",
-    lblPhone:"Phone Number (+966xxxxxxxx, +91xxxxxxxxxx)",
+    lblPhone:"Phone Number",
     lblSchoolCode:"Sunday School Code (eg: 123456)",
     lblDiocese:"Diocese",
+    lblSchoolName:"Sunday School Name",
+    secStudent:"Student Details",
+    secSchool:"Sunday School Details",
+    setupEyebrow:"Candidate Registration",
+    setupTitle:"Fill in your details to begin",
+    resSchoolLbl:"Sunday School:",
     selectDiocese:"Select your Diocese",
     hintPool:"30 questions are randomly selected from the complete Vedapraveen Diploma bank (569 questions) — every attempt is different.",
     btnStart:"Start Exam (30 Questions)",
@@ -690,9 +309,15 @@ var UI = {
     lblLang:"പരീക്ഷ ഭാഷ തിരഞ്ഞെടുക്കുക",
     lblName:"വിദ്യാർത്ഥിയുടെ പേര്",
     lblRoll:"റോൾ നമ്പർ",
-    lblPhone:"ഫോൺ നമ്പർ (+966xxxxxxxx, +91xxxxxxxxxx)",
+    lblPhone:"ഫോൺ നമ്പർ",
     lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ് (eg: 123456)",
     lblDiocese:"ഭദ്രാസനം",
+    lblSchoolName:"സൺഡേ സ്കൂളിന്റെ പേര്",
+    secStudent:"വിദ്യാർത്ഥിയുടെ വിവരങ്ങൾ",
+    secSchool:"സൺഡേ സ്കൂൾ വിവരങ്ങൾ",
+    setupEyebrow:"പരീക്ഷാർത്ഥി രജിസ്ട്രേഷൻ",
+    setupTitle:"ആരംഭിക്കാൻ നിങ്ങളുടെ വിവരങ്ങൾ നൽകുക",
+    resSchoolLbl:"സൺഡേ സ്കൂൾ:",
     selectDiocese:"ഭദ്രാസനം തിരഞ്ഞെടുക്കുക",
     hintPool:"വേദപ്രവീൺ ഡിപ്ലോമ ചോദ്യബാങ്കിൽ (569 ചോദ്യങ്ങൾ) നിന്നും 30 ചോദ്യങ്ങൾ ക്രമരഹിതമായി തിരഞ്ഞെടുക്കുന്നു — ഓരോ ശ്രമവും വ്യത്യസ്തം.",
     btnStart:"പരീക്ഷ ആരംഭിക്കുക (30 ചോദ്യങ്ങൾ)",
@@ -781,9 +406,11 @@ function applyStaticText(){
   var rNum = document.getElementById('rollNumber');
   if (rNum) rNum.placeholder = (lang === 'en') ? 'Enter your roll number' : 'റോൾ നമ്പർ നൽകുക';
   var sPhone = document.getElementById('studentPhone');
-  if (sPhone) sPhone.placeholder = "";
+  if (sPhone) sPhone.placeholder = "+966xxxxxxxx / +91xxxxxxxxxx";
+  var scName = document.getElementById('schoolName');
+  if (scName) scName.placeholder = (lang==='en') ? "e.g. St. Thomas Sunday School" : "ഉദാ: സെന്റ് തോമസ് സൺഡേ സ്കൂൾ";
   var scCode = document.getElementById('schoolCode');
-  if (scCode) scCode.placeholder = (lang === 'en') ? 'Enter Sunday School Code (eg: 123456)' : 'സൺഡേ സ്കൂൾ കോഡ് നൽകുക (eg: 123456)';
+  if (scCode) scCode.placeholder = (lang === 'en') ? 'e.g. 123456' : 'ഉദാ: 123456';
   var dioSel = document.getElementById('dioceseSelect');
   if (dioSel && dioSel.options[0]) dioSel.options[0].textContent = (lang === 'en') ? 'Select your Diocese' : 'ഭദ്രാസനം തിരഞ്ഞെടുക്കുക';
   var lt = document.getElementById('langToggle'); if (lt) lt.textContent = lang === 'en' ? 'മലയാളം' : 'English';
@@ -815,6 +442,7 @@ var VALID_DIOCESE = "Kottayam Diocese";
 var nameInput = document.getElementById('studentName');
 var rollInput = document.getElementById('rollNumber');
 var phoneInput = document.getElementById('studentPhone');
+var schoolNameInput = document.getElementById('schoolName');
 var codeInput = document.getElementById('schoolCode');
 var dioceseSelect = document.getElementById('dioceseSelect');
 var startBtn = document.getElementById('startBtn');
@@ -849,6 +477,7 @@ function validateSetup(){
   var n = nameInput.value.trim();
   var r = rollInput.value.trim();
   var p = phoneInput.value.trim();
+  var sn = schoolNameInput.value.trim();
   var c = codeInput.value.trim();
   var d = dioceseSelect.value.trim();
   var errEl = document.getElementById('schoolCodeError');
@@ -862,7 +491,7 @@ function validateSetup(){
     if (errEl) errEl.style.display = 'none';
   }
 
-  if (n && r && p && c && d && isCodeValid(c) && isDioceseValid(d)){
+  if (n && r && p && sn && c && d && isCodeValid(c) && isDioceseValid(d)){
     startBtn.disabled = false;
   } else {
     startBtn.disabled = true;
@@ -872,6 +501,7 @@ function validateSetup(){
 nameInput.addEventListener('input', validateSetup);
 rollInput.addEventListener('input', validateSetup);
 phoneInput.addEventListener('input', validateSetup);
+schoolNameInput.addEventListener('input', validateSetup);
 codeInput.addEventListener('input', validateSetup);
 
 codeInput.addEventListener('change', function(){
@@ -955,7 +585,7 @@ function handleBeforeUnload(e){
 }
 window.addEventListener('beforeunload', handleBeforeUnload);
 
-var state = { count: 30, pool: [], idx: 0, score: 0, answers: [], name: '', roll: '', phone: '', schoolCode: '', diocese: '' };
+var state = { count: 30, pool: [], idx: 0, score: 0, answers: [], name: '', roll: '', phone: '', schoolName: '', schoolCode: '', diocese: '' };
 
 var startModal = document.getElementById('startModal');
 var startModalCancelBtn = document.getElementById('startModalCancelBtn');
@@ -993,6 +623,7 @@ function beginExam(){
   state.name = name;
   state.roll = roll;
   state.phone = phone;
+  state.schoolName = schoolNameInput.value.trim();
   state.schoolCode = code;
   state.diocese = diocese;
   state.pool = shuffle(BANK).slice(0, Math.min(state.count, BANK.length));
@@ -1010,6 +641,7 @@ function beginExam(){
     studentName: state.name,
     rollNumber: state.roll,
     studentPhone: state.phone,
+    schoolName: state.schoolName,
     schoolCode: state.schoolCode,
     diocese: state.diocese,
     score: 0,
@@ -1024,6 +656,7 @@ function beginExam(){
   document.getElementById('barName').textContent = name;
   document.getElementById('barPhone').textContent = phone;
   document.getElementById('barRoll').textContent = roll;
+  document.getElementById('barSchool').textContent = state.schoolName;
   document.getElementById('barCode').textContent = code;
   document.getElementById('barDiocese').textContent = diocese;
 
@@ -1044,7 +677,7 @@ startBtn.addEventListener('click', function(){
   var phone = phoneInput.value.trim();
   var code = codeInput.value.trim();
   var diocese = dioceseSelect.value.trim();
-  if (!name || !roll || !phone || !code || !diocese) return;
+  if (!name || !roll || !phone || !schoolNameInput.value.trim() || !code || !diocese) return;
 
   if (!isDioceseValid(diocese) || !isCodeValid(code)){
     showCodeErrorModal();
@@ -1219,6 +852,7 @@ function finishQuiz(){
     studentName: state.name,
     rollNumber: state.roll,
     studentPhone: state.phone,
+    schoolName: state.schoolName,
     schoolCode: state.schoolCode,
     diocese: state.diocese,
     score: state.score,
@@ -1237,6 +871,7 @@ function renderResult(){
   document.getElementById('resName').textContent = state.name;
   document.getElementById('resRoll').textContent = state.roll;
   document.getElementById('resPhone').textContent = state.phone;
+  document.getElementById('resSchool').textContent = state.schoolName;
   document.getElementById('resCode').textContent = state.schoolCode;
   document.getElementById('resDiocese').textContent = state.diocese;
   document.getElementById('resTime').textContent = formatDuration(timeTakenSeconds);
@@ -1262,6 +897,7 @@ window.shareResult = function(){
     'Candidate: ' + state.name + '\n' +
     'Roll No: ' + state.roll + '\n' +
     'Phone: ' + state.phone + '\n' +
+    'Sunday School: ' + state.schoolName + '\n' +
     'Sunday School Code: ' + state.schoolCode + '\n' +
     'Diocese: ' + state.diocese + '\n' +
     'Time Taken: ' + formatDuration(timeTakenSeconds) + '\n' +
@@ -1379,6 +1015,7 @@ abortConfirmBtn.addEventListener('click', function(){
       studentName: state.name,
       rollNumber: state.roll,
       studentPhone: state.phone,
+      schoolName: state.schoolName,
       schoolCode: state.schoolCode,
       diocese: state.diocese,
       score: state.score || 0,
@@ -1416,6 +1053,24 @@ if (btnTranslate) {
 }
 
 applyStaticText();
+})();
+</script>
+<script>
+(function(){
+  var b = document.getElementById('themeBtn'); if (!b) return;
+  function cur(){
+    var a = document.documentElement.getAttribute('data-theme');
+    if (a) return a;
+    return (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  function paint(){ b.textContent = cur() === 'dark' ? '☀' : '☾'; }
+  b.addEventListener('click', function(){
+    var n = cur() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', n);
+    try { localStorage.setItem('ss_theme', n); } catch(e){}
+    paint();
+  });
+  paint();
 })();
 </script>
 </body>
