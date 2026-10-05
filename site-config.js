@@ -8,5 +8,5 @@
    Leave empty ('') to keep data only on each device.
    ========================================================== */
 window.SS_CONFIG = window.SS_CONFIG || {
-  sheetUrl: 'https://script.google.com/macros/s/AKfycbxRleZTNrtaTowRvYXvqiOWebqRCjK_3iV3vwsDyN3FD7Yq0qIr2Wy_wcM-UhnVU98j/exec'
+  sheetUrl: 'https://script.google.com/macros/s/AKfycbzXS2VqX4nqIy4jJp-i9wHyJPccyRbmJXiLQC-sUtYiLHv3FN8oyT9hOHFANzSNSmOZ/exec'
 };
