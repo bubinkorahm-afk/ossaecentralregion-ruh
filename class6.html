@@ -1012,11 +1012,12 @@ function saveExamAttempt(attempt){
   }
 
   try {
-    var cloudUrl = localStorage.getItem('ss_cloud_endpoint');
+    var cfg = window.SS_CONFIG || {};
+    var cloudUrl = cfg.sheetUrl || localStorage.getItem('ss_cloud_endpoint');
     if (cloudUrl && cloudUrl.trim().startsWith('http')) {
       fetch(cloudUrl.trim(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(attempt),
         mode: 'no-cors'
       }).catch(function(err){
@@ -1291,7 +1292,7 @@ applyStaticText();
   paint();
 })();
 </script>
-<script src="site-config.js?v=1"></script>
+<script src="site-config.js?v=2"></script>
 <script src="chatbot.js?v=4" defer></script>
 </body>
 </html>

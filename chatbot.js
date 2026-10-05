@@ -325,7 +325,7 @@
 
   function feedbackUrl(){
     var c = window.SS_CONFIG || {};
-    var u = String(c.feedbackUrl || '').trim();
+    var u = String(c.sheetUrl || c.feedbackUrl || '').trim();
     return /^https:\/\//.test(u) ? u : '';
   }
 

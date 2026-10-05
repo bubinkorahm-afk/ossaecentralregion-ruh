@@ -1,12 +1,12 @@
 /* ==========================================================
    OSSAE Exam Portal — shared site settings
    ----------------------------------------------------------
-   feedbackUrl: the Google Apps Script "Web app" URL that stores
-   student feedback in a Google Sheet (see Admin page → Student
-   Feedback → "How to connect a Google Sheet").
-   Leave empty ('') until the Sheet is set up — feedback is then
-   kept only on the device where it was written.
+   sheetUrl: the Google Apps Script "Web app" URL (ends in /exec)
+   connected to the OSSAE Google Sheet. Every student's exam result
+   and every feedback message is sent here.
+   Set up / update the script from: Admin page → ☁️ Cloud Sync.
+   Leave empty ('') to keep data only on each device.
    ========================================================== */
 window.SS_CONFIG = window.SS_CONFIG || {
-  feedbackUrl: ''
+  sheetUrl: 'https://script.google.com/macros/s/AKfycbymebLkAHpQ6xv9V3sUH0_mQxJ5Dz-jE4GeV4zvyW5i8wZfeaIs3a1vlCLUb-m134w/exec'
 };

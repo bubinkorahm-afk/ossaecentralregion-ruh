@@ -302,7 +302,7 @@
       </div>
       <div class="head-actions">
         <button type="button" class="btn btn-outline" onclick="loadAttempts()" title="Refresh attempt records from storage">🔄 Refresh</button>
-        <button type="button" class="btn btn-outline" onclick="openCloudModal()">☁️ Cloud Sync</button>
+        <button type="button" class="btn btn-outline" id="cloudBtn" onclick="openCloudModal()">☁️ Cloud Sync</button>
         <button type="button" class="btn btn-primary" onclick="exportCSV()">📥 Export CSV / Excel</button>
       </div>
     </div>
@@ -455,13 +455,6 @@
       </div>
       <div class="panel-body">
         <div id="fbStatus" class="fb-status"></div>
-        <div style="display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px;">
-          <div class="filter-group" style="flex:1; min-width:220px;">
-            <label for="fbKeyInput">Sheet read key (kept only on this device)</label>
-            <input type="password" id="fbKeyInput" placeholder="Your secret word from the Apps Script" autocomplete="off">
-          </div>
-          <button type="button" class="btn btn-outline" onclick="saveFeedbackKey()">💾 Save key</button>
-        </div>
         <div class="fb-summary" id="fbSummary"></div>
         <div class="filter-panel" style="grid-template-columns:2fr 1fr 1fr; margin-bottom:14px;">
           <div class="filter-group fg-search">
@@ -492,40 +485,7 @@
           <p>Feedback that students send from the “✍️ Write feedback” option in the help chatbot will appear here.</p>
         </div>
 
-        <details class="howto" style="margin-top:14px;">
-          <summary>How to connect a Google Sheet to collect feedback from every student</summary>
-          <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
-            <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a> (for example “OSSAE Feedback”).</li>
-            <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>, delete any code there and paste the script below. Change <code>CHANGE-ME-to-a-secret-word</code> to your own secret word, then click <b>Save</b>.</li>
-            <li>Click <b>Deploy &rarr; New deployment</b>, choose type <b>Web app</b>, set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then <b>Deploy</b> and allow access.</li>
-            <li>Copy the <b>Web app URL</b> (it ends with <code>/exec</code>) and put it in <code>site-config.js</code> as <code>feedbackUrl</code> (or send it to your developer).</li>
-            <li>Enter your secret word in <b>Sheet read key</b> above and click <b>Save key</b>. Only someone with this key can read the feedback, so student phone numbers stay private.</li>
-          </ol>
-          <pre class="code-block">var READ_KEY = 'CHANGE-ME-to-a-secret-word';  // the admin page asks for this key
-
-function doPost(e) {
-  var d = JSON.parse(e.postData.contents);
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sh = ss.getSheetByName('Feedback') || ss.insertSheet('Feedback');
-  if (sh.getLastRow() === 0) {
-    sh.appendRow(['ID', 'Timestamp', 'Name', 'Phone', 'Class', 'Rating', 'Message', 'Page', 'Language']);
-  }
-  sh.appendRow([d.id, d.timestamp, d.name, "'" + (d.phone || ''), d.className, d.rating, String(d.message).slice(0, 1000), d.page, d.lang]);
-  return ContentService.createTextOutput(JSON.stringify({status: 'ok'})).setMimeType(ContentService.MimeType.JSON);
-}
-
-function doGet(e) {
-  if (!e || !e.parameter || e.parameter.key !== READ_KEY) {
-    return ContentService.createTextOutput(JSON.stringify({error: 'unauthorized'})).setMimeType(ContentService.MimeType.JSON);
-  }
-  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Feedback');
-  var rows = sh ? sh.getDataRange().getValues().slice(1) : [];
-  var out = rows.map(function(r) {
-    return {id: r[0], timestamp: r[1], name: r[2], phone: String(r[3]), className: r[4], rating: r[5], message: r[6], page: r[7], lang: r[8]};
-  });
-  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
-}</pre>
-        </details>
+        <p style="margin-top:14px; font-size:.86rem; color:var(--muted);">Feedback is stored in the same Google Sheet as exam results (a “Feedback” tab). Set it up or update it from <a href="#" onclick="openCloudModal(); return false;" style="color:var(--gold); font-weight:700;">☁️ Cloud Sync</a>.</p>
       </div>
     </section>
 
@@ -550,44 +510,109 @@ function doGet(e) {
 
 <!-- Cloud Sync Setup Modal -->
 <div class="modal-overlay" id="cloudModal" role="dialog" aria-modal="true">
-  <div class="modal-box" style="max-width:600px;">
+  <div class="modal-box" style="max-width:640px;">
     <div class="modal-header">
-      <h3>Google Sheets &amp; Cloud Sync</h3>
+      <h3>☁️ Cloud Sync — Google Sheet</h3>
       <button type="button" class="modal-close" onclick="closeCloudModal()" aria-label="Close">&times;</button>
     </div>
     <p style="font-size:.9rem; color:var(--muted); margin:0 0 14px;">
-      Connect a free Google Sheet to receive student exam attempts live from their phones or computers.
+      One Google Sheet stores every student’s exam results and feedback, sent live from their phones or computers. This dashboard reads them back using your secret key.
     </p>
-    <div style="margin-bottom:14px;">
-      <label class="field-label" for="cloudUrlInput">Google Apps Script Web App URL / Webhook</label>
+    <div id="cloudStatus" class="fb-status" style="margin-bottom:14px;">Not checked yet.</div>
+    <div style="margin-bottom:12px;">
+      <label class="field-label" for="cloudUrlInput">Google Apps Script Web App URL</label>
       <input type="url" id="cloudUrlInput" class="field-input" placeholder="https://script.google.com/macros/s/.../exec">
+      <div id="cloudUrlNote" style="font-size:.8rem; color:var(--muted); margin-top:5px;"></div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label class="field-label" for="cloudKeyInput">Secret read key (kept only on this device)</label>
+      <input type="password" id="cloudKeyInput" class="field-input" placeholder="The secret word you set in the Apps Script" autocomplete="off">
     </div>
     <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-      <button type="button" class="btn btn-primary" onclick="saveCloudEndpoint()">Save URL</button>
-      <button type="button" class="btn btn-outline" onclick="testCloudSync()">Test Connection</button>
-      <button type="button" class="btn btn-outline" onclick="syncAllToCloud()">Push All Local Records</button>
+      <button type="button" class="btn btn-primary" onclick="saveCloudEndpoint()">💾 Save &amp; Test</button>
+      <button type="button" class="btn btn-outline" onclick="testCloudSync()">🔌 Test Connection</button>
+      <button type="button" class="btn btn-outline" onclick="syncAllToCloud()">⬆️ Push Records on This Device</button>
     </div>
     <details class="howto">
-      <summary>How to set up a free Google Sheet (1 minute)</summary>
+      <summary>How to set up or update the Google Sheet script</summary>
       <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
-        <li>Create a new spreadsheet in <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a>.</li>
-        <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>.</li>
-        <li>Paste the script below and click <b>Deploy &rarr; New Deployment &rarr; Select type: Web App</b>.</li>
-        <li>Set <b>Who has access</b> to <b>Anyone</b>, then click <b>Deploy</b> and copy the URL here.</li>
+        <li>Open your spreadsheet in Google Sheets (or create one at <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">sheets.new</a>).</li>
+        <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>. <b>Delete all the old code</b>, paste the script below, change <code>CHANGE-ME-to-a-secret-word</code> to your own secret word, and click <b>Save</b>.</li>
+        <li><b>First time:</b> click <b>Deploy &rarr; New deployment</b>, type <b>Web app</b>, <b>Execute as: Me</b>, <b>Who has access: Anyone</b>, then <b>Deploy</b> and allow access.<br>
+            <b>Updating an existing script:</b> click <b>Deploy &rarr; Manage deployments</b> &rarr; ✏️ <b>Edit</b> &rarr; Version: <b>New version</b> &rarr; <b>Deploy</b>. The URL stays the same.</li>
+        <li>Paste the Web app URL above (it ends with <code>/exec</code>), enter your secret word as the read key, and click <b>Save &amp; Test</b>. For students’ results to reach the Sheet, the same URL must also be in <code>site-config.js</code> as <code>sheetUrl</code>.</li>
       </ol>
-      <pre class="code-block">function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["ID", "Timestamp", "Class", "Student Name", "Roll No", "Phone", "Sunday School", "School Code", "Diocese", "Score", "Total", "Percentage", "Status", "Duration"]);
+      <pre class="code-block" id="appsScriptCode">// OSSAE Exam Portal — Google Sheet connector (exam results + feedback)
+var READ_KEY = 'CHANGE-ME-to-a-secret-word';  // the admin page asks for this key
+
+var ATTEMPT_HEADERS = ['ID', 'Timestamp', 'Date', 'Time', 'Class', 'Student Name', 'Roll No', 'Phone',
+  'Sunday School', 'School Code', 'Diocese', 'Score', 'Total', 'Percentage', 'Status', 'Duration'];
+var FEEDBACK_HEADERS = ['ID', 'Timestamp', 'Name', 'Phone', 'Class', 'Rating', 'Message', 'Page', 'Language'];
+
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var d = JSON.parse(e.postData.contents);
+    if (d.type === 'feedback') {
+      sheet_('Feedback', FEEDBACK_HEADERS).appendRow([
+        text_(d.id), text_(d.timestamp), text_(d.name), text_(d.phone), text_(d.className),
+        d.rating || '', text_(String(d.message || '').slice(0, 1000)), text_(d.page), text_(d.lang)
+      ]);
+    } else {
+      var sh = sheet_('Attempts', ATTEMPT_HEADERS);
+      var row = [
+        text_(d.id), text_(d.timestamp), text_(d.dateStr), text_(d.timeStr), text_(d.className),
+        text_(d.studentName), text_(d.rollNumber), text_(d.studentPhone), text_(d.schoolName),
+        text_(d.schoolCode), text_(d.diocese), Number(d.score) || 0, Number(d.totalQuestions) || 0,
+        Number(d.percentage) || 0, text_(d.status), text_(d.durationStr)
+      ];
+      // One row per attempt: update it when the exam finishes or is aborted
+      var found = sh.getRange(1, 1, sh.getLastRow(), 1)
+        .createTextFinder(String(d.id)).matchEntireCell(true).findNext();
+      if (found &amp;&amp; found.getRow() > 1) sh.getRange(found.getRow(), 1, 1, row.length).setValues([row]);
+      else sh.appendRow(row);
+    }
+    return json_({status: 'ok'});
+  } finally {
+    lock.releaseLock();
   }
-  var data = JSON.parse(e.postData.contents);
-  sheet.appendRow([
-    data.id, data.timestamp, data.className, data.studentName,
-    data.rollNumber, data.studentPhone, data.schoolName || '', data.schoolCode, data.diocese,
-    data.score, data.totalQuestions, data.percentage + '%', data.status, data.durationStr
-  ]);
-  return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var p = (e &amp;&amp; e.parameter) || {};
+  if (p.key !== READ_KEY) return json_({error: 'unauthorized'});
+  var isFeedback = p.type === 'feedback';
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(isFeedback ? 'Feedback' : 'Attempts');
+  var rows = sh ? sh.getDataRange().getDisplayValues().slice(1) : [];
+  return json_(rows.map(function(r) {
+    return isFeedback
+      ? {id: r[0], timestamp: r[1], name: r[2], phone: r[3], className: r[4], rating: r[5],
+         message: r[6], page: r[7], lang: r[8]}
+      : {id: r[0], timestamp: r[1], dateStr: r[2], timeStr: r[3], className: r[4], studentName: r[5],
+         rollNumber: r[6], studentPhone: r[7], schoolName: r[8], schoolCode: r[9], diocese: r[10],
+         score: Number(r[11]) || 0, totalQuestions: Number(r[12]) || 0, percentage: Number(r[13]) || 0,
+         status: r[14], durationStr: r[15]};
+  }));
+}
+
+function sheet_(name, headers) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(name) || ss.insertSheet(name);
+  if (sh.getLastRow() === 0) sh.appendRow(headers);
+  return sh;
+}
+
+// Store as plain text; stops "+966..." becoming a number and blocks formula injection
+function text_(v) {
+  v = (v === undefined || v === null) ? '' : String(v);
+  return /^[=+\-@]/.test(v) ? "'" + v : v;
+}
+
+function json_(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }</pre>
+      <button type="button" class="btn btn-outline" style="margin-top:8px;" onclick="copyAppsScript()">📋 Copy script</button>
     </details>
   </div>
 </div>
@@ -681,6 +706,20 @@ function doGet(e) {
 
   // Data Loading & Filtering
   var attemptsData = [];
+  var remoteAttempts = [];
+
+  // Sheet records win, unless the copy on this device is newer
+  function mergeAttempts(local, remote){
+    var map = {};
+    remote.forEach(function(a){ map[a.id] = a; });
+    local.forEach(function(a){
+      if (!a || !a.id) return;
+      var r = map[a.id];
+      if (!r || new Date(a.timestamp || 0) > new Date(r.timestamp || 0)) map[a.id] = Object.assign({}, a, { _src: r ? 'both' : 'device' });
+      else r._src = 'both';
+    });
+    return Object.keys(map).map(function(k){ return map[k]; });
+  }
 
   function getAttempts(){
     try {
@@ -702,9 +741,10 @@ function doGet(e) {
   }
 
   function loadAttempts(){
-    attemptsData = getAttempts();
+    attemptsData = mergeAttempts(getAttempts(), remoteAttempts);
     renderStats();
     renderTable();
+    if (typeof fetchCloudAttempts === 'function') fetchCloudAttempts(false);
   }
   window.loadAttempts = loadAttempts;
 
@@ -1050,13 +1090,15 @@ function doGet(e) {
   // Row Actions: Delete
   window.deleteAttempt = function(id){
     if (!confirm('Are you sure you want to delete this candidate attempt?')) return;
-    var updated = attemptsData.filter(function(a){ return a.id !== id; });
+    var item = attemptsData.find(function(a){ return a.id === id; });
+    var updated = getAttempts().filter(function(a){ return a.id !== id; });
     saveAttempts(updated);
+    if (item && item._src !== 'device') alert('Removed from this device. This record is also in the Google Sheet — delete its row in the Sheet to remove it everywhere.');
   };
 
   window.clearAllAttempts = function(){
     if (!attemptsData.length) return;
-    if (!confirm('WARNING: Are you sure you want to clear ALL attempt records? This action cannot be undone.')) return;
+    if (!confirm('WARNING: Clear ALL attempt records saved on this device? This cannot be undone. Records in the Google Sheet are not affected.')) return;
     saveAttempts([]);
   };
 
@@ -1277,10 +1319,90 @@ function doGet(e) {
     e.target.value = '';
   };
 
-  // Cloud Sync Settings
+  // ---------- Cloud Sync (Google Sheet) ----------
+  function cloudUrl(){
+    var cfg = window.SS_CONFIG || {};
+    var u = String(cfg.sheetUrl || cfg.feedbackUrl || '').trim();
+    if (!u){ try { u = (localStorage.getItem('ss_cloud_endpoint') || '').trim(); } catch(e){} }
+    return /^https:\/\//.test(u) ? u : '';
+  }
+  function cloudKey(){
+    try { return localStorage.getItem('ss_sheet_key') || localStorage.getItem('ss_feedback_key') || ''; } catch(e){ return ''; }
+  }
+  // Shared with the Student Feedback section below
+  window.SSSheet = { url: cloudUrl, key: cloudKey };
+
+  // GET rows from the Sheet. Resolves { ok:true, rows } or { ok:false, reason:'nourl'|'key'|'script'|'network' }
+  function cloudRead(type){
+    var url = cloudUrl();
+    if (!url) return Promise.resolve({ ok:false, reason:'nourl' });
+    var q = 'type=' + encodeURIComponent(type) + '&key=' + encodeURIComponent(cloudKey()) + '&t=' + Date.now();
+    return fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + q)
+      .then(function(r){ return r.text(); })
+      .then(function(txt){
+        var data;
+        try { data = JSON.parse(txt); } catch(e){ return { ok:false, reason:'script' }; }
+        if (Array.isArray(data)) return { ok:true, rows:data };
+        if (data && data.error === 'unauthorized') return { ok:false, reason:'key' };
+        return { ok:false, reason:'script' };
+      })
+      .catch(function(){ return { ok:false, reason:'network' }; });
+  }
+  window.SSSheet.read = cloudRead;
+
+  var CLOUD_MSG = {
+    checking:['',   'Checking connection to the Google Sheet…'],
+    ok:      ['ok',   '✅ Connected — exam results are being read from the Google Sheet.'],
+    nourl:   ['warn', '⚠️ No Google Sheet connected. Records are only from this device.'],
+    key:     ['warn', '🔑 Connected, but the secret read key is missing or wrong. Enter the secret word from your Apps Script.'],
+    script:  ['warn', '⚠️ The Sheet script needs updating. Paste the latest script from “How to set up or update” below and deploy a New version.'],
+    network: ['warn', '⚠️ Could not read from the Google Sheet. Make sure the latest script below is deployed (as a New version, access “Anyone”), then check your internet and try again.']
+  };
+  var cloudState = 'checking';
+  var lastCloudFetch = 0;
+
+  function showCloudState(state, extra){
+    cloudState = state;
+    if (state === 'checking' && !cloudUrl()) state = 'nourl';
+    var m = CLOUD_MSG[state] || CLOUD_MSG.network;
+    var el = document.getElementById('cloudStatus');
+    if (el){ el.className = 'fb-status' + (m[0] ? ' ' + m[0] : ''); el.textContent = m[1] + (extra ? ' ' + extra : ''); }
+    var btn = document.getElementById('cloudBtn');
+    if (btn) btn.textContent = state === 'ok' ? '☁️ Cloud Sync · Connected' : (state === 'nourl' ? '☁️ Cloud Sync' : '☁️ Cloud Sync · Check');
+  }
+
+  function fetchCloudAttempts(force){
+    if (!force && Date.now() - lastCloudFetch < 30000) return Promise.resolve();
+    lastCloudFetch = Date.now();
+    return cloudRead('attempts').then(function(res){
+      if (res.ok){
+        remoteAttempts = res.rows.filter(function(a){ return a && a.id; })
+          .map(function(a){ a._src = 'sheet'; return a; });
+        showCloudState('ok', '(' + remoteAttempts.length + ' records in the Sheet)');
+      } else {
+        showCloudState(res.reason);
+      }
+      attemptsData = mergeAttempts(getAttempts(), remoteAttempts);
+      renderStats();
+      renderTable();
+    });
+  }
+  window.fetchCloudAttempts = fetchCloudAttempts;
+
   window.openCloudModal = function(){
-    var currentUrl = localStorage.getItem('ss_cloud_endpoint') || '';
-    document.getElementById('cloudUrlInput').value = currentUrl;
+    var cfg = window.SS_CONFIG || {};
+    var input = document.getElementById('cloudUrlInput');
+    input.value = cloudUrl();
+    var note = document.getElementById('cloudUrlNote');
+    if (cfg.sheetUrl){
+      input.readOnly = true;
+      note.textContent = 'Set in site-config.js — students’ results and feedback are sent to this address.';
+    } else {
+      input.readOnly = false;
+      note.textContent = 'Not set in site-config.js yet, so students’ phones cannot send results. Saving here only connects this dashboard.';
+    }
+    document.getElementById('cloudKeyInput').value = cloudKey();
+    showCloudState(cloudState);
     document.getElementById('cloudModal').classList.add('active');
   };
 
@@ -1289,71 +1411,50 @@ function doGet(e) {
   };
 
   window.saveCloudEndpoint = function(){
-    var url = document.getElementById('cloudUrlInput').value.trim();
-    localStorage.setItem('ss_cloud_endpoint', url);
-    alert('Cloud endpoint saved!');
+    var input = document.getElementById('cloudUrlInput');
+    try {
+      if (!input.readOnly) localStorage.setItem('ss_cloud_endpoint', input.value.trim());
+      var k = document.getElementById('cloudKeyInput').value.trim();
+      if (k) localStorage.setItem('ss_sheet_key', k); else localStorage.removeItem('ss_sheet_key');
+      localStorage.removeItem('ss_feedback_key');
+    } catch(e){}
+    window.testCloudSync();
   };
 
   window.testCloudSync = function(){
-    var url = document.getElementById('cloudUrlInput').value.trim();
-    if (!url){
-      alert('Please enter a valid Google Apps Script or Webhook URL first.');
-      return;
-    }
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: "test_" + Date.now(),
-        timestamp: new Date().toISOString(),
-        className: "Test Connection",
-        studentName: "Admin Test",
-        rollNumber: "TEST-01",
-        studentPhone: "+00 000000",
-        schoolName: "St. Thomas Sunday School",
-        schoolCode: "260310",
-        diocese: "Thrissur Diocese",
-        score: 30,
-        totalQuestions: 30,
-        percentage: 100,
-        status: "PASS",
-        durationStr: "0m 10s"
-      }),
-      mode: 'no-cors'
-    }).then(function(){
-      alert('Test request dispatched successfully! Check your Google Sheet to confirm the row was appended.');
-    }).catch(function(err){
-      alert('Error testing connection: ' + err.message);
+    var el = document.getElementById('cloudStatus');
+    if (el){ el.className = 'fb-status'; el.textContent = 'Testing connection…'; }
+    fetchCloudAttempts(true).then(function(){
+      if (typeof window.loadFeedback === 'function') window.loadFeedback();
     });
   };
 
   window.syncAllToCloud = function(){
-    var url = document.getElementById('cloudUrlInput').value.trim();
-    if (!url){
-      alert('Please enter a valid Google Apps Script or Webhook URL first.');
-      return;
-    }
-    var list = getAttempts();
-    if (!list.length){
-      alert('No attempts to push.');
-      return;
-    }
-
-    if (!confirm('Push all ' + list.length + ' local attempts to your cloud Google Sheet?')) return;
-
-    var sent = 0;
-    list.forEach(function(attempt){
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(attempt),
-        mode: 'no-cors'
-      }).then(function(){ sent++; });
+    var url = cloudUrl();
+    if (!url){ alert('Please connect a Google Sheet URL first.'); return; }
+    var list = getAttempts().filter(function(a){ return a && a.id && String(a.id).indexOf('att_sample') !== 0; });
+    if (!list.length){ alert('There are no records saved on this device to push (sample records are skipped).'); return; }
+    if (!confirm('Send ' + list.length + ' record(s) saved on this device to the Google Sheet? Records already in the Sheet are updated, not duplicated.')) return;
+    var done = 0;
+    list.forEach(function(attempt, i){
+      setTimeout(function(){
+        var copy = Object.assign({}, attempt); delete copy._src;
+        fetch(url, { method:'POST', mode:'no-cors', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify(copy) })
+          .catch(function(){})
+          .then(function(){
+            done++;
+            if (done === list.length){
+              alert('Sent ' + list.length + ' record(s). Refreshing from the Sheet…');
+              setTimeout(function(){ fetchCloudAttempts(true); }, 1500);
+            }
+          });
+      }, i * 250);
     });
+  };
 
-    setTimeout(function(){
-      alert('Dispatched ' + list.length + ' records to Google Sheet.');
-    }, 1000);
+  window.copyAppsScript = function(){
+    var txt = document.getElementById('appsScriptCode').textContent;
+    navigator.clipboard.writeText(txt).then(function(){ alert('Script copied. Paste it into Apps Script.'); });
   };
 
   // Theme support
@@ -1398,7 +1499,7 @@ function doGet(e) {
   checkSessionAuth();
 })();
 </script>
-<script src="site-config.js?v=1"></script>
+<script src="site-config.js?v=2"></script>
 <script>
 (function(){
   "use strict";
@@ -1407,10 +1508,6 @@ function doGet(e) {
 
   function esc(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
 
-  function feedbackUrl(){
-    var u = String((window.SS_CONFIG || {}).feedbackUrl || '').trim();
-    return /^https:\/\//.test(u) ? u : '';
-  }
 
   function localFeedback(){
     try { var l = JSON.parse(localStorage.getItem('ss_feedback') || '[]'); return Array.isArray(l) ? l : []; } catch(e){ return []; }
@@ -1425,26 +1522,19 @@ function doGet(e) {
   }
 
   window.loadFeedback = function(){
-    var url = feedbackUrl();
     var local = localFeedback();
-    if (!url){
+    feedbackData = merge([], local);
+    if (!window.SSSheet || !window.SSSheet.url()){
       remoteState = 'none';
-      feedbackData = merge([], local);
       render();
       return;
     }
-    feedbackData = merge([], local);
     render('loading');
-    var key = '';
-    try { key = localStorage.getItem('ss_feedback_key') || ''; } catch(e){}
-    fetch(url + (url.indexOf('?') === -1 ? '?' : '&') + 'key=' + encodeURIComponent(key) + '&t=' + Date.now())
-      .then(function(r){ return r.json(); })
-      .then(function(rows){
-        remoteState = Array.isArray(rows) ? 'ok' : (rows && rows.error === 'unauthorized' ? 'key' : 'error');
-        feedbackData = merge(Array.isArray(rows) ? rows : [], local);
-        render();
-      })
-      .catch(function(){ remoteState = 'error'; render(); });
+    window.SSSheet.read('feedback').then(function(res){
+      remoteState = res.ok ? 'ok' : (res.reason === 'key' ? 'key' : 'error');
+      feedbackData = merge(res.ok ? res.rows : [], local);
+      render();
+    });
   };
 
   function filtered(){
@@ -1481,11 +1571,11 @@ function doGet(e) {
     } else if (remoteState === 'ok'){
       status.className = 'fb-status ok'; status.textContent = '✅ Connected to Google Sheet — showing feedback from all students.';
     } else if (remoteState === 'key'){
-      status.className = 'fb-status warn'; status.textContent = '🔑 The Google Sheet needs the correct read key. Enter the secret word from your Apps Script in “Sheet read key” and click Save key. Showing feedback saved on this device only.';
+      status.className = 'fb-status warn'; status.textContent = '🔑 The Google Sheet needs the correct secret read key. Enter it in ☁️ Cloud Sync. Showing feedback saved on this device only.';
     } else if (remoteState === 'error'){
-      status.className = 'fb-status warn'; status.textContent = '⚠️ Could not load feedback from the Google Sheet. Check the feedbackUrl in site-config.js and that the script is deployed with access “Anyone”. Showing feedback saved on this device only.';
+      status.className = 'fb-status warn'; status.textContent = '⚠️ Could not load feedback from the Google Sheet — the Sheet script may need updating (see ☁️ Cloud Sync). Showing feedback saved on this device only.';
     } else {
-      status.className = 'fb-status warn'; status.textContent = '⚠️ Google Sheet not connected yet — only feedback written on this device is shown. Follow “How to connect a Google Sheet” below to collect feedback from every student.';
+      status.className = 'fb-status warn'; status.textContent = '⚠️ Google Sheet not connected yet — only feedback written on this device is shown. Connect it from ☁️ Cloud Sync.';
     }
 
     var all = feedbackData;
@@ -1516,12 +1606,6 @@ function doGet(e) {
     });
   }
 
-  window.saveFeedbackKey = function(){
-    var v = document.getElementById('fbKeyInput').value.trim();
-    try { if (v) localStorage.setItem('ss_feedback_key', v); else localStorage.removeItem('ss_feedback_key'); } catch(e){}
-    window.loadFeedback();
-  };
-  try { document.getElementById('fbKeyInput').value = localStorage.getItem('ss_feedback_key') || ''; } catch(e){}
 
   window.exportFeedbackCSV = function(){
     var list = filtered();
