@@ -536,14 +536,21 @@
     <details class="howto">
       <summary>How to set up or update the Google Sheet script</summary>
       <ol style="padding-left:18px; margin:10px 0 6px; line-height:1.6;">
-        <li>Open your spreadsheet in Google Sheets (or create one at <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">sheets.new</a>).</li>
-        <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b>. <b>Delete all the old code</b>, paste the script below, change <code>CHANGE-ME-to-a-secret-word</code> to your own secret word, and click <b>Save</b>.</li>
+        <li>Open your spreadsheet in Google Sheets (or create one at <a href="https://sheets.new" target="_blank" rel="noopener" style="color:var(--gold);">sheets.new</a>). Copy its ID from the address bar — the long part between <code>/d/</code> and <code>/edit</code>.</li>
+        <li>Click <b>Extensions</b> &rarr; <b>Apps Script</b> (or open your project at script.google.com). <b>Delete all the old code</b> and paste the script below. Then change <b>two lines</b> at the top:<br>
+            • <code>READ_KEY</code>: replace <code>CHANGE-ME-to-a-secret-word</code> with your own secret word (keep the quote marks).<br>
+            • <code>SHEET_ID</code>: paste your Sheet ID between the quote marks (needed for a project made at script.google.com).<br>
+            Click <b>💾 Save</b> (Ctrl + S) and wait until it has saved.</li>
         <li><b>First time:</b> click <b>Deploy &rarr; New deployment</b>, type <b>Web app</b>, <b>Execute as: Me</b>, <b>Who has access: Anyone</b>, then <b>Deploy</b> and allow access.<br>
             <b>Updating an existing script:</b> click <b>Deploy &rarr; Manage deployments</b> &rarr; ✏️ <b>Edit</b> &rarr; Version: <b>New version</b> &rarr; <b>Deploy</b>. The URL stays the same.</li>
         <li>Paste the Web app URL above (it ends with <code>/exec</code>), enter your secret word as the read key, and click <b>Save &amp; Test</b>. For students’ results to reach the Sheet, the same URL must also be in <code>site-config.js</code> as <code>sheetUrl</code>.</li>
       </ol>
       <pre class="code-block" id="appsScriptCode">// OSSAE Exam Portal — Google Sheet connector (exam results + feedback)
-var READ_KEY = 'CHANGE-ME-to-a-secret-word';  // the admin page asks for this key
+var READ_KEY = 'CHANGE-ME-to-a-secret-word';  // your secret word — the admin page asks for it
+
+// Only needed if this is a standalone project (created at script.google.com):
+// paste the ID from your Google Sheet's address, the long part between /d/ and /edit
+var SHEET_ID = '';
 
 var ATTEMPT_HEADERS = ['ID', 'Timestamp', 'Date', 'Time', 'Class', 'Student Name', 'Roll No', 'Phone',
   'Sunday School', 'School Code', 'Diocese', 'Score', 'Total', 'Percentage', 'Status', 'Duration'];
@@ -583,7 +590,7 @@ function doGet(e) {
   var p = (e &amp;&amp; e.parameter) || {};
   if (p.key !== READ_KEY) return json_({error: 'unauthorized'});
   var isFeedback = p.type === 'feedback';
-  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(isFeedback ? 'Feedback' : 'Attempts');
+  var sh = book_().getSheetByName(isFeedback ? 'Feedback' : 'Attempts');
   var rows = sh ? sh.getDataRange().getDisplayValues().slice(1) : [];
   return json_(rows.map(function(r) {
     return isFeedback
@@ -596,8 +603,15 @@ function doGet(e) {
   }));
 }
 
-function sheet_(name, headers) {
+function book_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (ss) return ss;
+  if (!SHEET_ID) throw new Error('No Google Sheet linked: set SHEET_ID at the top of the script.');
+  return SpreadsheetApp.openById(SHEET_ID);
+}
+
+function sheet_(name, headers) {
+  var ss = book_();
   var sh = ss.getSheetByName(name) || ss.insertSheet(name);
   if (sh.getLastRow() === 0) sh.appendRow(headers);
   return sh;
