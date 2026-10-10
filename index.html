@@ -220,16 +220,6 @@
       font-variant-numeric:tabular-nums;
     }
     .pill.strong{ color:var(--c); background:color-mix(in srgb, var(--c) 10%, var(--surface)); border-color:color-mix(in srgb, var(--c) 30%, transparent); }
-    .class-card.study{
-      background:linear-gradient(160deg, color-mix(in srgb, var(--c) 8%, var(--surface)), var(--surface) 60%);
-      border:1.5px dashed color-mix(in srgb, var(--c) 45%, var(--border));
-    }
-    .class-card.study .numeral{ font-size:1.6rem; }
-    .class-card.study .cc-top{ padding-right:64px; }
-    .new-badge{
-      position:absolute; top:14px; right:14px; font-size:.72rem; font-weight:700; letter-spacing:.06em;
-      text-transform:uppercase; padding:3px 10px; border-radius:999px; background:var(--gold); color:#1a1405;
-    }
     .cc-cta{
       margin-top:auto; display:flex; align-items:center; justify-content:space-between;
       padding-top:12px; border-top:1px solid var(--border); font-size:.9rem; font-weight:700; color:var(--c);
@@ -497,13 +487,6 @@
       ml:{ qBank:'ചോദ്യങ്ങൾ', perExam:'ചോദ്യം', mins:'മിനിറ്റ്', start:'പരീക്ഷ തുടങ്ങുക', both:'EN · ML' }
     };
 
-    var HELP12 = {
-      en:{ badge:'New', title:'Class XII Study Help', sub:'Vedapraveen Diploma · Key points & answers',
-           ch:'38 chapters', qa:'275 Q&A', cta:'Open study help' },
-      ml:{ badge:'പുതിയത്', title:'ക്ലാസ്സ് XII പഠനസഹായി', sub:'വേദപ്രവീൺ ഡിപ്ലോമ · പ്രധാന പോയിന്റുകളും ഉത്തരങ്ങളും',
-           ch:'38 അധ്യായങ്ങൾ', qa:'275 ചോദ്യോത്തരങ്ങൾ', cta:'പഠനസഹായി തുറക്കുക' }
-    };
-
     var currentLang = 'en';
     try { currentLang = localStorage.getItem('ss_lang') === 'ml' ? 'ml' : 'en'; } catch(e){}
 
@@ -535,29 +518,6 @@
         (c.id <= 9 ? junior : senior).appendChild(a);
       });
 
-      // Class XII study help (Vedapraveen Diploma)
-      var h = HELP12[currentLang];
-      var help = document.createElement('a');
-      help.className = 'class-card study';
-      help.href = 'class12-help.html';
-      help.style.setProperty('--c', 'var(--c12)');
-      help.innerHTML =
-        '<span class="new-badge"></span>' +
-        '<div class="cc-top">' +
-          '<span class="numeral" aria-hidden="true">📖</span>' +
-          '<div><div class="cc-title"></div><div class="cc-sub"></div></div>' +
-        '</div>' +
-        '<div class="cc-meta">' +
-          '<span class="pill strong"></span><span class="pill"></span><span class="pill">' + s.both + '</span>' +
-        '</div>' +
-        '<div class="cc-cta"><span></span><span class="arrow" aria-hidden="true">&rarr;</span></div>';
-      help.querySelector('.new-badge').textContent = h.badge;
-      help.querySelector('.cc-title').textContent = h.title;
-      help.querySelector('.cc-sub').textContent = h.sub;
-      help.querySelectorAll('.cc-meta .pill')[0].textContent = h.ch;
-      help.querySelectorAll('.cc-meta .pill')[1].textContent = h.qa;
-      help.querySelector('.cc-cta span').textContent = h.cta;
-      senior.appendChild(help);
       var total = CLASSES.reduce(function(sum, c){ return sum + c.q; }, 0);
       document.getElementById('statQuestions').textContent = total.toLocaleString('en-US');
     }
