@@ -74,8 +74,8 @@
       </div>
       <div class="field-row">
         <div class="field">
-          <label for="schoolCode" data-t="lblSchoolCode">Sunday School Code (eg: 123456)</label>
-          <input type="text" id="schoolCode" inputmode="numeric" placeholder="e.g. 123456" autocomplete="off">
+          <label for="schoolCode" data-t="lblSchoolCode">Sunday School Code</label>
+          <input type="text" id="schoolCode" inputmode="numeric" placeholder="Enter your school code" autocomplete="off">
           <div id="schoolCodeError" data-t="codeErrorInline">Wrong code. Please contact your Sunday school HM.</div>
         </div>
         <div class="field">
@@ -252,7 +252,7 @@ var UI = {
     lblName:"Student Name",
     lblRoll:"Roll Number",
     lblPhone:"Phone Number",
-    lblSchoolCode:"Sunday School Code (eg: 123456)",
+    lblSchoolCode:"Sunday School Code",
     lblDiocese:"Diocese",
     lblSchoolName:"Sunday School Name",
     secStudent:"Student Details",
@@ -312,7 +312,7 @@ var UI = {
     lblName:"വിദ്യാർത്ഥിയുടെ പേര്",
     lblRoll:"റോൾ നമ്പർ",
     lblPhone:"ഫോൺ നമ്പർ",
-    lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ് (eg: 123456)",
+    lblSchoolCode:"സൺഡേ സ്കൂൾ കോഡ്",
     lblDiocese:"ഭദ്രാസനം",
     lblSchoolName:"സൺഡേ സ്കൂളിന്റെ പേര്",
     secStudent:"വിദ്യാർത്ഥിയുടെ വിവരങ്ങൾ",
@@ -605,7 +605,7 @@ function applyStaticText(){
   var scName = document.getElementById('schoolName');
   if (scName) scName.placeholder = (lang==='en') ? "e.g. St. Thomas Sunday School" : "ഉദാ: സെന്റ് തോമസ് സൺഡേ സ്കൂൾ";
   var scCode = document.getElementById('schoolCode');
-  if (scCode) scCode.placeholder = (lang==='en') ? "e.g. 123456" : "ഉദാ: 123456";
+  if (scCode) scCode.placeholder = (lang==='en') ? "Enter your school code" : "കോഡ് നൽകുക";
   var dioSel = document.getElementById('dioceseSelect');
   if (dioSel && dioSel.options[0]) dioSel.options[0].textContent = (lang==='en') ? "Select your Diocese" : "ഭദ്രാസനം തിരഞ്ഞെടുക്കുക";
   var lt = document.getElementById('langToggle'); if (lt) lt.textContent = (lang==='en') ? "മലയാളം" : "English";
@@ -628,7 +628,7 @@ var lt = document.getElementById('langToggle'); if (lt) lt.addEventListener('cli
 });
 
 // Setup Form State
-var VALID_CODES = ["123456"];
+var VALID_CODES = ["123456", "260307", "260308", "260309", "260310", "260311", "260312"];
 
 var nameInput = document.getElementById('studentName');
 var rollInput = document.getElementById('rollNumber');
@@ -1294,5 +1294,38 @@ applyStaticText();
 </script>
 <script src="site-config.js?v=6"></script>
 <script src="chatbot.js?v=4" defer></script>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<style>
+#scrollTopBtn{
+  position:fixed; bottom:24px; right:22px; z-index:9999;
+  width:46px; height:46px; border-radius:50%;
+  background:var(--gold,#b8862b); color:#fff;
+  border:none; cursor:pointer;
+  font-size:1.5rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.22);
+  opacity:0; transform:translateY(12px);
+  transition:opacity .25s ease, transform .25s ease, background .18s ease;
+  pointer-events:none;
+}
+#scrollTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+#scrollTopBtn:hover{background:var(--navy,#14213d);}
+@media (max-width:480px){#scrollTopBtn{bottom:16px;right:14px;width:40px;height:40px;font-size:1.25rem;}}
+</style>
+<script>
+(function(){
+  var btn = document.getElementById('scrollTopBtn');
+  if(!btn) return;
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 220){
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, {passive:true});
+})();
+</script>
 </body>
 </html>

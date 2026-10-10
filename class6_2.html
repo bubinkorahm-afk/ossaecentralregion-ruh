@@ -1140,5 +1140,38 @@ if (btnTranslate) {
 applyStaticText();
 })();
 </script>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<style>
+#scrollTopBtn{
+  position:fixed; bottom:24px; right:22px; z-index:9999;
+  width:46px; height:46px; border-radius:50%;
+  background:var(--gold,#b8862b); color:#fff;
+  border:none; cursor:pointer;
+  font-size:1.5rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.22);
+  opacity:0; transform:translateY(12px);
+  transition:opacity .25s ease, transform .25s ease, background .18s ease;
+  pointer-events:none;
+}
+#scrollTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+#scrollTopBtn:hover{background:var(--navy,#14213d);}
+@media (max-width:480px){#scrollTopBtn{bottom:16px;right:14px;width:40px;height:40px;font-size:1.25rem;}}
+</style>
+<script>
+(function(){
+  var btn = document.getElementById('scrollTopBtn');
+  if(!btn) return;
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 220){
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }, {passive:true});
+})();
+</script>
 </body>
 </html>
