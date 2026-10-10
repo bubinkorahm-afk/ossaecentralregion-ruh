@@ -108,6 +108,13 @@
       link:{ href:'support.html', en:'▶ Open tutorial page', ml:'▶ ട്യൂട്ടോറിയൽ പേജ് തുറക്കുക' },
       k:['tutorial','video','guide','help','procedure','instructions','ട്യൂട്ടോറിയൽ','വീഡിയോ','സഹായ'] },
 
+    { id:'study12',
+      q:{ en:'Is there study help for Class XII?', ml:'ക്ലാസ്സ് XII-ന് പഠനസഹായി ഉണ്ടോ?' },
+      a:{ en:'Yes! The Class XII Study Help (Vedapraveen Diploma) has key points, questions with answers and think-and-answer questions for all 38 chapters, in English and Malayalam. Turn on Practice mode to hide answers and test yourself.',
+          ml:'ഉണ്ട്! ക്ലാസ്സ് XII പഠനസഹായിയിൽ (വേദപ്രവീൺ ഡിപ്ലോമ) 38 അധ്യായങ്ങളുടെയും പ്രധാന പോയിന്റുകളും ചോദ്യോത്തരങ്ങളും ചിന്തിച്ച് ഉത്തരം എഴുതേണ്ട ചോദ്യങ്ങളും ഇംഗ്ലീഷിലും മലയാളത്തിലും ഉണ്ട്. ഉത്തരങ്ങൾ മറച്ച് സ്വയം പരീക്ഷിക്കാൻ "പരിശീലന മോഡ്" ഓണാക്കുക.' },
+      link:{ href:'class12-help.html', en:'📖 Open Class XII Study Help', ml:'📖 ക്ലാസ്സ് XII പഠനസഹായി തുറക്കുക' },
+      k:['study','notes','material','key points','vedapraveen','diploma','class 12','class xii','12th','textbook','പഠനസഹായി','നോട്ട്','വേദപ്രവീൺ','ഡിപ്ലോമ','പാഠപുസ്തക'] },
+
     { id:'contact',
       q:{ en:'Who can I contact for help?', ml:'സഹായത്തിന് ആരെ ബന്ധപ്പെടാം?' },
       a:{ en:'For the Sunday School code, results or anything about your exam, please contact your Sunday School HM or class teacher.',
