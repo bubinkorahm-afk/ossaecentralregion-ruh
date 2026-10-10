@@ -28,6 +28,35 @@
   .help-txt small{ font-size:.82rem; color:#c8cfe0; line-height:1.4; margin-top:2px; }
   .help-go{ flex:none; padding:8px 14px; border-radius:999px; background:#e0b25a; color:#1a1405; font-weight:700; font-size:.86rem; white-space:nowrap; position:relative; z-index:1; }
   .help-banner.compact{ margin:4px 0 10px; }
+  /* Stronger highlight */
+  .help-banner.hl{ animation:helpGlow 2.4s ease-in-out infinite; }
+  @keyframes helpGlow{
+    0%,100%{ box-shadow:0 12px 24px -16px rgba(20,33,61,.9), 0 0 0 0 rgba(224,178,90,.55); }
+    50%{ box-shadow:0 12px 24px -16px rgba(20,33,61,.9), 0 0 0 7px rgba(224,178,90,0); }
+  }
+  .help-new{ position:absolute; top:-1px; left:16px; z-index:2; font-size:.66rem; font-weight:800; letter-spacing:.08em;
+    text-transform:uppercase; padding:2px 9px; border-radius:0 0 8px 8px; background:#e0b25a; color:#1a1405; }
+  .help-banner.hl{ padding-top:20px; }
+  /* What's new pop-up */
+  #helpPromoModal .modal-box{ max-width:440px; padding:0; overflow:hidden; text-align:left; }
+  .promo-top{ background:linear-gradient(135deg,#14213d,#1f3160); color:#fff; padding:22px 22px 18px; border-bottom:3px solid #e0b25a; position:relative; }
+  .promo-badge{ display:inline-block; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; padding:3px 10px; border-radius:999px; background:#e0b25a; color:#1a1405; }
+  .promo-top h3{ font-family:'Cormorant Garamond',Georgia,serif; color:#fff !important; font-size:1.65rem; line-height:1.2; margin:10px 0 4px; }
+  .promo-top p{ color:#c8cfe0 !important; margin:0 !important; font-size:.9rem; }
+  .promo-ic{ position:absolute; right:18px; top:16px; font-size:2.4rem; }
+  .promo-body{ padding:16px 22px 20px; }
+  .promo-list{ list-style:none; margin:0 0 14px; padding:0; display:grid; gap:8px; }
+  .promo-list li{ display:flex; gap:10px; font-size:.92rem; color:var(--ink); }
+  .promo-list li span:first-child{ flex:none; }
+  .promo-hide{ display:flex; align-items:center; gap:8px; font-size:.84rem; color:var(--muted); margin:0 0 14px; cursor:pointer; }
+  .promo-hide input{ width:16px; height:16px; accent-color:#b8862b; }
+  .promo-actions{ display:flex; gap:10px; }
+  .promo-actions a, .promo-actions button{ flex:1; min-height:46px; border-radius:12px; font-weight:700; font-size:.92rem; line-height:1.2; font-family:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center; text-decoration:none; }
+  .promo-open{ background:#14213d; color:#fff; border:none; }
+  :root[data-theme="dark"] .promo-open{ background:#e0b25a; color:#1a1405; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .promo-open{ background:#e0b25a; color:#1a1405; } }
+  .promo-later{ background:var(--surface-2); color:var(--ink); border:1.5px solid var(--border); }
+  @media (prefers-reduced-motion: reduce){ .help-banner.hl{ animation:none; } }
   @media (max-width:440px){ .help-go{ display:none; } }
   @media (prefers-reduced-motion: reduce){ .help-banner::after{ animation:none; display:none; } }
   :root[data-theme="dark"]{ --accent:#d8b4fe; }
@@ -55,7 +84,8 @@
 
     <!-- Setup Screen -->
   <section class="card setup" id="screenSetup">
-    <a class="help-banner" href="class12-help.html" target="_blank" rel="noopener">
+    <a class="help-banner hl" href="class12-help.html" target="_blank" rel="noopener">
+      <span class="help-new" data-t="helpNew">New</span>
       <span class="help-ic" aria-hidden="true">📖</span>
       <span class="help-txt"><strong data-t="helpTitle">Exam Help — Class XII Study Help</strong><small data-t="helpSub">Key points &amp; answers for all 38 chapters before you start</small></span>
       <span class="help-go" data-t="helpGo">Open ↗</span>
@@ -255,6 +285,31 @@
   </div>
 </div>
 
+<!-- What's new: Exam Help pop-up -->
+<div class="modal-overlay" id="helpPromoModal" role="dialog" aria-modal="true" aria-labelledby="helpPromoTitle">
+  <div class="modal-box">
+    <div class="promo-top">
+      <span class="promo-ic" aria-hidden="true">📖</span>
+      <span class="promo-badge" data-t="promoBadge">✨ New update</span>
+      <h3 id="helpPromoTitle" data-t="promoTitle">Exam Help is here!</h3>
+      <p data-t="promoSub">Class XII Study Help — Vedapraveen Diploma</p>
+    </div>
+    <div class="promo-body">
+      <ul class="promo-list">
+        <li><span>📚</span><span data-t="promo1">Key points for all 38 chapters</span></li>
+        <li><span>✅</span><span data-t="promo2">Questions with answers, including 2025 exam questions</span></li>
+        <li><span>🔁</span><span data-t="promo3">Practice mode to hide answers and test yourself</span></li>
+        <li><span>🌐</span><span data-t="promo4">In English and Malayalam</span></li>
+      </ul>
+      <label class="promo-hide"><input type="checkbox" id="helpPromoHide"><span data-t="promoHide">Don't show this again</span></label>
+      <div class="promo-actions">
+        <button type="button" class="promo-later" id="helpPromoLater" data-t="promoLater">Maybe later</button>
+        <a class="promo-open" id="helpPromoOpen" href="class12-help.html" target="_blank" rel="noopener" data-t="promoOpen">Open Exam Help ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Ready for Quiz Confirmation Modal -->
 <div class="modal-overlay" id="startModal" role="dialog" aria-modal="true" aria-labelledby="startModalTitle">
   <div class="modal-box" style="text-align:center; max-width:440px;">
@@ -289,6 +344,17 @@ var UI = {
     helpResultTitle:"Revise with Exam Help",
     helpResultSub:"Study the chapters you missed — key points and answers",
     helpGo:"Open ↗",
+    helpNew:"New",
+    promoBadge:"✨ New update",
+    promoTitle:"Exam Help is here!",
+    promoSub:"Class XII Study Help — Vedapraveen Diploma",
+    promo1:"Key points for all 38 chapters",
+    promo2:"Questions with answers, including 2025 exam questions",
+    promo3:"Practice mode to hide answers and test yourself",
+    promo4:"In English and Malayalam",
+    promoHide:"Don't show this again",
+    promoLater:"Maybe later",
+    promoOpen:"Open Exam Help ↗",
     secStudent:"Student Details",
     secSchool:"Sunday School Details",
     setupEyebrow:"Candidate Registration",
@@ -353,6 +419,17 @@ var UI = {
     helpResultTitle:"പരീക്ഷാ സഹായിയിൽ ആവർത്തിച്ച് പഠിക്കുക",
     helpResultSub:"തെറ്റിയ അധ്യായങ്ങൾ വീണ്ടും പഠിക്കുക — പ്രധാന പോയിന്റുകളും ഉത്തരങ്ങളും",
     helpGo:"തുറക്കുക ↗",
+    helpNew:"പുതിയത്",
+    promoBadge:"✨ പുതിയ അപ്ഡേറ്റ്",
+    promoTitle:"പരീക്ഷാ സഹായി എത്തി!",
+    promoSub:"ക്ലാസ്സ് XII പഠനസഹായി — വേദപ്രവീൺ ഡിപ്ലോമ",
+    promo1:"38 അധ്യായങ്ങളുടെയും പ്രധാന പോയിന്റുകൾ",
+    promo2:"2025 പരീക്ഷയിലെ ചോദ്യങ്ങൾ ഉൾപ്പെടെ ചോദ്യോത്തരങ്ങൾ",
+    promo3:"ഉത്തരങ്ങൾ മറച്ച് സ്വയം പരീക്ഷിക്കാൻ പരിശീലന മോഡ്",
+    promo4:"ഇംഗ്ലീഷിലും മലയാളത്തിലും",
+    promoHide:"ഇനി ഇത് കാണിക്കേണ്ട",
+    promoLater:"പിന്നീട്",
+    promoOpen:"പരീക്ഷാ സഹായി തുറക്കുക ↗",
     secStudent:"വിദ്യാർത്ഥിയുടെ വിവരങ്ങൾ",
     secSchool:"സൺഡേ സ്കൂൾ വിവരങ്ങൾ",
     setupEyebrow:"പരീക്ഷാർത്ഥി രജിസ്ട്രേഷൻ",
@@ -1117,10 +1194,39 @@ applyStaticText();
 <script src="chatbot.js?v=5" defer></script>
 
 <!-- Scroll to Top Button -->
+<script>
+(function(){
+  var modal = document.getElementById('helpPromoModal');
+  if (!modal) return;
+  var hideBox = document.getElementById('helpPromoHide');
+  function get(store, k){ try { return window[store].getItem(k); } catch(e){ return null; } }
+  function set(store, k, v){ try { window[store].setItem(k, v); } catch(e){} }
+  function close(){
+    modal.classList.remove('active');
+    set('sessionStorage', 'c12_help_promo_seen', '1');
+    if (hideBox.checked) set('localStorage', 'c12_help_promo_hide', '1');
+  }
+  document.getElementById('helpPromoLater').addEventListener('click', close);
+  document.getElementById('helpPromoOpen').addEventListener('click', function(){ setTimeout(close, 50); });
+  modal.addEventListener('click', function(e){ if (e.target === modal) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('active')) close(); });
+
+  var hidden = get('localStorage', 'c12_help_promo_hide') === '1';
+  var seen = get('sessionStorage', 'c12_help_promo_seen') === '1';
+  if (!hidden && !seen){
+    setTimeout(function(){
+      var quiz = document.getElementById('screenQuiz');
+      if (quiz && !quiz.hidden) return;           // never interrupt a running exam
+      modal.classList.add('active');
+      document.getElementById('helpPromoOpen').focus();
+    }, 700);
+  }
+})();
+</script>
 <button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
 <style>
 #scrollTopBtn{
-  position:fixed; bottom:24px; right:22px; z-index:9999;
+  position:fixed; bottom:90px; right:25px; z-index:899; /* sits just above the Malpan AI chat button */
   width:46px; height:46px; border-radius:50%;
   background:var(--gold,#b8862b); color:#fff;
   border:none; cursor:pointer;
@@ -1133,7 +1239,7 @@ applyStaticText();
 }
 #scrollTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
 #scrollTopBtn:hover{background:var(--navy,#14213d);}
-@media (max-width:480px){#scrollTopBtn{bottom:16px;right:14px;width:40px;height:40px;font-size:1.25rem;}}
+@media (max-width:480px){#scrollTopBtn{bottom:80px;right:22px;width:40px;height:40px;font-size:1.25rem;}}
 </style>
 <script>
 (function(){

@@ -1092,7 +1092,7 @@ applyStaticText();
 <button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
 <style>
 #scrollTopBtn{
-  position:fixed; bottom:24px; right:22px; z-index:9999;
+  position:fixed; bottom:90px; right:25px; z-index:899; /* sits just above the Malpan AI chat button */
   width:46px; height:46px; border-radius:50%;
   background:var(--gold,#b8862b); color:#fff;
   border:none; cursor:pointer;
@@ -1105,7 +1105,7 @@ applyStaticText();
 }
 #scrollTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
 #scrollTopBtn:hover{background:var(--navy,#14213d);}
-@media (max-width:480px){#scrollTopBtn{bottom:16px;right:14px;width:40px;height:40px;font-size:1.25rem;}}
+@media (max-width:480px){#scrollTopBtn{bottom:80px;right:22px;width:40px;height:40px;font-size:1.25rem;}}
 </style>
 <script>
 (function(){
