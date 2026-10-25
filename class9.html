@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="exam.css">
+<link rel="stylesheet" href="exam.css?v=2">
 <style>
   :root{ --accent:#0284c7; }
   @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --accent:#38bdf8; } }
@@ -944,7 +944,7 @@ function buildReview(){
     div.className = 'review-item';
     var qDiv = document.createElement('div');
     qDiv.className = 'review-q';
-    qDiv.textContent = (i+1) + '. [' + a.topic[lang] + '] ' + a.q[lang];
+    qDiv.textContent = (i+1) + '. ' + a.q[lang];
     div.appendChild(qDiv);
 
     var aDiv = document.createElement('div');

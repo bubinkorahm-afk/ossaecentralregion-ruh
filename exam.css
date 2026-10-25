@@ -299,7 +299,9 @@ select{ appearance:none; -webkit-appearance:none; padding-right:38px;
 .timer-badge.danger{ background:var(--bad-bg); border-color:var(--bad); color:var(--bad); animation:pulse 1s infinite; }
 @keyframes pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.05); } }
 
-.q-meta-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.q-meta-row{ display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-bottom:10px; }
+/* Unit / chapter reference is not shown during the exam */
+#qTopic, .q-topic{ display:none !important; }
 .q-topic, .q-unit{
   font-size:.76rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:700;
 }
